@@ -1,0 +1,51 @@
+<?php if($ServerPilot->Servers()->listAll()->data):?>
+    <div class="toolbar-widget list-header">
+        <div class="toolbar-widget list-header">
+            <div class="form-group span-full">
+                <button
+                    type="button"
+                    data-request="onSync"
+                    data-request-confirm="Re-sync?" 
+                    data-request-data="sync_now: 1" class="btn btn-primary oc-icon-plus"
+                    style="margin-left: -20px;">
+                    New Database
+                </button>
+                <button
+                    type="button"
+                    data-request="onSync"
+                    data-request-confirm="Re-sync?" 
+                    data-request-data="sync_now: 1" class="btn btn-default oc-icon-cloud-download"
+                    >
+                    Re-sync
+                </button>
+            </div>
+        </div>
+    
+        <?php foreach($ServerPilot->Servers()->listAll()->data as $server => $value): ?>
+            <div class="callout fade in callout-info no-icon no-subheader form-group span-left">
+                <div class="header">
+                    <h3><i class="oc-icon-hdd-o"></i><?=$value->name?></h3>
+                </div>
+                <div class="content">
+                    <div class="control-status-list">
+                        <ul>
+                            <?php
+                                $Databases = $ServerPilot->Databases()->where('serverid',$value->id)->get();
+                                foreach($Databases as $database => $db):?>
+                                    <li>
+                                        <span class="status-icon info"><i class="icon-database"></i></span>
+                                        <span class="status-text info"><?=$db->name?></span>
+                                        <span class="status-label link"><i class="icon-puzzle-piece"></i> <?=$ServerPilot->Apps($db->appid)->get()->name?></span>
+                                    </li>
+                                <? endforeach ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <? endforeach; ?>
+    </div>
+<?else:?>
+<p class="flash-message static error">No servers to display</p>
+<?endif?>
+
+<?= $this->listRender() ?>

@@ -1,0 +1,25 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+
+    server_id:
+        label: ServerId
+    name:
+        label: Name
+    autoupdates:
+        label: Updates
+    firewall:
+        label: Firewall
+    lastaddress:
+        label: IP/Host
+    datecreated:
+        label: Created At
+    lastconn:
+        label: Last Connection
+    updated_at:
+        label: Last Sync

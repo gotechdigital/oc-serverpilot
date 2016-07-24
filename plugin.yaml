@@ -1,0 +1,45 @@
+plugin:
+    name: 'awebsome.serverpilot::lang.plugin.name'
+    description: 'awebsome.serverpilot::lang.plugin.description'
+    author: LucasZdv
+    icon: oc-icon-cloud
+    homepage: 'https://awebsome.me'
+navigation:
+    serverpilot:
+        label: ServerPilot
+        url: awebsome/serverpilot/servers
+        icon: icon-cloud
+        permissions:
+            - awebsome.serverpilot.serverpilot
+        order: '500'
+        sideMenu:
+            apps:
+                label: Apps
+                url: awebsome/serverpilot/apps
+                icon: icon-th-large
+                permissions:
+                    - awebsome.serverpilot.apps
+            databases:
+                label: Databases
+                url: awebsome/serverpilot/databases
+                icon: icon-database
+                permissions:
+                    - awebsome.serverpilot.databases
+            systemusers:
+                label: Users
+                url: awebsome/serverpilot/systemusers
+                icon: icon-user-secret
+                permissions:
+                    - awebsome.serverpilot.users
+            servers:
+                label: Servers
+                url: awebsome/serverpilot/servers
+                icon: icon-server
+                permissions:
+                    - awebsome.serverpilot.servers
+            scheduling:
+                label: Syncs
+                url: awebsome/serverpilot/syncs
+                icon: icon-cloud-download
+                permissions:
+                    - awebsome.serverpilot.syncs

@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: App
+
+# Model Form Field configuration
+form: $/awebsome/serverpilot/models/app/fields.yaml
+
+# Model Class name
+modelClass: Awebsome\Serverpilot\Models\App
+
+# Default redirect location
+defaultRedirect: awebsome/serverpilot/apps
+
+# Create page
+create:
+    title: Create App
+    redirect: awebsome/serverpilot/apps/update/:id
+    redirectClose: awebsome/serverpilot/apps
+
+# Update page
+update:
+    title: Edit App
+    redirect: awebsome/serverpilot/apps
+    redirectClose: awebsome/serverpilot/apps
+
+# Preview page
+preview:
+    title: Preview App

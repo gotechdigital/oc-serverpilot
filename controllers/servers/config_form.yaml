@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Server
+
+# Model Form Field configuration
+form: $/awebsome/serverpilot/models/server/fields.yaml
+
+# Model Class name
+modelClass: Awebsome\Serverpilot\Models\Server
+
+# Default redirect location
+defaultRedirect: awebsome/serverpilot/servers
+
+# Create page
+create:
+    title: Create Server
+    redirect: awebsome/serverpilot/servers/update/:id
+    redirectClose: awebsome/serverpilot/servers
+
+# Update page
+update:
+    title: Edit Server
+    redirect: awebsome/serverpilot/servers
+    redirectClose: awebsome/serverpilot/servers
+
+# Preview page
+preview:
+    title: Preview Server

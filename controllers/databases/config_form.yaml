@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Database
+
+# Model Form Field configuration
+form: $/awebsome/serverpilot/models/database/fields.yaml
+
+# Model Class name
+modelClass: Awebsome\Serverpilot\Models\Database
+
+# Default redirect location
+defaultRedirect: awebsome/serverpilot/databases
+
+# Create page
+create:
+    title: Create Database
+    redirect: awebsome/serverpilot/databases/update/:id
+    redirectClose: awebsome/serverpilot/databases
+
+# Update page
+update:
+    title: Edit Database
+    redirect: awebsome/serverpilot/databases
+    redirectClose: awebsome/serverpilot/databases
+
+# Preview page
+preview:
+    title: Preview Database

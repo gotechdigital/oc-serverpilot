@@ -1,0 +1,17 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+
+    db_id:
+        label: DbId
+
+    app_id:
+        label: Appid
+
+    server_id: 
+        label: ServerId
