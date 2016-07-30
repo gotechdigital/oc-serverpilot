@@ -16,7 +16,7 @@ navigation:
             apps:
                 label: Apps
                 url: awebsome/serverpilot/apps
-                icon: icon-th-large
+                icon: icon-puzzle-piece
                 permissions:
                     - awebsome.serverpilot.apps
             databases:

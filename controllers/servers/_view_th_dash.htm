@@ -1,0 +1,74 @@
+<?php if(count($Servers->get())>0):?>
+    <div class="toolbar-widget list-header">
+        <div class="toolbar-widget list-header">
+            <div class="form-group span-full">
+
+                <a href="https://manage.serverpilot.io/#servers" class="btn btn-default oc-icon-cloud" target="_blank">Manage in ServerPilot</a>
+                <?=$this->makePartial('../syncs/sync_button')?>
+            </div>
+        </div>
+    
+        <?php foreach($Servers->get() as $server => $value): ?>
+        <div class="callout fade in callout-info no-icon no-subheader" style="display: inline-block; width: 49.5%;">
+            <div class="header">
+                <h3><i class="oc-icon-hdd-o"></i> <?=$value->name?> </h3>
+            </div>
+            <div class="content">
+                <div class="control-status-list">
+                    <ul>
+                        <li>
+                            <span class="status-icon <?=($value->firewall) ? 'success':'danger' ?>"><i class="icon-<?=($value->firewall) ? 'check':'times' ?>"></i></span>
+                            <span class="status-text <?=($value->firewall) ? 'success':'danger' ?>">Firewall</span>
+                            <span class="status-label link"><?=($value->firewall) ? '<i class="oc-icon-check text-success"></i>':'<i class="icon-times-circle text-danger"></i>' ?></span>
+                        </li>
+                        <li>
+                            <span class="status-icon <?=($value->autoupdates) ? 'success':'danger' ?>"><i class="icon-<?=($value->autoupdates) ? 'check':'times' ?>"></i></span>
+                            <span class="status-text <?=($value->autoupdates) ? 'success':'danger' ?>">Auto Updates</span>
+                            <span class="status-label link"><?=($value->autoupdates) ? '<i class="oc-icon-check text-success"></i>':'<i class="icon-times-circle text-danger"></i>' ?></span>
+                        </li>
+                        <li>
+                            <span class="status-icon warning"><i class="icon-user-secret"></i></span>
+                            <span class="status-text warning">System Users</span>
+                            <span class="status-label link">
+                            <a href="<?=Backend::url('awebsome/serverpilot/systemusers')?>"><?=count($value->systemusers);?></a></span>
+                        </li>
+
+                        <li>
+                            <span class="status-icon info"><i class="icon-th-large"></i></span>
+                            <span class="status-text info">Apps</span>
+                            <span class="status-label link">
+                            <a href="<?=Backend::url('awebsome/serverpilot/apps')?>"><?=count($value->apps);?></a></span>
+                        </li>
+
+                        <li>
+                            <span class="status-icon info"><i class="icon-database"></i></span>
+                            <span class="status-text info">Databases</span>
+                            <span class="status-label link">
+                            <a href="<?=Backend::url('awebsome/serverpilot/databases')?>"><?=count($value->databases);?></a></span>
+                        </li>
+
+                        <li>
+                            <span class="status-icon"><i class="icon-info"></i></span>
+                            <span class="status-text">IP/Host</span>
+                            <span class="status-label primary"><?=$value->lastaddress?></span>
+                        </li>
+                        <li>
+                            <span class="status-icon"><i class="icon-info"></i></span>
+                            <span class="status-text">Last connection</span>
+                            <span class="status-label primary"><?=date('m-d-y h:i:s A', $value->lastconn)?></span>
+                        </li>
+
+                        <li>
+                            <span class="status-icon"><i class="icon-info"></i></span>
+                            <span class="status-text">Created at</span>
+                            <span class="status-label link"><?=date('m-d-y h:i:s A', $value->datecreated)?></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <? endforeach; ?>
+    </div>
+<?else:?>
+<p class="flash-message static error">No servers to display</p>
+<?endif?>

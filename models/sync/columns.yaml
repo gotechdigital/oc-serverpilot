@@ -17,4 +17,5 @@ columns:
         width: 16%
     log:
         label: Log
-        searchable: true
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/models/sync/columns/_log_column.htm

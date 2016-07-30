@@ -1,0 +1,85 @@
+<?= Form::open(['id' => 'createForm']) ?>
+	<style>
+		.radio-runtime div.radio {display: inline-block;} .radio-runtime label{margin-right: 15px;}
+	</style>
+    <input type="hidden" name="create_app_form" value="1" />
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="popup">&times;</button>
+        <h4 class="modal-title">New App</h4>
+    </div>
+
+    <?php if (!$this->fatalError): ?>
+
+        <div class="modal-body">
+            <?= $this->formRender() ?>
+        </div>
+        <div class="modal-footer">
+            <button
+                type="submit"
+                data-request="onCreate"
+                data-request-data="redirect:1"
+                data-hotkey="ctrl+s, cmd+s"
+                data-popup-load-indicator
+                class="btn btn-primary">
+                <?= e(trans('backend::lang.form.create')) ?>
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="popup">
+                <?= e(trans('backend::lang.form.cancel')) ?>
+            </button>
+        </div>
+
+    <?php else: ?>
+
+        <div class="modal-body">
+            <p class="flash-message static error"><?= e(trans($this->fatalError)) ?></p>
+        </div>
+        <div class="modal-footer">
+            <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="popup">
+                <?= e(trans('backend::lang.form.close')) ?>
+            </button>
+        </div>
+
+    <?php endif ?>
+
+    <script>
+        setTimeout(
+            function(){ $('#createForm input.form-control:first').focus() },
+            310
+        )
+
+        $('#Form-field-App-domains').change(function(){
+            
+            var dom = $('#Form-field-App-domains').val();
+
+            validateDomain(dom);
+        });
+
+        function validateDomain(the_domain)
+        {  
+            // strip off "http://" and/or "www."
+            the_domain = the_domain.replace("http://","");
+            the_domain = the_domain.replace("www.","");
+
+            // var reg = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
+            var reg = /^[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\.([a-zA-Z]{1,6}|[a-zA-Z0-9-]{1,30}\.[a-zA-Z]{2,3})$/;
+            var result = reg.test(the_domain);
+
+            if(result){
+                $('.modal-footer .btn.btn-primary').prop('disabled', false);
+                $('#Form-field-App-domains-group label').prop('class','oc-icon-check');
+            }else{
+                $('.modal-footer .btn.btn-primary').prop('disabled', true);
+                $('#Form-field-App-domains-group label').prop('class','oc-icon-times');
+            }
+        } // end validateDomain()
+    </script>
+
+<?= Form::close() ?>

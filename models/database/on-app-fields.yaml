@@ -1,12 +1,4 @@
 fields:
-    app_id:
-        label: App
-        oc.commentPosition: ''
-        span: full
-        disabled: 0
-        required: 1
-        type: dropdown
-        options: getAppsList
     name:
         label: 'Database Name'
         oc.commentPosition: ''
@@ -37,3 +29,7 @@ fields:
             action: disable
             field: name
             condition: value[]
+    auto_pass:
+        cssClass: 'hide'
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/forms/_script_auto_password.htm

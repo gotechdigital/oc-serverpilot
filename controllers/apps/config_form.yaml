@@ -25,6 +25,7 @@ update:
     title: Edit App
     redirect: awebsome/serverpilot/apps
     redirectClose: awebsome/serverpilot/apps
+    form: $/awebsome/serverpilot/models/app/manage-fields.yaml
 
 # Preview page
 preview:

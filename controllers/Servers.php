@@ -4,13 +4,16 @@ use Backend;
 use Redirect;
 use BackendMenu;
 use ValidationException;
-use Backend\Classes\Controller;
 
+use System\Helpers\DateTime;
+
+use Backend\Classes\Controller;
 use Awebsome\Serverpilot\Classes\ServerPilot;
 use Awebsome\Serverpilot\Classes\ServerPilotSync;
-use Awebsome\Serverpilot\Models\Settings;
-use Awebsome\Serverpilot\Models\Database;
 
+use Awebsome\Serverpilot\Models\Sync;
+use Awebsome\Serverpilot\Models\Server;
+use Awebsome\Serverpilot\Models\SystemUser;
 /**
  * Servers Back-end Controller
  */
@@ -32,37 +35,28 @@ class Servers extends Controller
 
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'servers');
 
-        $this->ServerPilot = new ServerPilot(Settings::get('CLIENT_ID'), Settings::get('API_KEY'));
+        $this->ServerPilot = new ServerPilot();
     }
 
 
     public function index()
     {
         
-        $this->vars['ServerPilot'] = $this->ServerPilot;
+        # $this->vars['ServerPilot']  = $this->ServerPilot;
+        $this->vars['Servers']  = new Server;
+
+        $this->vars['lastSync'] = DateTime::timeSince(Sync::max('created_at'));
+
         $this->asExtension('ListController')->index();
+        
+        $this->bodyClass = 'compact-container';
     }
 
     public function onSync()
     {
         $Sync = new ServerPilotSync;
-        $Sync->All();
+        $Sync->All()->log('sync_all_resources_from_servers');
 
         return Redirect::to(Backend::url('awebsome/serverpilot/servers'));
-    }
-
-    public function tests()
-    {
-         
-         
-        # $sp = new ServerPilot(Settings::get('CLIENT_ID'), Settings::get('API_KEY'));
-        #return '<pre>'.json_encode($sp->Apps()->listAll()->data, JSON_PRETTY_PRINT).'</pre>';
-        ##$Resource = '\Database';
-        #$Resource = "Awebsome\Serverpilot\Models".$Resource;
-        #$Resource = new $Resource;
-
-        #return '<pre>'.json_encode($Resource::where('id','>','1')->get(), JSON_PRETTY_PRINT).'</pre>';
-         $Sync = new ServerPilotSync;
-         return json_encode($Sync->ServersTest()->now());
     }
 }

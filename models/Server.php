@@ -22,13 +22,17 @@ class Server extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['server_id','name','autoupdates','firewall','lastaddress','datecreated','lastconn'];
+    protected $fillable = ['id','name','autoupdates','firewall','lastaddress','datecreated','lastconn'];
 
     /**
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [];
+    public $hasMany = [
+                'systemusers'   => ['Awebsome\Serverpilot\Models\SystemUser','key' => 'server_id','otherKey' => 'id'],
+                'apps'          => ['Awebsome\Serverpilot\Models\App','key' => 'server_id','otherKey' => 'id'],
+                'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'server_id','otherKey' => 'id'],
+            ];
     public $belongsTo = [];
     public $belongsToMany = [];
     public $morphTo = [];

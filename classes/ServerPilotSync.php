@@ -7,10 +7,12 @@ use  Awebsome\Serverpilot\Models\Database;
 use  Awebsome\Serverpilot\Models\SystemUser;
 use  Awebsome\Serverpilot\Models\App;
 use  Awebsome\Serverpilot\Models\Sync;
-use  Awebsome\Serverpilot\Models\Settings;
 
 use  Awebsome\Serverpilot\Classes\ServerPilot;
 
+/**
+ * Bridge to ServerPilot with October Database
+ */
 class ServerPilotSync
 {
     public $ServerPilot;
@@ -19,13 +21,18 @@ class ServerPilotSync
     public $scheduleName;
     public $modelPath;
 
+    public $syncLog;
+    public $disabledLog;
+    public $Response;
+
     function __construct()
     {
         /**
          * Authentication with
          * @var ServerPilot
          */
-        $this->ServerPilot = new ServerPilot(Settings::get('CLIENT_ID'), Settings::get('API_KEY'));
+        $this->ServerPilot = new ServerPilot;
+        $this->syncLog = [];
     }
 
     /**
@@ -36,7 +43,7 @@ class ServerPilotSync
     public function Servers()
     {
         $this->syncResource     = 'Servers';
-        $this->idRowName        = 'server_id';
+        $this->idRowName        = 'id';
         $this->scheduleName     = 'sync_servers';
         $this->modelPath        = 'Awebsome\Serverpilot\Models\Server';
 
@@ -51,7 +58,7 @@ class ServerPilotSync
     public function Apps()
     {
         $this->syncResource     = 'Apps';
-        $this->idRowName        = 'app_id';
+        $this->idRowName        = 'id';
         $this->scheduleName     = 'sync_apps';
         $this->modelPath        = 'Awebsome\Serverpilot\Models\App';
 
@@ -66,7 +73,7 @@ class ServerPilotSync
     public function SystemUsers()
     {
         $this->syncResource     = 'SystemUsers';
-        $this->idRowName        = 'user_id';
+        $this->idRowName        = 'id';
         $this->scheduleName     = 'sync_system_users';
         $this->modelPath        = 'Awebsome\Serverpilot\Models\SystemUser';
 
@@ -81,7 +88,7 @@ class ServerPilotSync
     public function Databases()
     {
         $this->syncResource     = 'Databases';
-        $this->idRowName        = 'db_id';
+        $this->idRowName        = 'id';
         $this->scheduleName     = 'sync_databases';
         $this->modelPath        = 'Awebsome\Serverpilot\Models\Database';
 
@@ -106,15 +113,7 @@ class ServerPilotSync
         # SyncTo Model path ex: 'Awebsome\Serverpilot\Models\Server'
         $ResourceModel = $this->modelPath;
 
-        # Resources deleted on ServerPilot.
-        $resourceDeleted = $ResourceModel::whereNotIn($this->idRowName, array_column(array_map('get_object_vars', $Resources), 'id'));
-        
-        # Delete resources records
-        if($resourceDeleted->first())
-        {
-            $this->schedule($this->scheduleName, 'Deleted Resources: '.json_encode(array_column($resourceDeleted->get()->toArray(), 'name')));
-            $resourceDeleted->delete();
-        }
+           
 
         # Create or Update resource
         if(count($Resources) > 0)
@@ -124,22 +123,28 @@ class ServerPilotSync
                 # Mapping data
                 $data = $this->dataMapping($value);
 
-                $resource = $ResourceModel::where($this->idRowName, $value->id)->first();
-                if($resource)
+                $Resource = $ResourceModel::find($value->id);
+                if($Resource)
                 {
                     # Update Resource
-                    $ResourceModel::find($resource->id)->update($data);
-                        $this->schedule($this->scheduleName, $this->syncResource.': '.$value->name.' updated');
+                    $Resource->update($data);
+                        $this->addSyncLog($this->scheduleName, $this->syncResource.': '.$value->name.' updated');
                 }
                 else {
                         # Create Resource
                         $ResourceModel::create($data);
-                            $this->schedule($this->scheduleName, $this->syncResource.': '.$value->name.' Added');
+                            $this->addSyncLog($this->scheduleName, $this->syncResource.': '.$value->name.' Added');
                     }
             }
         }
 
-        return $Resources;
+        # Resources that have been deleted in ServerPilot
+        $resourceDeleted = $ResourceModel::whereNotIn($this->idRowName, array_column(array_map('get_object_vars', $Resources), 'id'))->delete();
+        
+        # Delete resources records
+        $this->addSyncLog($this->scheduleName, $this->syncResource.' Deleted: '.json_encode($resourceDeleted));
+        
+        return $this;
     }
 
     /**
@@ -155,7 +160,7 @@ class ServerPilotSync
         switch ($this->syncResource) {
             case 'Servers':
                     $data = [
-                            'server_id'     => $value->id,
+                            'id'            => $value->id,
                             'name'          => $value->name,
                             'autoupdates'   => $value->autoupdates,
                             'firewall'      => $value->firewall,
@@ -167,31 +172,31 @@ class ServerPilotSync
 
             case 'SystemUsers':
                     $data = [
-                            'user_id'     => $value->id,
-                            'server_id'   => $value->serverid,
-                            'name'        => $value->name
+                            'id'            => $value->id,
+                            'server_id'     => $value->serverid,
+                            'name'          => $value->name
                         ];
                 break;
 
             case 'Databases':
                     $data = [
-                            'db_id'     => $value->id,
-                            'app_id'    => $value->appid,
-                            'server_id' => $value->serverid,
-                            'user'      => $value->user,
-                            'name'      => $value->name
+                            'id'            => $value->id,
+                            'app_id'        => $value->appid,
+                            'server_id'     => $value->serverid,
+                            'user'          => $value->user,
+                            'name'          => $value->name
                         ];
                 break;
 
             case 'Apps':
                     $data = [
-                        'app_id'     => $value->id,
-                        'user_id'    => $value->sysuserid,
-                        'server_id'  => $value->serverid,
-                        'name'       => $value->name,
-                        'runtime'    => $value->runtime,
-                        'ssl'        => $value->ssl,
-                        'domains'    => $value->domains
+                        'id'                => $value->id,
+                        'user_id'           => $value->sysuserid,
+                        'server_id'         => $value->serverid,
+                        'name'              => $value->name,
+                        'runtime'           => $value->runtime,
+                        'ssl'               => $value->ssl,
+                        'domains'           => $this->getDomains($value->domains)
                     ];  
                 break;
         }
@@ -199,23 +204,63 @@ class ServerPilotSync
         return $data;
     }
 
-
     /**
-     * Schedules Logs.
-     * 
-     * @param string $schedule      ~# schedule name
-     * @param string $log           ~# Log or description
+     * getDomains
+     * ======================================
+     * reformat array to repeater field format
+     * @param  array  $domains 
+     * @return array
      */
-    public function Schedule($schedule = null, $log = null)
+    public function getDomains($domains)
     {
-        $Model = new Sync;
-        $Model->schedule    = $schedule;
-        $Model->log         = $log;
-        $Model->save();
+        foreach ($domains as $key => $value) 
+        {
+            $allDomains[]['domain'] = $value; 
+        }
 
-        return $Model;
+        return $allDomains;
     }
 
+    
+    /**
+     * putUpdateResource
+     * ======================================
+     * Put sync schelude log
+     * Update
+     * @param  string $resource method
+     * @param  array $data     data
+     * @param  array $response curl response
+     */
+    public function putUpdateResource($resource, $data, $response)
+    {
+        
+        $schedule    = 'update_resource_'.strtolower($resource);
+        $log         = 'petition: '.json_encode($data).' response:'.json_encode($response);
+        
+        $this->addSyncLog($schedule, $log)->log($schedule);
+
+        # $this->all();
+    }
+
+    /**
+     * putCreateResource
+     * ======================================
+     * Put sync schelude log
+     * Update
+     * @param  string $resource method
+     * @param  array $data     data
+     * @param  array $response curl response
+     */
+    public function putCreateResource($resource, $data, $response)
+    {
+        
+        $schedule    = 'create_resource_'.strtolower($resource);
+        $log         = 'petition: '.json_encode($data).' response:'.json_encode($response);
+        
+        $this->addSyncLog($schedule, $log)->log($schedule);
+
+        # $this->all();
+    }
 
     /**
      * Sync All Resources
@@ -224,9 +269,50 @@ class ServerPilotSync
     {
         $this->Servers()->now();
         $this->SystemUsers()->now();
-        $this->Apps()->now();
         $this->Databases()->now();
+        $this->Apps()->now();
 
-        Flash::success('Sync successful');
+        return $this;
     }
+
+     public function addSyncLog($name, $log = null)
+    {
+        $this->syncLog[] = [
+                        'name' => $name,
+                        'log'  => $log
+                    ];
+
+        return $this;
+    }
+
+    /**
+     * Schedules Logs.
+     * 
+     * @param string $schedule      ~# schedule name
+     * @param string $log           ~# Log or description
+     */
+    public function Schedule($name)
+    {
+        if(!$this->disabledLog)
+        {
+            $Model = new Sync;
+            $Model->schedule    = $name;
+            $Model->log         = $this->syncLog;
+            $Model->save();
+
+            return $Model;
+        }
+    }
+    
+    public function testRequest()
+    {
+       $request = $this->ServerPilot->Resource($this->syncResource)->listAll()->data;
+       return '<pre>'.json_encode($request, JSON_PRETTY_PRINT).'</pre>';
+    }
+
+    public function log($name = null)
+    {
+        $this->Schedule($name);
+    }
+
 }

@@ -24,6 +24,7 @@ class Sync extends Model
      * @var array Fillable fields
      */
     protected $fillable = [];
+    protected $jsonable = ['log'];
 
     /**
      * @var array Relations
@@ -37,5 +38,4 @@ class Sync extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
-
 }

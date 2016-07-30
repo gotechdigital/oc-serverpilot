@@ -1,5 +1,6 @@
 <?php namespace Awebsome\Serverpilot\Classes;
 
+use ValidationException;
 use Awebsome\Serverpilot\Classes\ServerPilot;
 
 class Curl
@@ -54,9 +55,9 @@ class Curl
 				    'Content-Length: ' . strlen($data)                                                                      
 				);
 			break;
-			#case ServerPilot::SP_HTTP_METHOD_DELETE: 
-			#	$options[CURLOPT_CUSTOMREQUEST] = ServerPilot::SP_HTTP_METHOD_DELETE;
-			#break;
+			case ServerPilot::SP_HTTP_METHOD_DELETE: 
+				$options[CURLOPT_CUSTOMREQUEST] = ServerPilot::SP_HTTP_METHOD_DELETE;
+			break;
 		}
 		
 		// set the options
@@ -69,13 +70,13 @@ class Curl
 		// check for common errors
 		switch ($status_code) {
 			case 200: break;
-			case 400: throw new Exception('We could not understand your request. Typically missing a parameter or header.'); break;
-			case 401: throw new Exception('Either no authentication credentials were provided or they are invalid.'); break;
-			case 402: throw new Exception('Method is restricted to users on the Coach or Business plan.'); break;
-			case 403: throw new Exception('Typically when trying to alter or delete protected resources.'); break;
-			case 404: throw new Exception('You requested a resource that does not exist.'); break;
-			case 409: throw new Exception('Typically when trying creating a resource that already exists.'); break;
-			case 500: throw new Exception('Internal server error. Try again at a later time.'); break;
+			case 400: throw new ValidationException(['error_mesage' => 'ServerPilot: We could not understand your request. Typically missing a parameter or header.']); break;
+			case 401: throw new ValidationException(['error_mesage' => 'ServerPilot: Either no authentication credentials were provided or they are invalid.']); break;
+			case 402: throw new ValidationException(['error_mesage' => 'ServerPilot: Method is restricted to users on the Coach or Business plan.']); break;
+			case 403: throw new ValidationException(['error_mesage' => 'ServerPilot: Typically when trying to alter or delete protected resources.']); break;
+			case 404: throw new ValidationException(['error_mesage' => 'ServerPilot: You requested a resource that does not exist.']); break;
+			case 409: throw new ValidationException(['error_mesage' => 'ServerPilot: Typically when trying creating a resource that already exists.']); break;
+			case 500: throw new ValidationException(['error_mesage' => 'ServerPilot: Internal server error. Try again at a later time.']); break;
 			default:  break;
 		}
 	
@@ -83,14 +84,14 @@ class Curl
         curl_close($ch);
         
         if(empty($response)) {
-			throw new Exception('Empty Response');
+			throw new ValidationException('Empty Response');
         }
         
         // if we get here, assume we have a JSON string - decode
         if($response = json_decode($response)) {
 	        // check for any SP specific errors
 	        if(!empty($response->error)) {
-		        throw new Exception($response->error);
+		        throw new ValidationException($response->error);
 	        }
         }
         

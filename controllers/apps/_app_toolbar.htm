@@ -1,0 +1,61 @@
+<?php
+    $isCreate = $this->formGetContext() == 'create';
+    $pageUrl = isset($pageUrl) ? $pageUrl : null;
+
+?>
+<div class="form-buttons loading-indicator-container">
+
+    <div class="loading-indicator-container">
+        <button
+            id="Sale-Save"
+            type="submit"
+            data-request="onSave"
+            data-request-data="redirect:<?= (int) $isCreate ?> , save_app_update:1"
+            data-load-indicator="<?=trans('backend::lang.form.save')?>..."
+            class="btn btn-primary oc-icon-check save"
+
+            data-hotkey="ctrl+s"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            data-delay="500"
+            data-original-title="<?=e(trans('backend::lang.form.save'))?> (Ctrl+S)"
+            
+            >
+            <?= e(trans('backend::lang.form.save')) ?>
+        </button>
+
+        <button
+            type="button"
+            data-request="onSave"
+            data-request-data="close:1 , save_app_update:1"
+            data-load-indicator="<?=trans('backend::lang.form.save_and_close')?>..."
+            class="btn btn-default oc-icon-check save"
+
+            data-hotkey="ctrl+shift+s"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            data-delay="500"
+            data-original-title="<?=e(trans('backend::lang.form.save_and_close'))?> (Ctrl+Shift+S)"
+            >
+            <?= e(trans('backend::lang.form.save_and_close'))?>
+        </button>
+
+          <?php if (!$isCreate): ?>
+            <button
+                type="button"
+                class="btn btn-default empty oc-icon-trash-o"
+                data-request="onDelete"
+
+                data-toggle="tooltip"
+                data-placement="right"
+                data-delay="500"
+                data-original-title="<?=trans('backend::lang.form.delete')?>"
+
+                data-load-indicator="<?=trans('backend::lang.form.delete')?>..."
+                data-request-confirm="Once you delete an app, there is no going back. Please be certain. <?=trans('backend::lang.form.confirm')?> <?=trans('backend::lang.form.delete')?>?" 
+                
+                >
+            </button>
+        <?endif;?>
+    </div>
+</div>

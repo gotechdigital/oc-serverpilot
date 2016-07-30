@@ -16,12 +16,15 @@ class Plugin extends PluginBase
     {
         $runTime = Settings::get('sync_data');
 
-        $schedule->call(function () {
-            $Sync = new Sync;
-            $Sync->schedule = 'sync_'.$runTime;
-            $Sync->save();            
+        if($runTime != 'realtime')
+        {
+                $schedule->call(function () {
+                $Sync = new Sync;
+                $Sync->schedule = 'sync_schedule_'.$runTime;
+                $Sync->save();            
 
-        })->$runTime();
+            })->$runTime();
+        }
     }
 
     public function registerSettings()

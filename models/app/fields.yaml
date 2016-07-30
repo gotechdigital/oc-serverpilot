@@ -1,8 +1,43 @@
-# ===================================
-#  Form Field Definitions
-# ===================================
-
 fields:
-    id:
-        label: ID
-        disabled: true
+    user_id:
+        label: 'System User'
+        oc.commentPosition: ''
+        span: left
+        disabled: 0
+        required: 1
+        type: dropdown
+        options: getSystemUserList
+    name:
+        label: Name
+        oc.commentPosition: ''
+        span: right
+        required: 1
+        context:
+            - create
+        type: text
+    runtime:
+        label: Runtime
+        oc.commentPosition: ''
+        default: php5.6
+        options:
+            php7.0: php7.0
+            php5.6: 'php5.6 (recommended)'
+            php5.5: php5.5
+            php5.4: php5.4
+        span: full
+        required: 1
+        context:
+            - create
+        type: radio
+        cssClass: 'radio-runtime'
+    domains:
+        label: Domain 
+        commentAbove: 'Main maindomain.tld without (www)'
+        type: text
+        context: create
+        trigger:
+            action: disable
+            field: name
+            condition: value[]
+            
+

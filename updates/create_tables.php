@@ -31,8 +31,8 @@ class CreateTables extends Migration
         Schema::create('awebsome_serverpilot_servers', function($table)
         {
             $table->engine = 'InnoDB';
-            $table->increments('id');
-            $table->string('server_id');                      #id,
+            # $table->increments('id');
+            $table->string('id');                            #id,
 
             $table->string('name');                                 #hostname,
             $table->boolean('autoupdates')->default(0);              #is enabled,
@@ -51,11 +51,11 @@ class CreateTables extends Migration
         Schema::create('awebsome_serverpilot_system_users', function($table)
         {
             $table->engine = 'InnoDB';
-            $table->increments('id');
-            $table->string('user_id');                  
+            # $table->increments('id');
+            $table->string('id');                  
             $table->string('server_id');                
 
-            $table->string('name');                     
+            $table->string('name');                
             
             $table->timestamps();
         });
@@ -67,15 +67,15 @@ class CreateTables extends Migration
         Schema::create('awebsome_serverpilot_apps', function($table)
         {
             $table->engine = 'InnoDB';
-            $table->increments('id');
-            $table->string('app_id');
+            # $table->increments('id');
+            $table->string('id');
             $table->string('user_id');
             $table->string('server_id');
 
             $table->string('name');                 
             $table->string('runtime');                 
             $table->longText('ssl')->nullable();                 
-            $table->longText('domains')->nullable();                 
+            $table->longText('domains')->nullable();            #serverpilot sync
             
             $table->timestamps();
         });
@@ -86,12 +86,13 @@ class CreateTables extends Migration
         Schema::create('awebsome_serverpilot_databases', function($table)
         {
             $table->engine = 'InnoDB';
-            $table->increments('id');
-            $table->string('db_id');
+            # $table->increments('id');
+            $table->string('id');
             $table->string('app_id');
             $table->string('server_id');
 
-            $table->string('user');            
+            $table->string('name');
+            $table->string('user');        
             
             $table->timestamps();
         });

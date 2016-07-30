@@ -1,17 +1,7 @@
-# ===================================
-#  List Column Definitions
-# ===================================
-
 columns:
-    id:
-        label: ID
-        searchable: true
     name:
         label: Name
-    user_id:
-        label: UserId
-    server_id:
-        label: ServerId
+        type: text
     updated_at:
-        label: Last Updated
-
+        label: 'Last Updated'
+        type: timesince

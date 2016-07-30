@@ -1,51 +1,24 @@
-<?php if($ServerPilot->SystemUsers()->listAll()->data):?>
-    <div class="toolbar-widget list-header">
-        <div class="toolbar-widget list-header">
-            <div class="form-group span-full">
-                <button
-                    type="button"
-                    data-request="onSync"
-                    data-request-confirm="Re-sync?" 
-                    data-request-data="sync_now: 1" class="btn btn-primary oc-icon-user-plus"
-                    style="margin-left: -20px;">
-                    New User
-                </button>
-                <button
-                    type="button"
-                    data-request="onSync"
-                    data-request-confirm="Re-sync?" 
-                    data-request-data="sync_now: 1" class="btn btn-default oc-icon-cloud-download"
-                    >
-                    Re-sync
-                </button>
-            </div>
+<div class="control-tabs content-tabs tabs-flush" data-control="tab">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#dashboard"> <i class="icon-th-large"></i> Dashboard</a></li>
+        <li><a href="#list"><i class="icon-list"></i> List</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <?= $this->makePartial('view_th_dash') ?>
         </div>
-        <?php foreach($ServerPilot->SystemUsers()->listAll()->data as $user => $value):?>
-            <div class="callout fade in callout-warning no-icon no-subheader" style="display: inline-block; width: 49.5%;">
-                <div class="header">
-                    <h3><i class="oc-icon-user-secret"></i><?=$value->name?></h3>
-                </div>
-                <div class="content">
-                    <div class="control-status-list">
-                        <ul>
-                            <li>
-                                <span class="status-icon info"><i class="icon-hdd-o"></i></span>
-                                <span class="status-text">Server</span>
-                                <span class="status-label link"><a href="ssh://<?=$ServerPilot->Servers($value->serverid)->get()->lastaddress?>">This user manages <?=count($ServerPilot->Apps()->where('sysuserid',$value->id)->get())?> apps on <?=$ServerPilot->Servers($value->serverid)->get()->name?></a></span>
-                            </li>
-                            <li>
-                                <span class="status-icon warning"><i class="icon-key"></i></span>
-                                <span class="status-text">Password</span>
-                                <span class="status-label link"><button type="button" class="btn btn-default btn-xs pull-right">Reset</button></span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        <?endforeach?>
+        <div class="tab-pane">
+            <?= $this->listRender() ?>
+        </div>
     </div>
-<?else:?>
-<p class="flash-message static error">No users to display</p>
-<?endif?>
-
-<?= $this->listRender() ?>
+</div>
+<!--
+<div class="padded-container">
+    <div class="callout callout-info">
+        <div class="header">
+            <i class="icon-user-secret"></i>
+            <h3>System Users Sync</h3>
+            <p>The Resources has been updated <?=$lastSync?></p>
+        </div>
+    </div>
+</div> -->

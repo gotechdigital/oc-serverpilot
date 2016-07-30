@@ -1,8 +1,26 @@
-# ===================================
-#  Form Field Definitions
-# ===================================
-
 fields:
-    id:
-        label: ID
-        disabled: true
+    server_id: 
+        label: Server
+        type: dropdown
+        options: getServerList
+        context: create
+        required: 1
+
+    name:
+        label: User
+        oc.commentPosition: ''
+        span: left
+        required: 1
+        type: text
+        cssClass: usr-name
+    password:
+        label: Password
+        oc.commentPosition: ''
+        span: right
+        required: 1
+        type: text
+        cssClass: usr-pass
+        trigger:
+            action: disable
+            field: name
+            condition: value[]

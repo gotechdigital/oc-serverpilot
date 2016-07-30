@@ -1,25 +1,31 @@
-# ===================================
-#  List Column Definitions
-# ===================================
-
 columns:
     id:
-        label: ID
-        searchable: true
-
-    server_id:
         label: ServerId
+        type: text
+        width: 5%
     name:
         label: Name
+        type: text
+        width: 15%
     autoupdates:
         label: Updates
+        type: switch
+        width: 5%
     firewall:
         label: Firewall
+        type: switch
+        width: 5%
     lastaddress:
         label: IP/Host
+        type: text
+        width: 10%
     datecreated:
-        label: Created At
+        label: 'Created At'
+        type: datetime
+        width: 12%
     lastconn:
-        label: Last Connection
+        label: 'Last Connection'
+        type: timetense
     updated_at:
-        label: Last Sync
+        label: 'Last Sync'
+        type: timesince

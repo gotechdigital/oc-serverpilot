@@ -3,8 +3,11 @@
 use BackendMenu;
 use Backend\Classes\Controller;
 
+use System\Helpers\DateTime;
+
 use Awebsome\Serverpilot\Models\Sync;
 
+use Awebsome\Serverpilot\Classes\ServerPilot;
 use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
 /**
@@ -28,12 +31,18 @@ class Syncs extends Controller
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'scheduling');
     }
 
+    public function index()
+    {
 
+        $this->vars['lastSync'] = DateTime::timeSince(Sync::max('created_at'));
+
+        $this->asExtension('ListController')->index();
+    }
     public function onSync()
     {
         $Sync = new ServerPilotSync;
-        $Sync->All();
-
+        $Sync->All()->log('sync_all');
+        
         return $this->listRefresh('syncs');
     }
 
@@ -43,5 +52,25 @@ class Syncs extends Controller
         $Sync->truncate();
 
         return $this->listRefresh('syncs');
+    }
+
+    public function test()
+    {
+        $ServerPilot = new ServerPilot;
+        $response['servers'] = $ServerPilot->Resource('Servers')->get();
+        $response['databases'] = $ServerPilot->Resource('Databases')->get();
+        $response['systemusers'] = $ServerPilot->Resource('SystemUsers')->get();
+        $response['systemusers'] = $ServerPilot->Resource('SystemUsers')->get();
+        $response['apps'] = $ServerPilot->Resource('Apps')->get();
+
+        #$Resource = "Awebsome\Serverpilot\Models".$Resource;
+        #$Resource = new $Resource;
+
+        #return '<pre>'.json_encode($Resource::where('id','>','1')->get(), JSON_PRETTY_PRINT).'</pre>';
+        #$Sync = new ServerPilotSync;
+        # $response['sync'] = $Sync->Apps()->now();
+        
+        $allResponse = '<pre>'.json_encode($response, JSON_PRETTY_PRINT).'</pre>';
+         return $allResponse;
     }
 }

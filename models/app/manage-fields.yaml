@@ -1,0 +1,53 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: App Name
+        span: left
+        placeholder: appname
+        disabled: 1
+
+    server_id:
+        label: Server
+        span: right
+        disabled: 1
+
+    toolbar:
+        type: partial
+        path: app_toolbar
+        cssClass: collapse-visible
+
+secondaryTabs:
+    stretch: true
+    fields:
+        domains:
+            label: Domains
+            tab: App
+            type: repeater
+            span: left
+            form:
+                fields:
+                    domain:
+                        label: Domain
+                        type: text
+        runtime:
+            label: Runtime
+            tab: App
+            oc.commentPosition: ''
+            default: php5.6
+            type: radio
+            span: right
+            options:
+                php7.0: php7.0
+                php5.6: 'php5.6 (recommended)'
+                php5.5: php5.5
+                php5.4: php5.4
+
+        databases:
+            label: Databases
+            tab: App
+            type: partial
+            path: relation_databases
+            span: right
