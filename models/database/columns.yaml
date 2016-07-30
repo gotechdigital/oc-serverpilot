@@ -4,12 +4,19 @@
 
 columns:
 
-    name:
-        clickable: false
-        label: Name
     id:
         label: ID
         clickable: false
-    app_id:
+        invisible: true
+    name:
         clickable: false
-        label: App Id
+        label: Database Name
+    app:
+        clickable: false
+        label: App 
+        relation: app 
+        valueFrom: name
+    created_at:
+        clickable: false
+        label: Created 
+        type: datetime

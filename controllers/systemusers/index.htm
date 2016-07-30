@@ -1,10 +1,22 @@
+<style>.tab-content div.tab-pane.white{background-color: #fff !important;}</style>
 <div class="control-tabs content-tabs tabs-flush" data-control="tab">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#dashboard"> <i class="icon-th-large"></i> Dashboard</a></li>
         <li><a href="#list"><i class="icon-list"></i> List</a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active">
+        <div class="tab-pane white active">
+            <div class="toolbar-widget list-header">
+                <div class="control-toolbar">
+                    <div class="toolbar-item toolbar-primary">
+                        <div data-control="toolbar">
+                            
+                                <?=$this->makePartial('list_toolbar');?>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
             <?= $this->makePartial('view_th_dash') ?>
         </div>
         <div class="tab-pane">

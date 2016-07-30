@@ -1,7 +1,18 @@
 columns:
+    id:
+        label: UserId
+        type: text
+        invisible: true
     name:
         label: Name
         type: text
-    updated_at:
-        label: 'Last Updated'
-        type: timesince
+        searchable: true
+    apps:
+        users_count:
+        label: Apps
+        relation: apps
+        valueFrom: name
+        searchable: true
+    created_at:
+        label: 'Created At'
+        type: datetime

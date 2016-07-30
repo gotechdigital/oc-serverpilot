@@ -20,7 +20,7 @@ class Plugin extends PluginBase
         {
                 $schedule->call(function () {
                 $Sync = new Sync;
-                $Sync->schedule = 'sync_schedule_'.$runTime;
+                $Sync->schedule = 'sync_auto_schedule_'.$runTime;
                 $Sync->save();            
 
             })->$runTime();

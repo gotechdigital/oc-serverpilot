@@ -3,10 +3,15 @@ columns:
         label: ServerId
         type: text
         width: 5%
+        invisible: true
     name:
         label: Name
         type: text
         width: 15%
+    lastaddress:
+        label: IP/Host
+        type: text
+        width: 12%
     autoupdates:
         label: Updates
         type: switch
@@ -15,17 +20,23 @@ columns:
         label: Firewall
         type: switch
         width: 5%
-    lastaddress:
-        label: IP/Host
-        type: text
         width: 10%
+    apps:
+        users_count:
+        label: Apps
+        relation: apps
+        valueFrom: name
+
     datecreated:
         label: 'Created At'
         type: datetime
-        width: 12%
+        width: 15%
+        invisible: true
     lastconn:
         label: 'Last Connection'
         type: timetense
+        width: 10%
     updated_at:
         label: 'Last Sync'
         type: timesince
+        width: 15%

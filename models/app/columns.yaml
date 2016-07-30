@@ -6,6 +6,16 @@ columns:
     runtime:
         label: Runtime
         type: text
-    user_id:
-        label: UserId
+    user:
+        label: System User
         type: text
+        relation: systemuser
+        valueFrom: name 
+    databases:
+        label: Databases
+        type: text
+        relation: databases
+        valueFrom: name
+    created_at:
+        label: Created At
+        type: datetime

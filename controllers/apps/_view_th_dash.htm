@@ -1,77 +1,63 @@
 <?php if(count($Apps->get())>0):?>
-    <div class="toolbar-widget list-header">
-        <div class="toolbar-widget list-header">
-            <div class="form-group span-full">
-                <button
-                    type="button"
-                    data-control="popup"
-                    data-handler="onCreateForm"
-                    data-request-data="redirect:1"
-                    class="btn btn-primary oc-icon-puzzle-piece"
-                    style="margin-left:-20px;">
-                    New App
-                </button>
-                <?=$this->makePartial('../syncs/sync_button')?>
+
+    <?php foreach($Apps->get() as $user => $value):?>
+        <div class="callout fade in callout-info no-icon no-subheader col-sm-4">
+            <div class="header">
+                <h3><i class="icon-puzzle-piece" style="margin-right: 10px;"></i> <?=$value->name?></h3>
+            </div>
+            <div class="content">
+                <div class="control-status-list">
+                    <ul>
+                        <li>
+                            <span class="status-icon <?=($value->ssl) ? 'success':'danger' ?>"><i class="icon-<?=($value->ssl) ? 'check':'times' ?>"></i></span>
+                            <span class="status-text <?=($value->ssl) ? 'success':'danger' ?>">SSL</span>
+                            <span class="status-label link"><?=($value->ssl) ? '<i class="oc-icon-check text-success"></i>':'<i class="icon-times-circle text-danger"></i>' ?></span>
+                        </li>
+                        <li>
+                            <span class="status-icon <?=($value->domains) ? 'success':'danger' ?>"><i class="icon-globe"></i></span>
+                            <span class="status-text">Domains</span>
+                            <span class="status-label link">
+                                <?if(is_array($value->domains)):?>
+                                    <?foreach($value->domains as $domain => $val):?>
+                                        <a style="margin-left: 6px;" href="http://<?=$val['domain']?>" target="_blank"><?=$val['domain']?></a>  
+                                    <?endforeach?>
+                                <?else:?>
+                                    <i class="icon-times-circle text-danger"></i>
+                                <?endif;?>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="status-icon <?=(count($value->databases)>0) ? 'info':'warning' ?>"><i class="icon-database"></i></span>
+                            <span class="status-text">Databases</span>
+                            <span class="status-label link">
+                                <?if(count($value->databases)>0):?>
+                                    <?foreach($value->databases as $database => $db):?>
+                                        <a href="<?=Backend::url('awebsome/serverpilot/databases')?>" style="margin-left: 6px;"><?=$db->name?></a> 
+                                    <?endforeach?>
+                                <?else:?>
+                                    <i class="icon-times-circle text-warning"></i>
+                                <?endif;?>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span class="status-icon info"><i class="icon-hdd-o"></i></span>
+                            <span class="status-text"><?=$value->server->name?></span>
+                            <span class="status-label link">This app is managed by <a href="<?=Backend::url('awebsome/serverpilot/systemusers')?>"><b><?=$value->systemuser->name?></b></a></span>
+                        </li>
+                        <li>
+                            <span class="status-icon default"><i class="icon-cogs"></i></span>
+                            <span class="status-text"><?=$value->runtime?></span>
+                            <span class="status-label link"><button type="button"
+                            onclick="window.location.href='<?=Backend::url('awebsome/serverpilot/apps/update/'.$value->id)?>'"
+                            class="btn btn-info btn-xs oc-icon-cog pull-right">Manage</button></span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <?php foreach($Apps->get() as $user => $value):?>
-            <div class="callout fade in callout-info no-icon no-subheader" style="display: inline-block; width: 49.5%;">
-                <div class="header">
-                    <h3><i class="icon-puzzle-piece" style="margin-right: 10px;"></i> <?=$value->name?></h3>
-                </div>
-                <div class="content">
-                    <div class="control-status-list">
-                        <ul>
-                            <li>
-                                <span class="status-icon <?=($value->ssl) ? 'success':'danger' ?>"><i class="icon-<?=($value->ssl) ? 'check':'times' ?>"></i></span>
-                                <span class="status-text <?=($value->ssl) ? 'success':'danger' ?>">SSL</span>
-                                <span class="status-label link"><?=($value->ssl) ? '<i class="oc-icon-check text-success"></i>':'<i class="icon-times-circle text-danger"></i>' ?></span>
-                            </li>
-                            <li>
-                                <span class="status-icon <?=($value->domains) ? 'success':'danger' ?>"><i class="icon-globe"></i></span>
-                                <span class="status-text">Domains</span>
-                                <span class="status-label link">
-                                    <?if(is_array($value->domains)):?>
-                                        <?foreach($value->domains as $domain => $val):?>
-                                            <a style="margin-left: 6px;" href="http://<?=$val['domain']?>" target="_blank"><?=$val['domain']?></a>  
-                                        <?endforeach?>
-                                    <?else:?>
-                                        <i class="icon-times-circle text-danger"></i>
-                                    <?endif;?>
-                                </span>
-                            </li>
-                            <li>
-                                <span class="status-icon <?=(count($value->databases)>0) ? 'info':'warning' ?>"><i class="icon-database"></i></span>
-                                <span class="status-text">Databases</span>
-                                <span class="status-label link">
-                                    <?if(count($value->databases)>0):?>
-                                        <?foreach($value->databases as $database => $db):?>
-                                            <a href="<?=Backend::url('awebsome/serverpilot/databases')?>" style="margin-left: 6px;"><?=$db->name?></a> 
-                                        <?endforeach?>
-                                    <?else:?>
-                                        <i class="icon-times-circle text-warning"></i>
-                                    <?endif;?>
-                                </span>
-                            </li>
-                            
-                            <li>
-                                <span class="status-icon info"><i class="icon-hdd-o"></i></span>
-                                <span class="status-text"><?=@$value->server->name?></span>
-                                <span class="status-label link">This app is hosted in <a href="ssh://<?=@$value->server->lastaddress?>"><?=@$value->server->lastaddress?></a> and managed by <a href="<?=Backend::url('awebsome/serverpilot/systemusers')?>"><b><?=$value->systemuser->name?></b></a></span>
-                            </li>
-                            <li>
-                                <span class="status-icon default"><i class="icon-cogs"></i></span>
-                                <span class="status-text"><?=$value->runtime?></span>
-                                <span class="status-label link"><button type="button"
-                                onclick="window.location.href='<?=Backend::url('awebsome/serverpilot/apps/update/'.$value->id)?>'"
-                                class="btn btn-info btn-xs oc-icon-cog pull-right">Manage</button></span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        <?endforeach?>
-    </div>
+    <?endforeach?>
+
 <?else:?>
 <p class="flash-message static error">No apps to display</p>
 <?endif?>

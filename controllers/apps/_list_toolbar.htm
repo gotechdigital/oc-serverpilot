@@ -1,7 +1,9 @@
-<div data-control="toolbar">
-    <a
-        href="<?= Backend::url('awebsome/serverpilot/apps/create') ?>"
-        class="btn btn-primary oc-icon-plus">
-        New App
-    </a>
-</div>
+<button
+    type="button"
+    data-control="popup"
+    data-handler="onCreateForm"
+    data-request-data="redirect:1"
+    class="btn btn-primary oc-icon-puzzle-piece">
+    New App
+</button>
+<?=$this->makePartial('../syncs/sync_button')?>
