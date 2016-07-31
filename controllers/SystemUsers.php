@@ -27,6 +27,8 @@ class SystemUsers extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
     
+    public $requiredPermissions = ['awebsome.serverpilot.systemusers'];
+
     public function __construct()
     {
         parent::__construct();

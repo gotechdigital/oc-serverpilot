@@ -9,7 +9,6 @@ use BackendMenu;
 use System\Helpers\DateTime;
 
 use Backend\Classes\Controller;
-use Awebsome\Serverpilot\Classes\ServerPilot;
 use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
 use Awebsome\Serverpilot\Models\Sync;
@@ -33,15 +32,13 @@ class Apps extends Controller
     public $bodyClass = 'compact-container';
     protected $assetsPath = '/plugins/awebsome/serverpilot/assets';
 
-    public $ServerPilot;
+    public $requiredPermissions = ['awebsome.serverpilot.apps'];
 
     public function __construct()
     {
         parent::__construct();
 
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'apps');
-        
-        $this->ServerPilot = new ServerPilot;
 
         $this->addCss($this->assetsPath.'/modal-form.css');
     }

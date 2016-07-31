@@ -43,3 +43,25 @@ navigation:
                 icon: icon-cloud-download
                 permissions:
                     - awebsome.serverpilot.syncs
+permissions:
+    awebsome.serverpilot.serverpilot:
+        tab: 'awebsome.serverpilot::lang.plugin.name'
+        label: 'Can use Awebsome ServerPilot'
+    awebsome.serverpilot.syncs:
+        tab: 'awebsome.serverpilot::lang.plugin.name'
+        label: 'View synchronization logs'
+    awebsome.serverpilot.servers:
+        tab: 'awebsome.serverpilot::lang.plugin.name'
+        label: 'View Servers'
+    awebsome.serverpilot.systemusers:
+        tab: 'awebsome.serverpilot::lang.plugin.name'
+        label: 'Manage SystemUsers'
+    awebsome.serverpilot.databases:
+        tab: 'awebsome.serverpilot::lang.plugin.name'
+        label: 'Manage Databases'
+    awebsome.serverpilot.apps:
+        tab: 'awebsome.serverpilot::lang.plugin.name'
+        label: 'Manage Apps'
+    awebsome.serverpilot.settings:
+        tab: 'awebsome.serverpilot::lang.plugin.name'
+        label: 'ServerPilot Settings'

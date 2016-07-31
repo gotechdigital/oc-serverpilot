@@ -29,6 +29,8 @@ class Servers extends Controller
 
     public $ServerPilot;
 
+    public $requiredPermissions = ['awebsome.serverpilot.servers'];
+
     public function __construct()
     {
         parent::__construct();

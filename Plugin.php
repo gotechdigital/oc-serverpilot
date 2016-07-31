@@ -39,7 +39,7 @@ class Plugin extends PluginBase
                 'icon'        => 'icon-cloud',
                 'class'       => 'Awebsome\Serverpilot\Models\Settings',
                 'order'       => 100,
-                'permissions' => [ 'awebsome.serverpilot.configs' ],
+                'permissions' => [ 'awebsome.serverpilot.settings' ],
                 'keywords'    => 'Server ServerPilot'
             ],
         ];

@@ -27,6 +27,8 @@ class Databases extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
+    public $requiredPermissions = ['awebsome.serverpilot.databases'];
+
     public function __construct()
     {
         parent::__construct();
