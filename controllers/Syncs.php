@@ -6,7 +6,7 @@ use Backend\Classes\Controller;
 use System\Helpers\DateTime;
 
 use Awebsome\Serverpilot\Models\Sync;
-
+use Awebsome\Serverpilot\Models\Settings;
 use Awebsome\Serverpilot\Classes\ServerPilot;
 use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
@@ -58,21 +58,9 @@ class Syncs extends Controller
 
     public function test()
     {
-        $ServerPilot = new ServerPilot;
-        $response['servers'] = $ServerPilot->Resource('Servers')->get();
-        $response['databases'] = $ServerPilot->Resource('Databases')->get();
-        $response['systemusers'] = $ServerPilot->Resource('SystemUsers')->get();
-        $response['systemusers'] = $ServerPilot->Resource('SystemUsers')->get();
-        $response['apps'] = $ServerPilot->Resource('Apps')->get();
-
-        #$Resource = "Awebsome\Serverpilot\Models".$Resource;
-        #$Resource = new $Resource;
-
-        #return '<pre>'.json_encode($Resource::where('id','>','1')->get(), JSON_PRETTY_PRINT).'</pre>';
-        #$Sync = new ServerPilotSync;
-        # $response['sync'] = $Sync->Apps()->now();
+        $test = Settings::get('sync_data');
         
-        $allResponse = '<pre>'.json_encode($response, JSON_PRETTY_PRINT).'</pre>';
+        $allResponse = '<pre>'.json_encode($test, JSON_PRETTY_PRINT).'</pre>';
          return $allResponse;
     }
 }

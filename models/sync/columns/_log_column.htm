@@ -1,3 +1,6 @@
-<?foreach($value as $logs => $log):?>
+<?
+if(is_array($value)):
+foreach($value as $logs => $log):?>
 	<?=$log['name']?>: <?=$log['log']?> <br>
-<?endforeach?>
+<?endforeach;
+endif;?>

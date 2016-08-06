@@ -24,6 +24,7 @@ tabs:
             tab: Options
             span: left
             options:
+                realtime: 'Only Manual Sync'
                 everyMinute: 'Run the task every minute'
                 everyFiveMinutes: 'Run the task every five minutes'
                 everyTenMinutes: 'Run the task every ten minutes'

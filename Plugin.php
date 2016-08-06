@@ -3,6 +3,8 @@
 use Awebsome\Serverpilot\Models\Sync;
 use Awebsome\Serverpilot\Models\Settings;
 
+use Awebsome\Serverpilot\Classes\ServerPilotSync;
+
 use System\Classes\PluginBase;
 use Db;
 
@@ -18,10 +20,10 @@ class Plugin extends PluginBase
 
         if($runTime != 'realtime')
         {
-                $schedule->call(function () {
-                $Sync = new Sync;
-                $Sync->schedule = 'sync_auto_schedule_'.$runTime;
-                $Sync->save();            
+            $schedule->call(function () {
+
+                $Sync = new ServerPilotSync;
+                $Sync->All()->log('sync_auto_schedule');
 
             })->$runTime();
         }
