@@ -12,19 +12,19 @@
                     foreach($value->databases as $database => $db):?>
                         <li>
                             <div class="row">
-                                <div class="col-xs-3">
+                                <div class="col-sm-6 col-lg-3" style="margin-top:5px;">
                                     <span class="status-icon info"><i class="icon-database"></i></span>
                                     <span class="status-text info"><?=$db->name?></span>
                                 </div>
-                                <div class="col-xs-3">
+                                <div class="col-sm-6 col-lg-3" style="margin-top:5px;">
                                     <span class="status-icon default"><i class="icon-puzzle-piece"></i></span>
                                     <span class="status-text info"><?=$db->app->name?></span>
                                 </div>
-                                <div class="col-xs-3">
+                                <div class="col-sm-6 col-lg-3" style="margin-top:5px;">
                                     <span class="status-icon warning"><i class="icon-user"></i></span>
                                     <span class="status-text warning"><?=$db->user['name']?></span>
                                 </div>
-                                <div class="col-xs-3" id="reset-<?=$db->id?>">
+                                <div class="col-sm-6 col-lg-3" style="margin-top:5px;" id="reset-<?=$db->id?>">
                                     <span class="status-icon warning"><i class="icon-key"></i></span>
                                     <span class="status-text warning"><span class="password-reset"><b><span class="password">···Password···</span></b></span> 
                                     <button 
