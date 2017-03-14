@@ -20,8 +20,9 @@ fields:
         oc.commentPosition: ''
         default: php5.6
         options:
+            php7.1: php7.1
             php7.0: php7.0
-            php5.6: 'php5.6 (recommended)'
+            php5.6: php5.6
             php5.5: php5.5
             php5.4: php5.4
         span: full
@@ -31,7 +32,7 @@ fields:
         type: radio
         cssClass: 'radio-runtime'
     domains:
-        label: Domain 
+        label: Domain
         commentAbove: 'Main maindomain.tld without (www)'
         type: text
         context: create
@@ -39,5 +40,3 @@ fields:
             action: disable
             field: name
             condition: value[]
-            
-
