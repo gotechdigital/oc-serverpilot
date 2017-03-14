@@ -40,8 +40,9 @@ secondaryTabs:
             type: radio
             span: right
             options:
+                php7.1: php7.1
                 php7.0: php7.0
-                php5.6: 'php5.6 (recommended)'
+                php5.6: php5.6
                 php5.5: php5.5
                 php5.4: php5.4
 
