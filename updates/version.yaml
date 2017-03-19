@@ -7,7 +7,9 @@
     - 'Update tables'
     - update_tables.php
 1.0.4:
-    - Fix responsive 
+    - Fix responsive
+1.0.5:
     - Fix bug Sync
+1.0.6:
     - Implemented php runtime (7.1)
-    - Implemented ftp .Configs for (Atom And Sublime Text).
+1.1.0: !!! Implemented ftp .Configs for (Atom And Sublime Text).
