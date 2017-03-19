@@ -1,5 +1,13 @@
 1.0.1:
-    - Initialize plugin.
+    - 'Initialize plugin.'
 1.0.2:
-    - Create tables
+    - 'Create tables'
     - create_tables.php
+1.0.3:
+    - 'Update tables'
+    - update_tables.php
+1.0.4:
+    - Fix responsive 
+    - Fix bug Sync
+    - Implemented php runtime (7.1)
+    - Implemented ftp .Configs for (Atom And Sublime Text).
