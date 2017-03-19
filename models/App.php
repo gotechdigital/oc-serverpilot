@@ -7,6 +7,8 @@ use Awebsome\Serverpilot\Models\Settings;
 use Awebsome\Serverpilot\Models\SystemUser;
 use Awebsome\Serverpilot\Models\Database;
 
+use Awebsome\Serverpilot\Classes\Atom;
+use Awebsome\Serverpilot\Classes\Sublime;
 use Awebsome\Serverpilot\Classes\ServerPilot;
 use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
@@ -15,6 +17,7 @@ use Awebsome\Serverpilot\Classes\ServerPilotSync;
  */
 class App extends Model
 {
+    use \October\Rain\Database\Traits\Purgeable;
 
     /**
      * @var string The database table used by the model.
@@ -35,6 +38,11 @@ class App extends Model
      * @var array jSonables fields
      */
     protected $jsonable = ['domains','ssl','all_domains'];
+
+    /**
+     * @var array Purgeable fields
+     */
+    protected $purgeable = [];
 
     /**
      * @var array Relations
@@ -62,10 +70,10 @@ class App extends Model
     protected $rules = [
         'user_id' => ['required'],
         'runtime' => ['required'],
-        'name' => ['required', 'between:3,16','alpha_num','unique:awebsome_serverpilot_apps'],
-        //'domains' => ['required'],
+        'name' => ['required', 'between:3,16','alpha_num'],
+        'domains' => ['required']
     ];
-    
+
     public function beforeCreate()
     {
 
@@ -89,7 +97,16 @@ class App extends Model
                 $this->ssl = $App->data->ssl;
                 $this->domains = $this->setDomains($App->data->domains);
 
-            }else throw new ValidationException(['error_mesage' => json_encode($App)]);  
+                //set AtomConfig
+                if(empty($this->atom_config)){
+                    $this->atom_config = $this->getAtomConfig();
+                }
+                //set SublimeConfig
+                if(empty($this->sublime_config)){
+                    $this->sublime_config = $this->getSublimeConfig();
+                }
+
+            }else throw new ValidationException(['error_mesage' => json_encode($App)]);
         }
     }
 
@@ -98,19 +115,29 @@ class App extends Model
         if(post('save_app_update'))
         {
             $ServerPilot = new ServerPilot;
-        
+
             $App = $ServerPilot->Apps($this->id)->update([
                             #'name'      => $this->name,
                             #'sysuserid' => $this->user_id,
                             'runtime'   => $this->runtime,
                             'domains'   => array_column($this->domains, 'domain'),
-                        ]); 
+                        ]);
 
             if($App->data->id && $App->data->serverid)
             {
                 $this->domains = $this->setDomains($App->data->domains);
 
-            }else throw new ValidationException(['error_mesage' => json_encode($App)]);  
+            }else throw new ValidationException(['error_mesage' => json_encode($App)]);
+        }
+
+        //set AtomConfig
+        if(empty($this->atom_config)){
+            $this->atom_config = $this->getAtomConfig();
+        }
+
+        //set SublimeConfig
+        if(empty($this->sublime_config)){
+            $this->sublime_config = $this->getSublimeConfig();
         }
     }
 
@@ -118,6 +145,12 @@ class App extends Model
     {
         $ServerPilot = new ServerPilot;
         $ServerPilot->Apps($this->id)->delete();
+    }
+
+    public function afterCreate()
+    {
+        $Sync = new ServerPilotSync;
+        $Sync->Apps()->now();
     }
 
     public function afterDelete()
@@ -139,7 +172,7 @@ class App extends Model
         $domains[] = 'www.'.$domain;
 
         $prevDomain = $this->getPrevDomain();
-        
+
         if($prevDomain)
             $domains[] = $prevDomain;
 
@@ -150,14 +183,14 @@ class App extends Model
      * getDomains
      * ======================================
      * reformat array to repeater field
-     * @param  array  $domains 
+     * @param  array  $domains
      * @return array
      */
     public function setDomains($domains)
     {
-        foreach ($domains as $key => $value) 
+        foreach ($domains as $key => $value)
         {
-            $allDomains[]['domain'] = $value; 
+            $allDomains[]['domain'] = $value;
         }
 
         return $allDomains;
@@ -166,7 +199,7 @@ class App extends Model
     /**
      * getPrevDomain
      * ==============================
-     * 
+     *
      */
     public function getPrevDomain()
     {
@@ -190,5 +223,43 @@ class App extends Model
         }
 
         return $options;
+    }
+
+    /**
+     * asume the first domain with the main (default)
+     */
+    public function getMainDomain()
+    {
+        return current(current($this->domains));
+    }
+
+    /**
+     * get Atom Config data
+     */
+    public function getAtomConfig()
+    {
+        $config = Atom::config([
+                'host' => $this->getMainDomain(),
+                'user' => $this->systemuser->name,
+                'pass' => $this->systemuser->passwordDecrypt(),
+                'app'  => $this->name
+            ]);
+
+        return json_encode($config, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * get Sublime Config data
+     */
+    public function getSublimeConfig()
+    {
+        $config = Sublime::config([
+                'host' => $this->getMainDomain(),
+                'user' => $this->systemuser->name,
+                'password' => $this->systemuser->passwordDecrypt(),
+                'app'  => $this->name
+            ]);
+
+        return json_encode($config, JSON_PRETTY_PRINT);
     }
 }

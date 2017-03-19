@@ -52,3 +52,42 @@ secondaryTabs:
             type: partial
             path: relation_databases
             span: right
+
+        editor:
+            label: Select an Editor
+            tab: Ftp
+            type: radio
+            span: left
+            default: Atom
+            cssClass: 'radio-runtime'
+            options:
+                Atom: 'Atom'
+                Sublime: 'Sublime Text'
+
+        atom_config:
+            label: Atom Config
+            commentHtml: true
+            comment: 'Remote <a target="_blank" href="https://atom.io/packages/Remote-FTP">FTP</a> Config for <a target="_blank" href="https://atom.io">Atom editor</a> You can reset the configuration by deleting the previous one and save again'
+            tab: Ftp
+            type: codeeditor
+            size: giant
+            span: left
+            language: json
+            trigger:
+                action: show
+                field: editor
+                condition: value[Atom]
+
+        sublime_config:
+            label: Sublime Text Config
+            commentHtml: true
+            comment: 'Remote <a target="_blank" href="https://wbond.net/sublime_packages/sftp">FTP</a> Config for <a target="_blank" href="https://www.sublimetext.com/">Sublime text</a> You can reset the configuration by deleting the previous one and save again'
+            tab: Ftp
+            type: codeeditor
+            size: giant
+            span: left
+            language: json
+            trigger:
+                action: show
+                field: editor
+                condition: value[Sublime]

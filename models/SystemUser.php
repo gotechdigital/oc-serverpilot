@@ -1,5 +1,6 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
+use Crypt;
 use Model;
 use Flash;
 use Request;
@@ -8,14 +9,15 @@ use ValidationException;
 use Awebsome\Serverpilot\Models\Server;
 use Awebsome\Serverpilot\Models\Settings;
 use Awebsome\Serverpilot\Models\Sync;
-
 use Awebsome\Serverpilot\Classes\ServerPilot;
+
+use Illuminate\Contracts\Encryption\DecryptException;
 /**
  * SystemUser Model
  */
 class SystemUser extends Model
 {
-    use \October\Rain\Database\Traits\Purgeable;
+    # use \October\Rain\Database\Traits\Purgeable;
     use \October\Rain\Database\Traits\Validation;
 
     /**
@@ -31,10 +33,12 @@ class SystemUser extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['id', 'server_id','name'];
+    protected $fillable = ['id', 'server_id','name','password'];
 
-    
-    protected $purgeable = ['password'];
+    /**
+     * @var array Purgeable fields
+     */
+    # protected $purgeable = [];
 
     /**
      * @var array Relations
@@ -43,14 +47,13 @@ class SystemUser extends Model
     public $belongsTo = ['server' => ['Awebsome\Serverpilot\Models\Server']];
 
 
-
     /**
      * @var array Validation rules
      */
     protected $rules = [
         'name' => ['required','alpha', 'between:3,16'],
         'server_id' => ['required'],
-        'password' => ['between:8,20']
+        'password' => ['between:8,255']
     ];
 
     public function beforeCreate()
@@ -70,14 +73,35 @@ class SystemUser extends Model
 
             if($SystemUser->data->id)
                 $this->id = $SystemUser->data->id;
-            else throw new ValidationException(['error_mesage' => json_encode($SystemUser)]);   
+            else throw new ValidationException(['error_mesage' => json_encode($SystemUser)]);
         }
 
     }
 
+    /**
+     * Set before create or save values
+     */
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = strtolower($value);
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Crypt::encrypt($value);
+        # to decrypt use:
+        # Crypt::decrypt($encryptedValue);
+    }
+
+    public function passwordDecrypt()
+    {
+        try {
+            return Crypt::decrypt($this->password);
+        }
+        catch (DecryptException $ex) {
+            return null;
+        }
+
     }
 
     /**

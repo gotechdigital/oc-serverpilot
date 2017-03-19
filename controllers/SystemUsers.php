@@ -3,6 +3,7 @@
 use Flash;
 use Backend;
 use Redirect;
+use Request;
 use BackendMenu;
 use Backend\Classes\Controller;
 
@@ -26,7 +27,7 @@ class SystemUsers extends Controller
 
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
-    
+
     public $requiredPermissions = ['awebsome.serverpilot.systemusers'];
 
     public function __construct()
@@ -82,19 +83,21 @@ class SystemUsers extends Controller
     /**
      * onResetPassword
      * reset pass and Sync ServerPilot
-     * 
+     *
      * @return [type] [description]
      */
     public function onResetPsw()
     {
         $id         = post('resource_id');
         $resource   = post('resource');
-        $newPassword = str_random(20);
+        $newPassword = str_random(16);
 
         $ServerPilot = new ServerPilot;
-        
-        if($id)
+
+        if($id){
             $ServerPilot->SystemUsers($id)->update(['password'=> $newPassword]);
+            SystemUser::find($id)->update(['password'=> $newPassword]);
+        }
 
         return [
             'newPassword' => $newPassword,

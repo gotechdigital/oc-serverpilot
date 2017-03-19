@@ -17,8 +17,7 @@ fields:
         type: text
     runtime:
         label: Runtime
-        oc.commentPosition: ''
-        default: php5.6
+        default: php7.0
         options:
             php7.1: php7.1
             php7.0: php7.0

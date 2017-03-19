@@ -1,5 +1,5 @@
 fields:
-    server_id: 
+    server_id:
         label: Server
         type: dropdown
         options: getServerList
@@ -24,3 +24,5 @@ fields:
             action: disable
             field: name
             condition: value[]
+        attributes:
+            maxlength: 16
