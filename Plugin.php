@@ -10,6 +10,11 @@ use Db;
 
 class Plugin extends PluginBase
 {
+    /**
+     * @var array Plugin dependencies
+     */
+    public $require = ['RainLab.Translate'];
+
     public function registerComponents()
     {
     }
@@ -31,7 +36,7 @@ class Plugin extends PluginBase
 
     public function registerSettings()
     {
-    	return [
+        return [
 
             //Connection Settings
             'serverpilot'  => [
