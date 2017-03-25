@@ -4,8 +4,8 @@ plugin:
     author: LucasZdv
     icon: oc-icon-cloud
     homepage: 'https://awebsome.me'
-require:
-    - RainLab.Translate
+    require:
+        - RainLab.Translate
 navigation:
     serverpilot:
         label: ServerPilot
