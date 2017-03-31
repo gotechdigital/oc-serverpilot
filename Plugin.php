@@ -23,14 +23,17 @@ class Plugin extends PluginBase
     {
         $runTime = Settings::get('sync_data');
 
-        if($runTime != 'realtime')
+        if(!is_null($runTime))
         {
-            $schedule->call(function () {
+          if($runTime != 'realtime')
+          {
+              $schedule->call(function () {
 
-                $Sync = new ServerPilotSync;
-                $Sync->All()->log('sync_auto_schedule');
+                  $Sync = new ServerPilotSync;
+                  $Sync->All()->log('sync_auto_schedule');
 
-            })->$runTime();
+              })->$runTime();
+          }
         }
     }
 
