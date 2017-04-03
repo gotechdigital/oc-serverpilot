@@ -99,10 +99,10 @@ class ServerPilotSync
     /**
      * Now
      * ========================
-     * Execution sync, 
+     * Execution sync,
      * get data form ServerPilot
      * and put data in the database
-     * 
+     *
      * @return array Resources petition
      */
     public function now()
@@ -113,13 +113,13 @@ class ServerPilotSync
         # SyncTo Model path ex: 'Awebsome\Serverpilot\Models\Server'
         $ResourceModel = $this->modelPath;
 
-           
+
 
         # Create or Update resource
         if(count($Resources) > 0)
         {
             foreach ($Resources as $resource => $value) {
-                
+
                 # Mapping data
                 $data = $this->dataMapping($value);
 
@@ -140,10 +140,10 @@ class ServerPilotSync
 
         # Resources that have been deleted in ServerPilot
         $resourceDeleted = $ResourceModel::whereNotIn($this->idRowName, array_column(array_map('get_object_vars', $Resources), 'id'))->delete();
-        
+
         # Delete resources records
         $this->addSyncLog($this->scheduleName, $this->syncResource.' Deleted: '.json_encode($resourceDeleted));
-        
+
         return $this;
     }
 
@@ -151,7 +151,7 @@ class ServerPilotSync
      * dataMapping
      * =========================
      * Mapping data for resources queries.
-     * 
+     *
      * @param  array $value data
      * @return array        data
      */
@@ -167,6 +167,7 @@ class ServerPilotSync
                             'lastaddress'   => $value->lastaddress,
                             'datecreated'   => $value->datecreated,
                             'lastconn'      => $value->lastconn,
+                            'created_at'    => $value->datecreated
                         ];
                 break;
 
@@ -196,8 +197,9 @@ class ServerPilotSync
                         'name'              => $value->name,
                         'runtime'           => $value->runtime,
                         'ssl'               => $value->ssl,
+                        'created_at'        => $value->datecreated,
                         'domains'           => $this->getDomains($value->domains)
-                    ];  
+                    ];
                 break;
         }
 
@@ -208,20 +210,20 @@ class ServerPilotSync
      * getDomains
      * ======================================
      * reformat array to repeater field format
-     * @param  array  $domains 
+     * @param  array  $domains
      * @return array
      */
     public function getDomains($domains)
     {
-        foreach ($domains as $key => $value) 
+        foreach ($domains as $key => $value)
         {
-            $allDomains[]['domain'] = $value; 
+            $allDomains[]['domain'] = $value;
         }
 
         return $allDomains;
     }
 
-    
+
     /**
      * putUpdateResource
      * ======================================
@@ -233,10 +235,10 @@ class ServerPilotSync
      */
     public function putUpdateResource($resource, $data, $response)
     {
-        
+
         $schedule    = 'update_resource_'.strtolower($resource);
         $log         = 'petition: '.json_encode($data).' response:'.json_encode($response);
-        
+
         $this->addSyncLog($schedule, $log)->log($schedule);
 
         # $this->all();
@@ -253,10 +255,10 @@ class ServerPilotSync
      */
     public function putCreateResource($resource, $data, $response)
     {
-        
+
         $schedule    = 'create_resource_'.strtolower($resource);
         $log         = 'petition: '.json_encode($data).' response:'.json_encode($response);
-        
+
         $this->addSyncLog($schedule, $log)->log($schedule);
 
         # $this->all();
@@ -287,7 +289,7 @@ class ServerPilotSync
 
     /**
      * Schedules Logs.
-     * 
+     *
      * @param string $schedule      ~# schedule name
      * @param string $log           ~# Log or description
      */
@@ -303,7 +305,7 @@ class ServerPilotSync
             return $Model;
         }
     }
-    
+
     public function testRequest()
     {
        $request = $this->ServerPilot->Resource($this->syncResource)->listAll()->data;
