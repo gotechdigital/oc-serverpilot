@@ -22,7 +22,7 @@ class Server extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['id','name','autoupdates','firewall','lastaddress','datecreated','lastconn'];
+    protected $fillable = ['id','name','autoupdates','firewall','lastaddress','datecreated','lastconn','created_at'];
 
     /**
      * @var array Relations

@@ -32,7 +32,7 @@ class App extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['id','user_id','server_id','name','runtime','ssl','domains','all_domains'];
+    protected $fillable = ['id','user_id','server_id','name','runtime','ssl','domains','all_domains','created_at'];
 
     /**
      * @var array jSonables fields
