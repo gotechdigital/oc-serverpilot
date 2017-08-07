@@ -1,42 +1,48 @@
 columns:
-    id:
-        label: ServerId
-        type: text
-        width: 5%
-        invisible: true
     name:
         label: Name
-        type: text
-        width: 15%
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_name_column.htm
     lastaddress:
         label: IP/Host
-        type: text
-        width: 12%
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_lastaddress_column.htm
     autoupdates:
         label: Updates
-        type: switch
-        width: 5%
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_autoupdates_column.htm
     firewall:
         label: Firewall
-        type: switch
-        width: 5%
-        width: 10%
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_firewall_column.htm
+    deny_unknown_domains:
+        label: 'Deny uknown domains'
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_deny_uknown_domains_column.htm
+    systemusers:
+        label: Users
+        relation: systemusers
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_users_column.htm
+        sortable: false
     apps:
-        users_count:
         label: Apps
         relation: apps
-        valueFrom: name
-
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_apps_column.htm
+        sortable: false
+    databases:
+        label: Databases
+        relation: databases
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_databases_column.htm
+        sortable: false
     datecreated:
         label: 'Created At'
         type: datetime
-        width: 15%
-        invisible: true
     lastconn:
         label: 'Last Connection'
         type: timetense
-        width: 10%
     updated_at:
         label: 'Last Sync'
         type: timesince
-        width: 15%

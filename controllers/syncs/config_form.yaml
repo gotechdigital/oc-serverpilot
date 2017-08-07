@@ -13,19 +13,3 @@ modelClass: Awebsome\Serverpilot\Models\Sync
 
 # Default redirect location
 defaultRedirect: awebsome/serverpilot/syncs
-
-# Create page
-create:
-    title: Create Sync
-    redirect: awebsome/serverpilot/syncs/update/:id
-    redirectClose: awebsome/serverpilot/syncs
-
-# Update page
-update:
-    title: Edit Sync
-    redirect: awebsome/serverpilot/syncs
-    redirectClose: awebsome/serverpilot/syncs
-
-# Preview page
-preview:
-    title: Preview Sync

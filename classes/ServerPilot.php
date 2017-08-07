@@ -15,7 +15,7 @@ class ServerPilot extends Curl
     const SP_HTTP_METHOD_POST   = 'POST';
     const SP_HTTP_METHOD_GET    = 'GET';
     const SP_HTTP_METHOD_DELETE    = 'DELETE';
-        
+
 
     /**  Location for overloaded data.  */
     public $data;
@@ -41,7 +41,7 @@ class ServerPilot extends Curl
      * @param object json response
      */
     public function Servers($id = null)
-    {   
+    {
         $this->resource = 'Servers';
         $this->path = ($id) ? 'servers/'.$id : 'servers';
 
@@ -56,7 +56,7 @@ class ServerPilot extends Curl
      * @param object json response
      */
     public function SystemUsers($id = null)
-    {   
+    {
         $this->resource = 'SystemUsers';
         $this->path = ($id) ? 'sysusers/'.$id : 'sysusers';
 
@@ -71,7 +71,7 @@ class ServerPilot extends Curl
      * @param object json response
      */
     public function Apps($id = null)
-    {   
+    {
         $this->resource = 'Apps';
         $this->path = ($id) ? 'apps/'.$id : 'apps';
 
@@ -86,7 +86,7 @@ class ServerPilot extends Curl
      * @param object json response
      */
     public function Databases($id = null)
-    {   
+    {
         $this->resource = 'Databases';
         $this->path = ($id) ? 'dbs/'.$id : 'dbs';
 
@@ -100,7 +100,7 @@ class ServerPilot extends Curl
     public function where($by = null, $id = null)
     {
             $results = $this->response;
-        
+
             if(!is_null($by)) {
                 foreach($results->data as $key => $result) {
                     if($result->$by != $id) unset($results->data[$key]);
@@ -108,14 +108,14 @@ class ServerPilot extends Curl
             }
 
             $this->response = $results;
-        
+
         return $this;
     }
 
     /**
      * Resource
-     * Call resource method by resource method... 
-     * 
+     * Call resource method by resource method...
+     *
      * @param [type] $Resource [description]
      * @param [type] $id       [description]
      */
@@ -160,13 +160,13 @@ class ServerPilot extends Curl
      */
     public function update($data)
     {
-        
+
         $this->data = $data;
-        $this->response =  $this->request($this->auth,$this->path,$this->data, self::SP_HTTP_METHOD_POST);
-        
+        $this->response =  $this->request($this->auth, $this->path, $this->data, self::SP_HTTP_METHOD_POST);
+
         $Sync = new ServerPilotSync;
         $Sync->putUpdateResource($this->resource, $data, $this->response);
-        
+
         return $this->response;
     }
 
@@ -179,10 +179,10 @@ class ServerPilot extends Curl
      */
     public function create($data)
     {
-        
+
         $this->data = $data;
         $this->response =  $this->request($this->auth,$this->path,$this->data, self::SP_HTTP_METHOD_POST);
-        
+
         # $Sync = new ServerPilotSync;
         # $Sync->putCreateResource($this->resource, $data, $this->response);
 
@@ -192,13 +192,13 @@ class ServerPilot extends Curl
     public function delete($data = null)
     {
         $deleteables = Settings::get('deleteable_resources');
-        
+
         if(!is_array($deleteables))
             $deleteables = [];
 
         if(in_array($this->resource, $deleteables)){
-            
-            
+
+
             $this->response =  $this->request($this->auth,$this->path,$data, self::SP_HTTP_METHOD_DELETE);
 
             return $this->response;

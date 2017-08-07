@@ -12,7 +12,7 @@ modelClass: Awebsome\Serverpilot\Models\Sync
 title: Manage Syncs
 
 # Link URL for each record
-recordUrl: awebsome/serverpilot/syncs/update/:id
+#recordUrl: awebsome/serverpilot/syncs/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

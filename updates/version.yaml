@@ -17,3 +17,6 @@
     - Change Licence & create Readme.
 1.1.2:
     - created_at implemented by Resource from ServerPilotSync
+1.1.3:
+    - Feature Manage Servers
+    - update_servers_table.php

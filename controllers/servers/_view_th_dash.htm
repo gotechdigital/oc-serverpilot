@@ -1,5 +1,5 @@
 <?php if(count($Servers->get())>0):?>
-        
+
 
 <?php foreach($Servers->get() as $server => $value): ?>
     <div class="callout fade in callout-info no-icon no-subheader col-sm-12 col-lg-6">
@@ -20,8 +20,13 @@
                         <span class="status-label link"><?=($value->autoupdates) ? '<i class="oc-icon-check text-success"></i>':'<i class="icon-times-circle text-danger"></i>' ?></span>
                     </li>
                     <li>
-                        <span class="status-icon warning"><i class="icon-user-secret"></i></span>
-                        <span class="status-text warning">System Users</span>
+                        <span class="status-icon <?=($value->deny_unknown_domains) ? 'success':'warning' ?>"><i class="icon-<?=($value->deny_unknown_domains) ? 'check':'exclamation-triangle' ?>"></i></span>
+                        <span class="status-text <?=($value->deny_unknown_domains) ? 'success':'warning' ?>">Deny uknown domains</span>
+                        <span class="status-label link"><?=($value->deny_unknown_domains) ? '<i class="oc-icon-check text-success"></i>':'<i class="icon-exclamation-triangle text-warning"></i>' ?></span>
+                    </li>
+                    <li>
+                        <span class="status-icon info"><i class="icon-user-secret"></i></span>
+                        <span class="status-text info">System Users</span>
                         <span class="status-label link">
                         <a href="<?=Backend::url('awebsome/serverpilot/systemusers')?>"><?=count($value->systemusers);?></a></span>
                     </li>
@@ -45,16 +50,17 @@
                         <span class="status-text">IP/Host</span>
                         <span class="status-label primary"><?=$value->lastaddress?></span>
                     </li>
-                    <li>
-                        <span class="status-icon"><i class="icon-info"></i></span>
-                        <span class="status-text">Last connection</span>
-                        <span class="status-label primary"><?=date('m-d-y h:i:s A', $value->lastconn)?></span>
-                    </li>
 
                     <li>
                         <span class="status-icon"><i class="icon-info"></i></span>
                         <span class="status-text">Created at</span>
-                        <span class="status-label link"><?=date('m-d-y h:i:s A', $value->datecreated)?></span>
+                        <span class="status-label primary"><?=date('m-d-y h:i:s A', $value->datecreated)?></span>
+                    </li>
+
+                    <li>
+                        <span class="status-icon"><i class="icon-info"></i></span>
+                        <span class="status-text">Last connection</span>
+                        <span class="status-label warning"><?=date('m-d-y h:i:s A', $value->lastconn)?></span>
                     </li>
                 </ul>
             </div>

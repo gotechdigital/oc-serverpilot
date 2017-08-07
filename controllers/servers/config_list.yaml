@@ -6,13 +6,13 @@
 list: $/awebsome/serverpilot/models/server/columns.yaml
 
 # Model Class name
-modelClass: Awebsome\Serverpilot\Models\Server
+modelClass: Awebsome\ServerPilot\Models\Server
 
 # List Title
 title: Manage Servers
 
 # Link URL for each record
-# recordUrl: awebsome/serverpilot/servers/update/:id
+recordUrl: awebsome/serverpilot/servers/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

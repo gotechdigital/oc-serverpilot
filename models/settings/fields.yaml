@@ -13,7 +13,7 @@ fields:
         label: Api Key
         type: text
         required: true
-        span: left
+        span: right
         commentHtml: true
         comment: 'Obtain this from <a href="https://manage.serverpilot.io/#account/api" target="_blank">here</a>.'
 tabs:
@@ -31,15 +31,6 @@ tabs:
                 everyThirtyMinutes: 'Run the task every thirty minutes'
                 hourly: 'Run the task every hour'
                 daily: 'Run the task every day at midnight'
-        deleteable_resources:
-            label: Allow Delete Resources
-            tab: Options
-            comment: These resources can be deleted
-            type: checkboxlist
-            span: right
-            options: 
-                Databases: Databases
-                Apps: Apps
         app_prev_domain:
             label: Preview Domain
             commentHtml: true
