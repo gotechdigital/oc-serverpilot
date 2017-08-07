@@ -1,21 +1,44 @@
 columns:
     name:
         label: name
-        type: text
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/name.htm
         searchable: true
     runtime:
         label: Runtime
-        type: text
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/runtime.htm
+    server:
+        label: Server
+        relation: server
+        valueFrom: name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/server.htm
+    ssl:
+        label: SSL
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/ssl.htm
+    force_ssl:
+        label: Force Https
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/force_ssl.htm
+    domains:
+        label: Main Domain
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/domain.htm
     user:
         label: System User
-        type: text
         relation: systemuser
-        valueFrom: name 
+        valueFrom: name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/user.htm
     databases:
         label: Databases
-        type: text
         relation: databases
         valueFrom: name
-    created_at:
-        label: Created At
-        type: datetime
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/databases.htm
+    updated_at:
+        label: 'Last Update'
+        type: timesince
+        invisible: true

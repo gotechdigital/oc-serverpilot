@@ -6,17 +6,40 @@ columns:
 
     id:
         label: ID
-        clickable: false
         invisible: true
     name:
+        label: Name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/name.htm
+        searchable: true
+        width: 15%
         clickable: false
-        label: Database Name
     app:
-        clickable: false
-        label: App 
-        relation: app 
+        label: App
+        relation: app
         valueFrom: name
-    created_at:
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/app.htm
+        width: 15%
+    server:
+        label: Server
+        relation: server
+        valueFrom: name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/server.htm
+        width: 15%
         clickable: false
-        label: Created 
-        type: datetime
+    user:
+        label: User
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/user.htm
+        clickable: false
+    password:
+        label: Password
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/password.htm
+        sortable: false
+        clickable: false
+    updated_at:
+        label: 'Last Sync'
+        type: timesince

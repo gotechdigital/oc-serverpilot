@@ -1,10 +1,10 @@
 databases:
     label: Databases
     view:
-        list: $/awebsome/serverpilot/models/database/columns.yaml
+        list: $/awebsome/serverpilot/models/database/app-columns.yaml
         toolbarButtons: create|delete
-        clickable: 'false'
+        clickable: false
     manage:
         form: $/awebsome/serverpilot/models/database/on-app-fields.yaml
         list: $/awebsome/serverpilot/models/database/columns.yaml
-        clickable: 'false'
+        clickable: false
