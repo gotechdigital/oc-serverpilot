@@ -28,7 +28,7 @@ navigation:
                 permissions:
                     - awebsome.serverpilot.databases
             systemusers:
-                label: Users
+                label: System Users
                 url: awebsome/serverpilot/systemusers
                 icon: icon-user-secret
                 permissions:

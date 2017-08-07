@@ -5,14 +5,30 @@ columns:
         invisible: true
     name:
         label: Name
-        type: text
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/systemusers/columns/name.htm
         searchable: true
+        width: 15%
     apps:
-        users_count:
         label: Apps
         relation: apps
         valueFrom: name
-        searchable: true
-    created_at:
-        label: 'Created At'
-        type: datetime
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/systemusers/columns/apps.htm
+        width: 10%
+    server:
+        label: Server
+        relation: server
+        valueFrom: name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/systemusers/columns/server.htm
+        width: 15%
+    password:
+        label: Password
+        relation: apps
+        valueFrom: name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/systemusers/columns/password.htm
+    updated_at:
+        label: 'Last Sync'
+        type: timesince

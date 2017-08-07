@@ -45,7 +45,6 @@ class SystemUsers extends Controller
 
 
         $this->asExtension('ListController')->index();
-        $this->bodyClass = 'compact-container';
     }
 
 
@@ -58,7 +57,7 @@ class SystemUsers extends Controller
         $Sync = new ServerPilotSync;
         $Sync->SystemUsers()->now()->log('sync_systemusers');
 
-        return Redirect::to(Backend::url('awebsome/serverpilot/systemusers'));
+        return $this->listRefresh('systemusers');
     }
 
 

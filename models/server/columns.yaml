@@ -2,40 +2,40 @@ columns:
     name:
         label: Name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_name_column.htm
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/name.htm
     lastaddress:
         label: IP/Host
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_lastaddress_column.htm
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/lastaddress.htm
     autoupdates:
         label: Updates
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_autoupdates_column.htm
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/autoupdates.htm
     firewall:
         label: Firewall
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_firewall_column.htm
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/firewall.htm
     deny_unknown_domains:
         label: 'Deny uknown domains'
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_deny_uknown_domains_column.htm
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/deny_uknown_domains.htm
     systemusers:
         label: Users
         relation: systemusers
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_users_column.htm
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/users.htm
         sortable: false
     apps:
         label: Apps
         relation: apps
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_apps_column.htm
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/apps.htm
         sortable: false
     databases:
         label: Databases
         relation: databases
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/_databases_column.htm
+        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/databases.htm
         sortable: false
     datecreated:
         label: 'Created At'
