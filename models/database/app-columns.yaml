@@ -1,0 +1,24 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    name:
+        label: DB Name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/name.htm
+        searchable: true
+        width: 15%
+        clickable: false
+    user:
+        label: User Name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/user.htm
+        clickable: false
+    updated_at:
+        label: 'Last Sync'
+        type: timesince
+        clickable: false
+    created_at:
+        label: 'Created At'
+        clickable: false

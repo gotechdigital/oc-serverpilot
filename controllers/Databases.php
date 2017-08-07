@@ -37,13 +37,12 @@ class Databases extends Controller
     }
 
     public function index()
-    {  
+    {
         $this->vars['Servers'] = new Server;
 
         $this->vars['lastSync'] = DateTime::timeSince(Sync::max('created_at'));
 
         $this->asExtension('ListController')->index();
-        $this->bodyClass = 'compact-container';
     }
 
     public function onSync()
@@ -51,7 +50,7 @@ class Databases extends Controller
         $Sync = new ServerPilotSync;
         $Sync->Databases()->now()->log('sync_databases');
 
-        return Redirect::to(Backend::url('awebsome/serverpilot/databases'));
+        return $this->listRefresh('databases');
     }
 
 
@@ -67,24 +66,24 @@ class Databases extends Controller
         # Save before create in ServerPilot.
         $this->asExtension('FormController')->create_onSave();
 
-        return Redirect::to(Backend::url('awebsome/serverpilot/databases'));
+        return $this->listRefresh('databases');
     }
 
     /**
      * onResetPassword
      * reset pass and Sync ServerPilot
-     * 
+     *
      * @return [type] [description]
      */
     public function onResetPsw()
     {
-        $resource       = post('resource');
-        $id             = post('resource_id');
-        $usr       = post('user_name');
-        $npsw    = str_random(16);
-        
+        $resource   = post('resource');
+        $id         = post('resource_id');
+        $usr        = post('user_name');
+        $npsw       = str_random(16);
+
         $ServerPilot = new ServerPilot;
-        
+
         if($id)
             $ServerPilot->Databases($id)->update([ 'user' => ['id' => $usr, 'password' => $npsw] ]);
 

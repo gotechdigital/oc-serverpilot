@@ -76,7 +76,7 @@ class SystemUsers extends Controller
         # Saved on database.
         $this->asExtension('FormController')->create_onSave();
 
-        return Redirect::to(Backend::url('awebsome/serverpilot/systemusers'));
+        return $this->listRefresh('systemusers');
     }
 
     /**

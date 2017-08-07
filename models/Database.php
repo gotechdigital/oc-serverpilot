@@ -38,7 +38,10 @@ class Database extends Model
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = ['app'=> ['Awebsome\Serverpilot\Models\App']];
+    public $belongsTo = [
+        'app'       => ['Awebsome\Serverpilot\Models\App'],
+        'server'    => ['Awebsome\Serverpilot\Models\Server'] 
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];
@@ -54,7 +57,7 @@ class Database extends Model
     protected $rules = [
         'app_id' => ['required'],
         'name' => ['required','alpha_num','between:3,16'],
-        'user' => ['required']        
+        'user' => ['required']
     ];
 
     public function beforeCreate()
@@ -82,7 +85,7 @@ class Database extends Model
                 $this->id = $Database->data->id;
                 $this->server_id = $Database->data->serverid;
                 $this->user = $Database->data->user;
-            }else throw new ValidationException(['error_mesage' => json_encode($Database)]);   
+            }else throw new ValidationException(['error_mesage' => json_encode($Database)]);
         }
     }
 

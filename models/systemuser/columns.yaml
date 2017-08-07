@@ -29,6 +29,7 @@ columns:
         valueFrom: name
         type: partial
         path: ~/plugins/awebsome/serverpilot/controllers/systemusers/columns/password.htm
+        sortable: false
     updated_at:
-        label: 'Last Sync'
+        label: 'Last Update'
         type: timesince
