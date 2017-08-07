@@ -25,9 +25,7 @@ class Servers extends Controller
     ];
 
     public $formConfig = 'config_form.yaml';
-    public $listConfig = 'config_list.yaml';  
-
-    public $ServerPilot;
+    public $listConfig = 'config_list.yaml';
 
     public $requiredPermissions = ['awebsome.serverpilot.servers'];
 
@@ -37,21 +35,7 @@ class Servers extends Controller
 
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'servers');
 
-        $this->ServerPilot = new ServerPilot();
-    }
-
-
-    public function index()
-    {
-        
-        # $this->vars['ServerPilot']  = $this->ServerPilot;
-        $this->vars['Servers']  = new Server;
-
-        $this->vars['lastSync'] = DateTime::timeSince(Sync::max('created_at'));
-
-        $this->asExtension('ListController')->index();
-        
-        $this->bodyClass = 'compact-container';
+        $this->addCss($this->assetsPath.'/modal-form.css');
     }
 
     public function onSync()
@@ -59,6 +43,6 @@ class Servers extends Controller
         $Sync = new ServerPilotSync;
         $Sync->All()->log('sync_all_resources_from_servers');
 
-        return Redirect::to(Backend::url('awebsome/serverpilot/servers'));
+        return $this->listRefresh('servers');
     }
 }

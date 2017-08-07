@@ -167,7 +167,8 @@ class ServerPilotSync
                             'lastaddress'   => $value->lastaddress,
                             'datecreated'   => $value->datecreated,
                             'lastconn'      => $value->lastconn,
-                            'created_at'    => $value->datecreated
+                            'created_at'    => $value->datecreated,
+                            'deny_unknown_domains'  => $value->deny_unknown_domains # added 06082917
                         ];
                 break;
 

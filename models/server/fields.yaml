@@ -3,6 +3,31 @@
 # ===================================
 
 fields:
+    name:
+        label: Name
+        disabled: true
+        span: left
     id:
         label: ID
         disabled: true
+        span: right
+tabs:
+    fields:
+        autoupdates:
+            tab: ServerPilot
+            label: 'Updates'
+            type: switch
+            span: left
+            comment: 'Automatic security updates'
+        firewall:
+            tab: ServerPilot
+            label: 'Firewall'
+            type: switch
+            span: left
+            comment: 'ServerPilot Firewall'
+        deny_unknown_domains:
+            tab: ServerPilot
+            label: 'Deny uknown domains'
+            type: switch
+            span: left
+            comment: 'Denying requests for IP addresses and unknown domains disables the default app.'
