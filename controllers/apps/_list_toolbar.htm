@@ -1,9 +1,33 @@
-<button
-    type="button"
-    data-control="popup"
-    data-handler="onCreateForm"
-    data-request-data="redirect:1"
-    class="btn btn-primary oc-icon-puzzle-piece">
-    New App
-</button>
-<?=$this->makePartial('../syncs/sync_button')?>
+<style>
+.synchronize {
+display: inline-block;
+vertical-align: middle;
+margin-left: 20px;
+}
+</style>
+<div data-control="toolbar">
+
+    <button
+        type="button"
+        data-control="popup"
+        data-handler="onCreateForm"
+        data-request-data="redirect:1"
+        class="btn btn-primary oc-icon-puzzle-piece">
+        New App
+    </button>
+
+    <button
+        type="button"
+        data-request="onSync"
+        data-request-data="sync_now: 1" class="btn sync btn-info oc-icon-cloud-download"
+        data-request-loading=".synchronize">
+        Sync
+    </button>
+
+    <div style="display:none;" class="synchronize loading-indicator-container">
+        <div class="loading-indicator size-small">
+            <span></span>
+            <div>Synced...</div>
+        </div>
+    </div>
+</div>

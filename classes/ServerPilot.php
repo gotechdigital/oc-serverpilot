@@ -80,6 +80,21 @@ class ServerPilot extends Curl
     }
 
     /**
+     * App SSL
+     * ==============================
+     * Resources Methods ServerPilot
+     * @param object json response
+     */
+    public function AppSSL($id = null)
+    {
+        $this->resource = 'Apps';
+        $this->path = 'apps/'.$id.'/ssl';
+
+        $this->setRequest();
+        return $this;
+    }
+
+    /**
      * Databases
      * ==============================
      * Resources Methods ServerPilot

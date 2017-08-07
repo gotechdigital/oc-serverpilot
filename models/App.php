@@ -42,7 +42,7 @@ class App extends Model
     /**
      * @var array Purgeable fields
      */
-    protected $purgeable = [];
+    protected $purgeable = ['server_name', 'auto_ssl', 'force_ssl'];
 
     /**
      * @var array Relations
@@ -120,7 +120,7 @@ class App extends Model
                             #'name'      => $this->name,
                             #'sysuserid' => $this->user_id,
                             'runtime'   => $this->runtime,
-                            'domains'   => array_column($this->domains, 'domain'),
+                            'domains'   => array_column($this->domains, 'domain')
                         ]);
 
             if($App->data->id && $App->data->serverid)
@@ -261,5 +261,20 @@ class App extends Model
             ]);
 
         return json_encode($config, JSON_PRETTY_PRINT);
+    }
+
+    public function getServerNameAttribute()
+    {
+        return $this->server->name;
+    }
+
+    public function getAutoSslAttribute()
+    {
+        return $this->ssl['auto'];
+    }
+
+    public function getForceSslAttribute()
+    {
+        return $this->ssl['force'];
     }
 }

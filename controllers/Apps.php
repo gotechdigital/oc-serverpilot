@@ -50,24 +50,13 @@ class Apps extends Controller
         $this->asExtension('FormController')->update($recordId, $context);
     }
 
-    public function index()
-    {  
-
-        $this->vars['Apps'] = new App;
-
-        $this->vars['lastSync'] = DateTime::timeSince(Sync::max('created_at'));
-
-        $this->asExtension('ListController')->index();
-        
-        $this->bodyClass = 'compact-container';
-    }
 
     public function onSync()
     {
         $Sync = new ServerPilotSync;
         $Sync->Apps()->now()->log('sync_apps');
 
-        return Redirect::to(Backend::url('awebsome/serverpilot/apps'));
+        return $this->listRefresh('apps');
     }
 
 

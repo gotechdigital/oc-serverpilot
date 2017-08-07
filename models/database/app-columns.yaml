@@ -8,7 +8,6 @@ columns:
         type: partial
         path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/name.htm
         searchable: true
-        width: 15%
         clickable: false
     user:
         label: User Name
