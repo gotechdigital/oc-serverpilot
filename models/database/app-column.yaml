@@ -1,0 +1,22 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    name:
+        label: Name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/name.htm
+        searchable: true
+        width: 15%
+    server:
+        label: Server
+        relation: server
+        valueFrom: name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/server.htm
+        width: 15%
+    user:
+        label: User
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/user.htm
