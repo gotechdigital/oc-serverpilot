@@ -68,10 +68,10 @@ class App extends Model
      * @var array Validation rules
      */
     protected $rules = [
-        'user_id' => ['required'],
-        'runtime' => ['required'],
-        'name' => ['required', 'between:3,16','alpha_num'],
-        'domains' => ['required']
+        'user_id'   => ['required'],
+        'runtime'   => ['required'],
+        'name'      => ['required', 'between:3,16','alpha_dash'],
+        'domains'   => ['required']
     ];
 
     public function beforeCreate()
