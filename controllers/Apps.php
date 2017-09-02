@@ -72,7 +72,10 @@ class Apps extends Controller
         # Save before create in ServerPilot, to save and validations
         $this->asExtension('FormController')->create_onSave();
 
-        return Redirect::to(Backend::url('awebsome/serverpilot/apps/update/'.App::where('name',post('App.name'))->first()->id));
+        # Redirect to APP Update page.
+        $app = App::where('name', post('App.name'))->orderBy('created_at', 'desc')->first();
+
+        return Redirect::to(Backend::url('awebsome/serverpilot/apps/update/'.$app->id));
     }
 
 }
