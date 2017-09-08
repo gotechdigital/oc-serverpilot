@@ -51,7 +51,7 @@ class SystemUser extends Model
      * @var array Validation rules
      */
     protected $rules = [
-        'name' => ['required','alpha', 'between:3,16'],
+        'name' => ['required','alpha_dash', 'between:3,16'],
         'server_id' => ['required'],
         'password' => ['between:8,255']
     ];
