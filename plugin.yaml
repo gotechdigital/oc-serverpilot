@@ -9,7 +9,7 @@ require:
 navigation:
     serverpilot:
         label: ServerPilot
-        url: awebsome/serverpilot/servers
+        url: awebsome/serverpilot/apps
         icon: icon-cloud
         permissions:
             - awebsome.serverpilot.serverpilot
