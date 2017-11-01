@@ -40,7 +40,7 @@ class Database extends Model
     public $hasMany = [];
     public $belongsTo = [
         'app'       => ['Awebsome\Serverpilot\Models\App'],
-        'server'    => ['Awebsome\Serverpilot\Models\Server'] 
+        'server'    => ['Awebsome\Serverpilot\Models\Server']
     ];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -56,7 +56,7 @@ class Database extends Model
      */
     protected $rules = [
         'app_id' => ['required'],
-        'name' => ['required','alpha_num','between:3,16'],
+        'name' => ['required','alpha_dash','between:3,16'],
         'user' => ['required']
     ];
 
