@@ -13,6 +13,7 @@ columns:
         relation: server
         valueFrom: name
         type: partial
+        searchable: true
         path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/server.htm
     ssl:
         label: SSL
