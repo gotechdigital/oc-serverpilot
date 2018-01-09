@@ -9,8 +9,9 @@ class CreateTables extends Migration
     public function up()
     {
 
-    /*       SERVERPILOT       
-    * ====================== 
+    /*
+    * SERVERPILOT
+    * ======================
     */
 
         /**
@@ -39,8 +40,8 @@ class CreateTables extends Migration
             $table->boolean('firewall')->default(0);                #is enabled,
             $table->string('lastaddress');                          #ip,
             $table->string('datecreated');                          #created_at,
-            $table->string('lastconn');                             #Last_conecction                                           
-            
+            $table->string('lastconn');                             #Last_conecction
+
             $table->timestamps();
         });
 
@@ -52,11 +53,11 @@ class CreateTables extends Migration
         {
             $table->engine = 'InnoDB';
             # $table->increments('id');
-            $table->string('id');                  
-            $table->string('server_id');                
+            $table->string('id');
+            $table->string('server_id');
 
-            $table->string('name');                
-            
+            $table->string('name');
+
             $table->timestamps();
         });
 
@@ -72,11 +73,11 @@ class CreateTables extends Migration
             $table->string('user_id');
             $table->string('server_id');
 
-            $table->string('name');                 
-            $table->string('runtime');                 
-            $table->longText('ssl')->nullable();                 
+            $table->string('name');
+            $table->string('runtime');
+            $table->longText('ssl')->nullable();
             $table->longText('domains')->nullable();            #serverpilot sync
-            
+
             $table->timestamps();
         });
 
@@ -92,8 +93,8 @@ class CreateTables extends Migration
             $table->string('server_id');
 
             $table->string('name');
-            $table->string('user');        
-            
+            $table->string('user');
+
             $table->timestamps();
         });
     }
