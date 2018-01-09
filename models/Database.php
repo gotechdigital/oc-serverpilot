@@ -39,7 +39,7 @@ class Database extends Model
     public $hasOne = [];
     public $hasMany = [];
     public $belongsTo = [
-        'app'       => ['Awebsome\Serverpilot\Models\App'],
+        'app'       => ['Awebsome\Serverpilot\Models\App', 'key' => 'id'],
         'server'    => ['Awebsome\Serverpilot\Models\Server']
     ];
     public $belongsToMany = [];
