@@ -1,7 +1,11 @@
 <?php namespace Awebsome\Serverpilot;
 
+use Flash;
+use Backend;
+use Redirect;
+
 use Awebsome\Serverpilot\Models\Sync;
-use Awebsome\Serverpilot\Models\Settings;
+use Awebsome\Serverpilot\Models\Settings as CFG;
 
 use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
@@ -13,15 +17,17 @@ class Plugin extends PluginBase
     /**
      * @var array Plugin dependencies
      */
-    public $require = ['RainLab.Translate'];
+    //public $require = ['RainLab.Translate'];
 
-    public function registerComponents()
+
+    public function boot()
     {
+        
     }
 
     public function registerSchedule($schedule)
     {
-        $runTime = Settings::get('sync_data');
+        $runTime = CFG::get('sync_data');
 
         if(!is_null($runTime))
         {
@@ -39,6 +45,7 @@ class Plugin extends PluginBase
 
     public function registerSettings()
     {
+
         return [
 
             //Connection Settings

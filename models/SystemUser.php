@@ -44,7 +44,7 @@ class SystemUser extends Model
      * @var array Relations
      */
     public $hasMany = ['apps' => ['Awebsome\Serverpilot\Models\App', 'key'=> 'user_id']];
-    public $belongsTo = ['server' => ['Awebsome\Serverpilot\Models\Server']];
+    public $belongsTo = ['server' => ['Awebsome\Serverpilot\Models\Server', 'key' => 'server_id']];
 
 
     /**

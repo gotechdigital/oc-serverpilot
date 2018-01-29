@@ -1,7 +1,9 @@
 <?php namespace Awebsome\Serverpilot\Classes;
 
+use Backend;
+use Redirect;
 use ValidationException;
-use  Awebsome\Serverpilot\Classes\Curl;
+use  Awebsome\Serverpilot\Classes\Api\Curl;
 use  Awebsome\Serverpilot\Classes\ServerPilotSync;
 use  Awebsome\Serverpilot\Models\Settings;
 
@@ -18,20 +20,25 @@ class ServerPilot extends Curl
 
 
     /**  Location for overloaded data.  */
-    public $data;
-    public $path;
-    public $auth;
-    public $response;
-    public $resource;
+    public $data;               # data for create, update, or delete.
+    public $resource;           # resource to /endpoint
 
 
-    public function __construct()
+    /**
+     * isAuth
+     * ==============================
+     * check authentication
+     * @return boolean is auth
+     */
+    public static function isAuth($failRedirect = null)
     {
-        $CLIENT_ID = Settings::get('CLIENT_ID');
-        $API_KEY = Settings::get('API_KEY');
+        $sp = new Self;
+        $response = $sp->servers();
+        $code = @$response->error->code;
 
-        $this->auth = $CLIENT_ID.':'.$API_KEY;
-        $this->data = [];
+        if($code != 401)
+            return true;
+        else return false;
     }
 
     /**
@@ -40,183 +47,30 @@ class ServerPilot extends Curl
      * Resources Methods ServerPilot
      * @param object json response
      */
-    public function Servers($id = null)
+    public static function servers($id = null)
     {
-        $this->resource = 'Servers';
-        $this->path = ($id) ? 'servers/'.$id : 'servers';
+        $sp = new Self;
+        $sp->resource = ($id) ? __FUNCTION__ . '/'.$id : __FUNCTION__;
 
-        $this->setRequest();
-        return $this;
+        return $sp->get();
     }
+
+
 
     /**
-     * SystemUsers
-     * ==============================
-     * Resources Methods ServerPilot
-     * @param object json response
+     * CRUD METHODS
      */
-    public function SystemUsers($id = null)
-    {
-        $this->resource = 'SystemUsers';
-        $this->path = ($id) ? 'sysusers/'.$id : 'sysusers';
-
-        $this->setRequest();
-        return $this;
-    }
 
     /**
-     * Apps
-     * ==============================
-     * Resources Methods ServerPilot
-     * @param object json response
+     * get resource
+     * ========================================================
+     * get endpoint response.
      */
-    public function Apps($id = null)
-    {
-        $this->resource = 'Apps';
-        $this->path = ($id) ? 'apps/'.$id : 'apps';
-
-        $this->setRequest();
-        return $this;
-    }
-
-    /**
-     * App SSL
-     * ==============================
-     * Resources Methods ServerPilot
-     * @param object json response
-     */
-    public function AppSSL($id = null)
-    {
-        $this->resource = 'Apps';
-        $this->path = 'apps/'.$id.'/ssl';
-
-        $this->setRequest();
-        return $this;
-    }
-
-    /**
-     * Databases
-     * ==============================
-     * Resources Methods ServerPilot
-     * @param object json response
-     */
-    public function Databases($id = null)
-    {
-        $this->resource = 'Databases';
-        $this->path = ($id) ? 'dbs/'.$id : 'dbs';
-
-        $this->setRequest();
-        return $this;
-    }
-
-    /**
-     * Where field_table by id
-     */
-    public function where($by = null, $id = null)
-    {
-            $results = $this->response;
-
-            if(!is_null($by)) {
-                foreach($results->data as $key => $result) {
-                    if($result->$by != $id) unset($results->data[$key]);
-                }
-            }
-
-            $this->response = $results;
-
-        return $this;
-    }
-
-    /**
-     * Resource
-     * Call resource method by resource method...
-     *
-     * @param [type] $Resource [description]
-     * @param [type] $id       [description]
-     */
-    public function Resource($Resource, $id = null)
-    {
-        $this->$Resource($id);
-
-        return $this;
-    }
-
-    /**
-     * listAll
-     * all data of resource selected
-     * @return object json
-     */
-    public function listAll()
-    {
-        return $this->response;
-    }
-
-
     public function get()
     {
-        return $this->response->data;
+        return $this->request($this->resource, $this->data);
     }
 
-    /**
-     * setRequest
-     * curl request.
-     */
-    private function setRequest()
-    {
-        $this->response = $this->request($this->auth,$this->path,$this->data);
-    }
-
-    /**
-     * update
-     * ===================================
-     * Update Resource method
-     * @param  array $data  all data to update
-     * @return object json response
-     */
-    public function update($data)
-    {
-
-        $this->data = $data;
-        $this->response =  $this->request($this->auth, $this->path, $this->data, self::SP_HTTP_METHOD_POST);
-
-        $Sync = new ServerPilotSync;
-        $Sync->putUpdateResource($this->resource, $data, $this->response);
-
-        return $this->response;
-    }
-
-    /**
-     * create
-     * ===================================
-     * Create a Resource
-     * @param  array $data  all data to create
-     * @return object json response
-     */
-    public function create($data)
-    {
-
-        $this->data = $data;
-        $this->response =  $this->request($this->auth,$this->path,$this->data, self::SP_HTTP_METHOD_POST);
-
-        # $Sync = new ServerPilotSync;
-        # $Sync->putCreateResource($this->resource, $data, $this->response);
-
-        return $this->response;
-    }
-
-    public function delete($data = null)
-    {
-        $deleteables = Settings::get('deleteable_resources');
-
-        if(!is_array($deleteables))
-            $deleteables = [];
-
-        if(in_array($this->resource, $deleteables)){
-
-
-            $this->response =  $this->request($this->auth,$this->path,$data, self::SP_HTTP_METHOD_DELETE);
-
-            return $this->response;
-        }else throw new ValidationException(['error_mesage' => $this->resource.' is not a resource available for delete.']);
-    }
+    # update
+    # delete
 }

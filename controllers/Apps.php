@@ -5,10 +5,12 @@ use Redirect;
 use Request;
 use Flash;
 use BackendMenu;
+use ValidationException;
 
 use System\Helpers\DateTime;
 
 use Backend\Classes\Controller;
+use Awebsome\Serverpilot\Classes\ServerPilot;
 use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
 use Awebsome\Serverpilot\Models\Sync;
@@ -42,7 +44,6 @@ class Apps extends Controller
 
         $this->addCss($this->assetsPath.'/modal-form.css');
     }
-
 
     public function update($recordId = null, $context = null)
     {
