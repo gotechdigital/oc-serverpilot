@@ -7,6 +7,8 @@ use Flash;
 use ValidationException;
 use Illuminate\Contracts\Encryption\DecryptException;
 
+use Awebsome\ServerPilot\Models\Settings as CFG;
+
 use Awebsome\Serverpilot\Classes\ServerPilot;
 
 /**

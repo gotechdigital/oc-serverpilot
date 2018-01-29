@@ -13,7 +13,7 @@ columns:
         path: ~/plugins/awebsome/serverpilot/models/database/columns/name.htm
         searchable: true
         width: 15%
-        
+
     app:
         label: App
         relation: app
@@ -34,12 +34,13 @@ columns:
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/database/columns/user.htm
 
-    password:
+    visible_password:
         label: Password
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/database/columns/password.htm
         sortable: false
 
-#    updated_at:
-#        label: 'Last Import'
-#        type: timesince
+    updated_at:
+        label: 'Last Import'
+        type: timesince
+        invisible: true

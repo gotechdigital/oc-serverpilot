@@ -10,12 +10,10 @@ fields:
             action: enable
             field: server_api_id
             condition: value[]
-
-
     visible_password:
         label: Password:
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/password.htm
+        path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/password.htm
     password:
         label: Change Password
         type: password
