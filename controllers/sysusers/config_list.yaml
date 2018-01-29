@@ -12,7 +12,7 @@ modelClass: Awebsome\Serverpilot\Models\Sysuser
 title: Manage System Users
 
 # Link URL for each record
-# recordUrl: awebsome/serverpilot/sysusers/update/:id
+recordUrl: awebsome/serverpilot/sysusers/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

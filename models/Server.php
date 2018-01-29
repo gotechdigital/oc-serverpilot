@@ -1,5 +1,7 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
+use Log;
+
 use Model;
 use Flash;
 use ValidationException;
@@ -11,7 +13,6 @@ use Awebsome\Serverpilot\Classes\ServerPilot;
  */
 class Server extends Model
 {
-
     /**
      * @var string The database table used by the model.
      */
@@ -31,13 +32,11 @@ class Server extends Model
      * @var array Relations
      */
     public $hasOne = [];
-
     public $hasMany = [
-                'sysusers'      => ['Awebsome\Serverpilot\Models\Sysuser','key' => 'server_api_id','otherKey' => 'api_id'],
-                'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'server_api_id','otherKey' => 'api_id'],
-                'apps'          => ['Awebsome\Serverpilot\Models\App','key' => 'server_api_id','otherKey' => 'api_id']
-            ];
-
+        'sysusers'      => ['Awebsome\Serverpilot\Models\Sysuser','key' => 'server_api_id','otherKey' => 'api_id'],
+        'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'server_api_id','otherKey' => 'api_id'],
+        'apps'          => ['Awebsome\Serverpilot\Models\App','key' => 'server_api_id','otherKey' => 'api_id']
+    ];
     public $belongsTo = [];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -46,12 +45,22 @@ class Server extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    /**
+     * check if it's an import
+     * @param boolean
+     */
+    public $importing;
+
     public function beforeSave()
     {
-        $apiResponse = ServerPilot::servers($this->api_id)->update([
-            'autoupdates'   => ($this->autoupdates) ? TRUE : FALSE,
-            'firewall'      => ($this->firewall) ? TRUE : FALSE,
-            'deny_unknown_domains'   => ($this->deny_unknown_domains) ? TRUE : FALSE,
-        ]);
+        if(!$this->importing)
+        {
+            ServerPilot::servers($this->api_id)->update([
+                'autoupdates'   => ($this->autoupdates) ? TRUE : FALSE,
+                'firewall'      => ($this->firewall) ? TRUE : FALSE,
+                'deny_unknown_domains'   => ($this->deny_unknown_domains) ? TRUE : FALSE,
+            ]);
+            //Log::info('server Updateado...');
+        }
     }
 }

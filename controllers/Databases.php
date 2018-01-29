@@ -5,6 +5,7 @@ use BackendMenu;
 
 use Backend\Classes\Controller;
 use Awebsome\Serverpilot\Classes\ServerPilot;
+use Awebsome\Serverpilot\Models\Database;
 
 /**
  * Databases Back-end Controller

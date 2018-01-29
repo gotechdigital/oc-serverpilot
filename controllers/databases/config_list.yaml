@@ -12,7 +12,7 @@ modelClass: Awebsome\Serverpilot\Models\Database
 title: Manage Databases
 
 # Link URL for each record
-# recordUrl: awebsome/serverpilot/databases/update/:id
+recordUrl: awebsome/serverpilot/databases/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

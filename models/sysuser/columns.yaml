@@ -8,31 +8,30 @@ columns:
     server_api_id:
         label: server_api_id
         invisible: true
+
     name:
         label: Name
         type: partial
         path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/name.htm
         searchable: true
-        width: 15%
+    visible_password:
+        label: Password
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/password.htm
+        sortable: false
+        invisible: true
     apps:
         label: Apps
         relation: apps
         valueFrom: name
         type: partial
         path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/apps.htm
-        width: 10%
     server:
         label: Server
         relation: server
         valueFrom: name
         type: partial
         path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/server.htm
-        width: 15%
-    password:
-        label: Password
-        type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/password.htm
-        sortable: false
-#    updated_at:
-#        label: 'Last Update'
-#        type: timesince
+    updated_at:
+        label: 'Last Import'
+        type: timesince

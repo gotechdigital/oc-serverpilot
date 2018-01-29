@@ -38,4 +38,5 @@ class Sysusers extends Controller
 
         $this->asExtension('ListController')->index();
     }
+
 }

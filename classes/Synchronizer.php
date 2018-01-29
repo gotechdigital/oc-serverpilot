@@ -32,6 +32,7 @@ class Synchronizer
                 $model->$col = $data->$value;
             }
 
+            $model->importing = true;
             $model->save();
 
         }

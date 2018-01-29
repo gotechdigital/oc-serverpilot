@@ -54,7 +54,7 @@ class CreateTables extends Migration
             $table->string('name');
 
             //Custom Cols.
-            $table->string('password')->nullable();
+            $table->text('password')->nullable();
 
             $table->timestamps();
         });
@@ -102,7 +102,7 @@ class CreateTables extends Migration
             $table->text('user');
 
             # Custom Cols.
-            $table->string('password')->nullable();
+            $table->text('password')->nullable();
 
             $table->timestamps();
         });

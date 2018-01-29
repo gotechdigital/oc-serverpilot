@@ -1,28 +1,22 @@
 fields:
-    server_id:
-        label: Server
-        type: dropdown
-        options: getServerList
-        context: create
-        required: 1
-
+    server_api_id:
+        label: ServerId
+        cssClass: hide
+        disabled: true
     name:
         label: User
-        oc.commentPosition: ''
         span: left
-        required: 1
-        type: text
-        cssClass: usr-name
-    password:
-        label: Password
-        oc.commentPosition: ''
-        span: right
-        required: 1
-        type: text
-        cssClass: usr-pass
         trigger:
-            action: disable
-            field: name
+            action: enable
+            field: server_api_id
             condition: value[]
-        attributes:
-            maxlength: 16
+
+
+    visible_password:
+        label: Password:
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/password.htm
+    password:
+        label: Change Password
+        type: password
+        span: left

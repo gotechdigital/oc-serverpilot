@@ -1,12 +1,12 @@
 <div data-control="toolbar">
     <a
         href="<?= Backend::url('awebsome/serverpilot/actions/create') ?>"
-        class="btn btn-primary oc-icon-plus">
+        class="hide btn btn-primary oc-icon-plus">
         New Action
     </a>
 
     <button
-        class="btn btn-danger oc-icon-trash-o"
+        class="hide btn btn-danger oc-icon-trash-o"
         disabled="disabled"
         onclick="$(this).data('request-data', { checked: $('.control-list').listWidget('getChecked') })"
         data-request="onDelete"

@@ -39,6 +39,17 @@ tabs:
             tab: Options
             placeholder: 'preview.{APP_NAME}.domain.tld'
             span: left
+
+        show_sysuser_password:
+            label: Show user password
+            type: switch
+            span: left
+            default: false
+        show_dbs_password:
+            label: Show database password
+            type: switch
+            span: left
+            default: false
         log_errors:
             label: Log Errors
             type: switch

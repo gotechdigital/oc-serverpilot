@@ -17,8 +17,6 @@ use Awebsome\Serverpilot\Classes\ServerPilotSync;
  */
 class App extends Model
 {
-    //use \October\Rain\Database\Traits\Purgeable;
-
     /**
      * @var string The database table used by the model.
      */
@@ -39,10 +37,11 @@ class App extends Model
      */
     protected $jsonable = ['autossl','ssl', 'domains'];
 
+    use \October\Rain\Database\Traits\Purgeable;
     /**
      * @var array Purgeable fields
      */
-    //protected $purgeable = ['server_name', 'auto_ssl', 'force_ssl'];
+    protected $purgeable = ['importing'];
 
     /**
      * @var array Relations
