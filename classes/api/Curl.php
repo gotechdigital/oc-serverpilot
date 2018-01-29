@@ -87,7 +87,7 @@ class Curl
 			case 401: $error = 'ServerPilot: Either no authentication credentials were provided or they are invalid.'; break;
 			case 402: $error = 'ServerPilot: Method is restricted to users on the Coach or Business plan.'; break;
 			case 403: $error = 'ServerPilot: Typically when trying to alter or delete protected resources.'; break;
-			case 404: $error = 'ServerPilot: You requested a resource ('.$resource.') that does not exist.'; break;
+			case 404: $error = 'ServerPilot: You requested a resource that does not exist.'; break;
 			case 409: $error = 'ServerPilot: Typically when trying creating a resource that already exists.'; break;
 			case 500: $error = 'ServerPilot: Internal server error. Try again at a later time.'; break;
 			default:  break;

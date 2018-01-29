@@ -4,6 +4,7 @@ use Backend;
 use BackendMenu;
 
 use Backend\Classes\Controller;
+use Awebsome\Serverpilot\Classes\ServerPilot;
 
 /**
  * Databases Back-end Controller
@@ -25,5 +26,13 @@ class Databases extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'databases');
+    }
+
+    public function index()
+    {
+        if(ServerPilot::isAuth())
+            ServerPilot::dbs()->import();
+
+        $this->asExtension('ListController')->index();
     }
 }

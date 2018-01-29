@@ -4,6 +4,8 @@ use Crypt;
 use Model;
 use ValidationException;
 
+use Awebsome\ServerPilot\Models\Server;
+
 use Illuminate\Contracts\Encryption\DecryptException;
 
 /**
@@ -11,9 +13,6 @@ use Illuminate\Contracts\Encryption\DecryptException;
  */
 class Sysuser extends Model
 {
-    # use \October\Rain\Database\Traits\Purgeable;
-    use \October\Rain\Database\Traits\Validation;
-
     /**
      * @var string The database table used by the model.
      */
@@ -27,31 +26,16 @@ class Sysuser extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['id', 'server_id','name','password'];
-
-    /**
-     * @var array Purgeable fields
-     */
-    # protected $purgeable = [];
+    protected $fillable = ['*'];
 
     /**
      * @var array Relations
      */
-    public $hasMany = [];
-    public $belongsTo = [];
-    public $belongsToMany = [
-        'apps' => 'Awebsome\ServerPilot\Models\App',
-        'server' => 'Awebsome\ServerPilot\Models\Server'
+    public $hasMany = [
+        'apps' => ['Awebsome\ServerPilot\Models\App', 'key' => 'api_id', 'otherKey' => 'app_api_id']
     ];
-
-
-    /**
-     * @var array Validation rules
-     */
-    protected $rules = [
-        'name' => ['required','alpha_dash', 'between:3,16'],
-        'server_id' => ['required'],
-        'password' => ['between:8,255']
+    public $belongsTo = [
+        'server' => ['Awebsome\ServerPilot\Models\Server', 'key' => 'server_api_id', 'otherKey' => 'api_id']
     ];
 
     public function beforeCreate()
@@ -76,23 +60,10 @@ class Sysuser extends Model
 
     }
 
-    /**
-     * Set before create or save values
-     */
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = strtolower($value);
-    }
-
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Crypt::encrypt($value);
-        # to decrypt use:
-        # Crypt::decrypt($encryptedValue);
-    }
-
     public function passwordDecrypt()
     {
+
+        //Crypt::encrypt($value);
         try {
             return Crypt::decrypt($this->password);
         }

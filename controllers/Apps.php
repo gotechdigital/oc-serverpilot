@@ -6,6 +6,7 @@ use ValidationException;
 
 use Backend\Classes\Controller;
 
+use Awebsome\Serverpilot\Classes\ServerPilot;
 use Awebsome\Serverpilot\Models\App;
 
 /**
@@ -35,6 +36,14 @@ class Apps extends Controller
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'apps');
 
         $this->addCss($this->assetsPath.'/modal-form.css');
+    }
+
+    public function index()
+    {
+        if(ServerPilot::isAuth())
+            ServerPilot::apps()->import();
+
+        $this->asExtension('ListController')->index();
     }
 
     public function update($recordId = null, $context = null)

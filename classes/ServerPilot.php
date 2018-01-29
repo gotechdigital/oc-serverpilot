@@ -1,11 +1,7 @@
 <?php namespace Awebsome\Serverpilot\Classes;
 
-use Backend;
-use Redirect;
-use ValidationException;
-use  Awebsome\Serverpilot\Classes\Api\Curl;
-use  Awebsome\Serverpilot\Classes\ServerPilotSync;
-use  Awebsome\Serverpilot\Models\Settings;
+use Awebsome\Serverpilot\Classes\Api\Curl;
+use Awebsome\Serverpilot\Classes\Synchronizer;
 
 class ServerPilot extends Curl
 {
@@ -21,8 +17,31 @@ class ServerPilot extends Curl
 
     /**  Location for overloaded data.  */
     public $data;               # data for create, update, or delete.
-    public $resource;           # resource to /endpoint
+    public $endpoint;           # resource to /endpoint
+    public $resource;           # $resource name.
 
+    public $models;              # Models of resources.
+    public $model;              # Model of resource.
+    public $id;              # Model of resource.
+
+    public function __construct()
+    {
+        $this->registerModels();
+    }
+
+    public function registerModels()
+    {
+        /**
+         * Register Models.
+         */
+        return $this->models = [
+            'servers'   => 'Awebsome\ServerPilot\Models\Server',
+            'sysusers'  => 'Awebsome\ServerPilot\Models\Sysuser',
+            'apps'      => 'Awebsome\ServerPilot\Models\App',
+            'dbs'       => 'Awebsome\ServerPilot\Models\Database',
+            'actions'   => 'Awebsome\ServerPilot\Models\Action',
+        ];
+    }
 
     /**
      * isAuth
@@ -30,10 +49,10 @@ class ServerPilot extends Curl
      * check authentication
      * @return boolean is auth
      */
-    public static function isAuth($failRedirect = null)
+    public static function isAuth()
     {
         $sp = new Self;
-        $response = $sp->servers();
+        $response = $sp->actions('1')->get();
         $code = @$response->error->code;
 
         if($code != 401)
@@ -45,17 +64,69 @@ class ServerPilot extends Curl
      * Servers
      * ==============================
      * Resources Methods ServerPilot
-     * @param object json response
-     */
+     * @param $id to retrive one.
+     * @return array data endpoint resource id
+    */
     public static function servers($id = null)
     {
         $sp = new Self;
-        $sp->resource = ($id) ? __FUNCTION__ . '/'.$id : __FUNCTION__;
+        $sp->resource = __FUNCTION__;
+        $sp->id = $id;
 
-        return $sp->get();
+        return $sp;
+    }
+
+    public static function apps($id = null)
+    {
+        $sp = new Self;
+        $sp->resource = __FUNCTION__;
+        $sp->id = $id;
+
+        return $sp;
+    }
+
+    public static function sysusers($id = null)
+    {
+        $sp = new Self;
+        $sp->resource = __FUNCTION__;
+        $sp->id = $id;
+
+        return $sp;
+    }
+
+    public static function dbs($id = null)
+    {
+        $sp = new Self;
+        $sp->resource = __FUNCTION__;
+        $sp->id = $id;
+
+        return $sp;
+    }
+
+    public static function actions($id)
+    {
+        $sp = new Self;
+        $sp->resource = __FUNCTION__;
+        $sp->id = $id;
+
+        return $sp;
     }
 
 
+    /**
+     * Helper Methods
+     */
+
+    public function import()
+    {
+        $this->model = $this->models[$this->resource];
+
+        if($this->id)
+            $import = Synchronizer::import($this);
+        else $import = Synchronizer::importAll($this);
+
+        return $import;
+    }
 
     /**
      * CRUD METHODS
@@ -68,7 +139,10 @@ class ServerPilot extends Curl
      */
     public function get()
     {
-        return $this->request($this->resource, $this->data);
+        if(!$this->endpoint)
+            $this->endpoint = ($this->id) ? $this->resource . '/'.$this->id : $this->resource;
+
+        return $this->request($this->endpoint, $this->data);
     }
 
     # update

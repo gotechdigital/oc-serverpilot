@@ -15,7 +15,6 @@ class Server extends Model
      * @var string The database table used by the model.
      */
     public $table = 'awebsome_serverpilot_servers';
-    public $timestamps = true;
 
     /**
      * @var array Guarded fields
@@ -25,7 +24,7 @@ class Server extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['id','name','autoupdates','firewall','lastaddress','datecreated','lastconn','created_at','deny_unknown_domains'];
+    protected $fillable = ['*'];
 
     /**
      * @var array Relations
@@ -33,9 +32,9 @@ class Server extends Model
     public $hasOne = [];
 
     public $hasMany = [
-                'systemusers'   => ['Awebsome\Serverpilot\Models\SystemUser','key' => 'server_id','otherKey' => 'id'],
-                'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'server_id','otherKey' => 'id'],
-                'apps'          => ['Awebsome\Serverpilot\Models\App','key' => 'server_id','otherKey' => 'id']
+                'sysusers'      => ['Awebsome\Serverpilot\Models\Sysuser','key' => 'server_api_id','otherKey' => 'api_id'],
+                'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'server_api_id','otherKey' => 'api_id'],
+                'apps'          => ['Awebsome\Serverpilot\Models\App','key' => 'server_api_id','otherKey' => 'api_id']
             ];
 
     public $belongsTo = [];
@@ -46,7 +45,7 @@ class Server extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    public function beforeUpdate()
+    /* public function beforeUpdate()
     {
         $ServerPilot = new ServerPilot;
 
@@ -55,5 +54,5 @@ class Server extends Model
             'firewall'      => ($this->firewall) ? true : false,
             'deny_unknown_domains'   => ($this->deny_unknown_domains) ? true : false,
         ]);
-    }
+    } */
 }

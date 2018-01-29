@@ -47,7 +47,6 @@ class CreateTables extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('server_id');
 
             # API Cols.
             $table->string('api_id')->index();
@@ -68,9 +67,6 @@ class CreateTables extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('server_id');
-            $table->integer('sysuser_id');
 
             # API Cols.
             $table->string('api_id')->index();          # id.
@@ -97,8 +93,6 @@ class CreateTables extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('app_id');
-            $table->integer('server_id');
 
             # API Cols.
             $table->string('api_id')->index();
@@ -121,7 +115,6 @@ class CreateTables extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('server_id');
 
             # API Cols.
             $table->string('api_id')->index();

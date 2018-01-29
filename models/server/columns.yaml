@@ -1,4 +1,13 @@
 columns:
+    id:
+        label: id
+        invisible: true
+    api_id:
+        label: api_id
+        invisible: true
+    account_id:
+        label: account_id
+        invisible: true
     name:
         label: Name
         type: partial
@@ -19,9 +28,9 @@ columns:
         label: 'Deny uknown domains'
         type: partial
         path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/deny_uknown_domains.htm
-    systemusers:
+    sysusers:
         label: Users
-        relation: systemusers
+        relation: sysusers
         type: partial
         path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/users.htm
         sortable: false
@@ -44,5 +53,5 @@ columns:
         label: 'Last Connection'
         type: timetense
     updated_at:
-        label: 'Last Sync'
+        label: 'Last Import'
         type: timesince

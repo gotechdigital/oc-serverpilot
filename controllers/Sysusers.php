@@ -5,6 +5,8 @@ use BackendMenu;
 
 use Backend\Classes\Controller;
 
+use Awebsome\Serverpilot\Classes\ServerPilot;
+
 /**
  * Servers Back-end Controller
  */
@@ -27,5 +29,13 @@ class Sysusers extends Controller
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'sysusers');
 
         $this->addCss($this->assetsPath.'/modal-form.css');
+    }
+
+    public function index()
+    {
+        if(ServerPilot::isAuth())
+            ServerPilot::sysusers()->import();
+
+        $this->asExtension('ListController')->index();
     }
 }

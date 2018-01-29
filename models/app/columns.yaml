@@ -27,9 +27,9 @@ columns:
         label: Main Domain
         type: partial
         path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/domain.htm
-    user:
+    sysuser:
         label: System User
-        relation: systemuser
+        relation: sysuser
         valueFrom: name
         type: partial
         path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/user.htm
