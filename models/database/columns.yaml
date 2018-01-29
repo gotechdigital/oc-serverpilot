@@ -10,36 +10,36 @@ columns:
     name:
         label: Name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/name.htm
+        path: ~/plugins/awebsome/serverpilot/models/database/columns/name.htm
         searchable: true
         width: 15%
-        clickable: false
+        
     app:
         label: App
         relation: app
         valueFrom: name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/app.htm
+        path: ~/plugins/awebsome/serverpilot/models/database/columns/app.htm
         width: 15%
     server:
         label: Server
         relation: server
         valueFrom: name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/server.htm
+        path: ~/plugins/awebsome/serverpilot/models/database/columns/server.htm
         width: 15%
-        clickable: false
+
     user:
         label: User
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/user.htm
-        clickable: false
+        path: ~/plugins/awebsome/serverpilot/models/database/columns/user.htm
+
     password:
         label: Password
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/password.htm
+        path: ~/plugins/awebsome/serverpilot/models/database/columns/password.htm
         sortable: false
-        clickable: false
+
 #    updated_at:
 #        label: 'Last Import'
 #        type: timesince

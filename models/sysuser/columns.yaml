@@ -12,12 +12,12 @@ columns:
     name:
         label: Name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/name.htm
+        path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/name.htm
         searchable: true
     visible_password:
         label: Password
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/password.htm
+        path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/password.htm
         sortable: false
         invisible: true
     apps:
@@ -25,13 +25,13 @@ columns:
         relation: apps
         valueFrom: name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/apps.htm
+        path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/apps.htm
     server:
         label: Server
         relation: server
         valueFrom: name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/sysusers/columns/server.htm
+        path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/server.htm
     updated_at:
         label: 'Last Import'
         type: timesince
