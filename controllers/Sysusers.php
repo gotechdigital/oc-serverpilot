@@ -6,9 +6,9 @@ use BackendMenu;
 use Backend\Classes\Controller;
 
 /**
- * Databases Back-end Controller
+ * Servers Back-end Controller
  */
-class Databases extends Controller
+class Sysusers extends Controller
 {
     public $implement = [
         'Backend.Behaviors.FormController',
@@ -18,12 +18,14 @@ class Databases extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
-    public $requiredPermissions = ['awebsome.serverpilot.databases'];
+    public $requiredPermissions = ['awebsome.serverpilot.sysusers'];
 
     public function __construct()
     {
         parent::__construct();
 
-        BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'databases');
+        BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'sysusers');
+
+        $this->addCss($this->assetsPath.'/modal-form.css');
     }
 }

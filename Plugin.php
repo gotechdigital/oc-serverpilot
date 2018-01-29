@@ -22,25 +22,12 @@ class Plugin extends PluginBase
 
     public function boot()
     {
-        
+
     }
 
     public function registerSchedule($schedule)
     {
-        $runTime = CFG::get('sync_data');
-
-        if(!is_null($runTime))
-        {
-          if($runTime != 'realtime')
-          {
-              $schedule->call(function () {
-
-                  $Sync = new ServerPilotSync;
-                  $Sync->All()->log('sync_auto_schedule');
-
-              })->$runTime();
-          }
-        }
+    
     }
 
     public function registerSettings()

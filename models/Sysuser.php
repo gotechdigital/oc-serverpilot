@@ -2,20 +2,14 @@
 
 use Crypt;
 use Model;
-use Flash;
-use Request;
 use ValidationException;
 
-use Awebsome\Serverpilot\Models\Server;
-use Awebsome\Serverpilot\Models\Settings;
-use Awebsome\Serverpilot\Models\Sync;
-use Awebsome\Serverpilot\Classes\ServerPilot;
-
 use Illuminate\Contracts\Encryption\DecryptException;
+
 /**
  * SystemUser Model
  */
-class SystemUser extends Model
+class Sysuser extends Model
 {
     # use \October\Rain\Database\Traits\Purgeable;
     use \October\Rain\Database\Traits\Validation;
@@ -23,7 +17,7 @@ class SystemUser extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'awebsome_serverpilot_system_users';
+    public $table = 'awebsome_serverpilot_sysusers';
 
     /**
      * @var array Guarded fields
@@ -43,8 +37,12 @@ class SystemUser extends Model
     /**
      * @var array Relations
      */
-    public $hasMany = ['apps' => ['Awebsome\Serverpilot\Models\App', 'key'=> 'user_id']];
-    public $belongsTo = ['server' => ['Awebsome\Serverpilot\Models\Server', 'key' => 'server_id']];
+    public $hasMany = [];
+    public $belongsTo = [];
+    public $belongsToMany = [
+        'apps' => 'Awebsome\ServerPilot\Models\App',
+        'server' => 'Awebsome\ServerPilot\Models\Server'
+    ];
 
 
     /**
@@ -61,7 +59,7 @@ class SystemUser extends Model
         /**
          * Execute only from Create User From
          */
-        if(post('create_system_user_form')){
+        /*if(post('create_system_user_form')){
 
             $ServerPilot = new ServerPilot;
 
@@ -74,7 +72,7 @@ class SystemUser extends Model
             if($SystemUser->data->id)
                 $this->id = $SystemUser->data->id;
             else throw new ValidationException(['error_mesage' => json_encode($SystemUser)]);
-        }
+        }*/
 
     }
 
@@ -101,22 +99,5 @@ class SystemUser extends Model
         catch (DecryptException $ex) {
             return null;
         }
-
-    }
-
-    /**
-     * getServerList
-     * Servers Listing for "create form"
-     * @return array
-     */
-    public function getServerList()
-    {
-        $Servers = Server::get();
-        $options = [];
-        foreach ($Servers as $key => $value) {
-            $options[$value->id] = $value->name;
-        }
-
-        return $options;
     }
 }

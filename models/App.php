@@ -52,7 +52,7 @@ class App extends Model
                 'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'app_id','otherKey' => 'id'],
             ];
     public $belongsTo = [
-                'systemuser'   => ['Awebsome\Serverpilot\Models\SystemUser','key' => 'user_id'],
+                'sysuser'   => ['Awebsome\Serverpilot\Models\Sysuser','key' => 'user_id'],
                 'server'     => ['Awebsome\Serverpilot\Models\Server','key' => 'server_id'],
             ];
     public $belongsToMany = [];

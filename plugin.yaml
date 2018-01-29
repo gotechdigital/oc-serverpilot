@@ -26,37 +26,37 @@ navigation:
                 icon: icon-database
                 permissions:
                     - awebsome.serverpilot.databases
-            systemusers:
+            sysusers:
                 label: System Users
-                url: awebsome/serverpilot/systemusers
+                url: awebsome/serverpilot/sysusers
                 icon: icon-user-secret
                 permissions:
-                    - awebsome.serverpilot.users
+                    - awebsome.serverpilot.sysusers
             servers:
                 label: Servers
                 url: awebsome/serverpilot/servers
                 icon: icon-server
                 permissions:
                     - awebsome.serverpilot.servers
-            scheduling:
-                label: Syncs
-                url: awebsome/serverpilot/syncs
-                icon: icon-cloud-download
+            actions:
+                label: Actions
+                url: awebsome/serverpilot/actions
+                icon: icon-fire
                 permissions:
-                    - awebsome.serverpilot.syncs
+                    - awebsome.serverpilot.actions
 permissions:
     awebsome.serverpilot.serverpilot:
         tab: 'awebsome.serverpilot::lang.plugin.name'
         label: 'Can use Awebsome ServerPilot'
-    awebsome.serverpilot.syncs:
+    awebsome.serverpilot.actions:
         tab: 'awebsome.serverpilot::lang.plugin.name'
-        label: 'View synchronization logs'
+        label: 'View actions log'
     awebsome.serverpilot.servers:
         tab: 'awebsome.serverpilot::lang.plugin.name'
         label: 'View Servers'
-    awebsome.serverpilot.systemusers:
+    awebsome.serverpilot.sysusers:
         tab: 'awebsome.serverpilot::lang.plugin.name'
-        label: 'Manage SystemUsers'
+        label: 'Manage Sysusers'
     awebsome.serverpilot.databases:
         tab: 'awebsome.serverpilot::lang.plugin.name'
         label: 'Manage Databases'

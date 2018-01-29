@@ -1,19 +1,11 @@
 <?php namespace Awebsome\Serverpilot\Controllers;
 
 use Backend;
-use Redirect;
-use Request;
-use Flash;
 use BackendMenu;
 use ValidationException;
 
-use System\Helpers\DateTime;
-
 use Backend\Classes\Controller;
-use Awebsome\Serverpilot\Classes\ServerPilot;
-use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
-use Awebsome\Serverpilot\Models\Sync;
 use Awebsome\Serverpilot\Models\App;
 
 /**
@@ -51,14 +43,6 @@ class Apps extends Controller
         $this->asExtension('FormController')->update($recordId, $context);
     }
 
-
-    public function onSync()
-    {
-        $Sync = new ServerPilotSync;
-        $Sync->Apps()->now()->log('sync_apps');
-
-        return $this->listRefresh('apps');
-    }
 
 
     public function onCreateForm()

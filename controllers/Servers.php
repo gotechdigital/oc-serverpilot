@@ -37,12 +37,4 @@ class Servers extends Controller
 
         $this->addCss($this->assetsPath.'/modal-form.css');
     }
-
-    public function onSync()
-    {
-        $Sync = new ServerPilotSync;
-        $Sync->All()->log('sync_all_resources_from_servers');
-
-        return $this->listRefresh('servers');
-    }
 }

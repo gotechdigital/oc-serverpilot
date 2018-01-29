@@ -1,14 +1,12 @@
 <?php namespace Awebsome\Serverpilot\Controllers;
 
-use Backend;
 use BackendMenu;
-
 use Backend\Classes\Controller;
 
 /**
- * Databases Back-end Controller
+ * Actions Back-end Controller
  */
-class Databases extends Controller
+class Actions extends Controller
 {
     public $implement = [
         'Backend.Behaviors.FormController',
@@ -18,12 +16,10 @@ class Databases extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
-    public $requiredPermissions = ['awebsome.serverpilot.databases'];
-
     public function __construct()
     {
         parent::__construct();
 
-        BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'databases');
+        BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'actions');
     }
 }

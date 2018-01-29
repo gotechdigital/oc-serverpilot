@@ -1,0 +1,22 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+
+    server_id:
+        label: server_id
+        searchable: true
+    api_id:
+        label: api_id
+        searchable: true
+    server_api_id:
+        label: server_api_id
+        searchable: true
+    status:
+        label: status
+    datecreated:
+        label: datecreated

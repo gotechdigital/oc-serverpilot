@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/awebsome/serverpilot/models/systemuser/columns.yaml
+list: $/awebsome/serverpilot/models/sysuser/columns.yaml
 
 # Model Class name
-modelClass: Awebsome\Serverpilot\Models\SystemUser
+modelClass: Awebsome\Serverpilot\Models\Sysuser
 
 # List Title
 title: Manage System Users
 
 # Link URL for each record
-# recordUrl: awebsome/serverpilot/systemusers/update/:id
+# recordUrl: awebsome/serverpilot/sysusers/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

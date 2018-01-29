@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Action
+
+# Model Form Field configuration
+form: $/awebsome/serverpilot/models/action/fields.yaml
+
+# Model Class name
+modelClass: Awebsome\Serverpilot\Models\Action
+
+# Default redirect location
+defaultRedirect: awebsome/serverpilot/actions
+
+# Create page
+create:
+    title: Create Action
+    redirect: awebsome/serverpilot/actions/update/:id
+    redirectClose: awebsome/serverpilot/actions
+
+# Update page
+update:
+    title: Edit Action
+    redirect: awebsome/serverpilot/actions
+    redirectClose: awebsome/serverpilot/actions
+
+# Preview page
+preview:
+    title: Preview Action
