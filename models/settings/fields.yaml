@@ -39,3 +39,8 @@ tabs:
             tab: Options
             placeholder: 'preview.{APP_NAME}.domain.tld'
             span: left
+        log_errors:
+            label: Log Errors
+            type: switch
+            span: left
+            default: false

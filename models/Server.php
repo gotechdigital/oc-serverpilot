@@ -1,6 +1,7 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
 use Model;
+use Flash;
 use ValidationException;
 
 use Awebsome\Serverpilot\Classes\ServerPilot;
@@ -45,14 +46,12 @@ class Server extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    /* public function beforeUpdate()
+    public function beforeSave()
     {
-        $ServerPilot = new ServerPilot;
-
-        $ServerPilot->Servers($this->id)->update([
-            'autoupdates'   => ($this->autoupdates) ? true : false,
-            'firewall'      => ($this->firewall) ? true : false,
-            'deny_unknown_domains'   => ($this->deny_unknown_domains) ? true : false,
+        $apiResponse = ServerPilot::servers($this->api_id)->update([
+            'autoupdates'   => ($this->autoupdates) ? TRUE : FALSE,
+            'firewall'      => ($this->firewall) ? TRUE : FALSE,
+            'deny_unknown_domains'   => ($this->deny_unknown_domains) ? TRUE : FALSE,
         ]);
-    } */
+    }
 }

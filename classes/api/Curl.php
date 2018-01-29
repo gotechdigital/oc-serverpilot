@@ -1,5 +1,6 @@
 <?php namespace Awebsome\Serverpilot\Classes\Api;
 
+use Log;
 use ValidationException;
 use Awebsome\Serverpilot\Classes\ServerPilot;
 use Awebsome\Serverpilot\Models\Settings as CFG;
@@ -83,22 +84,46 @@ class Curl
 		// check for common errors
 		switch ($status_code) {
 			case 200: break;
-			case 400: $error = 'ServerPilot: We could not understand your request. Typically missing a parameter or header.'; break;
-			case 401: $error = 'ServerPilot: Either no authentication credentials were provided or they are invalid.'; break;
-			case 402: $error = 'ServerPilot: Method is restricted to users on the Coach or Business plan.'; break;
-			case 403: $error = 'ServerPilot: Typically when trying to alter or delete protected resources.'; break;
-			case 404: $error = 'ServerPilot: You requested a resource that does not exist.'; break;
-			case 409: $error = 'ServerPilot: Typically when trying creating a resource that already exists.'; break;
-			case 500: $error = 'ServerPilot: Internal server error. Try again at a later time.'; break;
+			case 400:
+                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code, ['data' => json_encode($data, JSON_PRETTY_PRINT)]);
+                break;
+			case 401:
+                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
+                break;
+			case 402:
+                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
+                break;
+			case 403:
+                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
+                break;
+			case 404:
+                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
+                break;
+			case 409:
+                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
+                break;
+			case 500:
+                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
+                break;
 			default:  break;
 		}
 
 		// close connection
         curl_close($ch);
 
+        //debug Log::info($response);
+
         if($status_code != 200)
-            return json_decode(json_encode(['error' => ['code' => $status_code, 'message' => $error]]));
-        else return json_decode($response);
+        {
+            if($method == ServerPilot::SP_HTTP_METHOD_POST || $method == ServerPilot::SP_HTTP_METHOD_DELETE)
+            {
+                if(CFG::get('log_errors'))
+                Log::error($error);
+
+                throw new ValidationException(['error_mesage' => $error]);
+            }
+            else return json_decode(json_encode(['error' => ['code' => $status_code, 'message' => $error]]));
+        } else return json_decode($response);
 	}
 }
 
