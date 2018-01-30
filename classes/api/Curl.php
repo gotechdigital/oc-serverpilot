@@ -103,7 +103,7 @@ class Curl
                     $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
                 break;
 			case 500:
-                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
+                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code, ['data' => json_encode($data, JSON_PRETTY_PRINT)]);
                 break;
 			default:  break;
 		}

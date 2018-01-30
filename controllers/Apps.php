@@ -1,6 +1,7 @@
 <?php namespace Awebsome\Serverpilot\Controllers;
 
 use Backend;
+use Redirect;
 use BackendMenu;
 use ValidationException;
 

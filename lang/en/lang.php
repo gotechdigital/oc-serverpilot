@@ -16,6 +16,6 @@
         '403' => 'Error 403: ServerPilot says, Typically when trying to alter or delete protected resources.',
         '404' => 'Error 404: ServerPilot says, You requested a resource that does not exist. :data',
         '409' => 'Error 409: ServerPilot says, Typically when trying creating a resource that already exists.',
-        '500' => 'Error 500: ServerPilot says, Internal server error. Try again at a later time.',
+        '500' => 'Error 500: ServerPilot says, Internal server error. Try again at a later time. :data',
     ]
 ];

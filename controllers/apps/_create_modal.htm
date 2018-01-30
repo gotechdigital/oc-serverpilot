@@ -1,3 +1,6 @@
+<style>
+    label[for="Form-field-App-runtime"]{ display: block;}
+</style>
 <?= Form::open(['id' => 'createForm']) ?>
 	<style>
 		.radio-runtime div.radio {display: inline-block;} .radio-runtime label{margin-right: 15px;}
@@ -48,38 +51,4 @@
         </div>
 
     <?php endif ?>
-
-    <script>
-        setTimeout(
-            function(){ $('#createForm input.form-control:first').focus() },
-            310
-        )
-
-        $('#Form-field-App-domains').change(function(){
-
-            var dom = $('#Form-field-App-domains').val();
-
-            validateDomain(dom);
-        });
-
-        function validateDomain(the_domain)
-        {
-            // strip off "http://" and/or "www."
-            the_domain = the_domain.replace("http://","");
-            the_domain = the_domain.replace("www.","");
-
-            // var reg = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
-            var reg = /^[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\.([a-zA-Z]{1,6}|[a-zA-Z0-9-]{1,30}\.[a-zA-Z]{2,3})$/;
-            var result = reg.test(the_domain);
-
-            if(result){
-                $('.modal-footer .btn.btn-primary').prop('disabled', false);
-                $('#Form-field-App-domains-group label').prop('class','oc-icon-check');
-            }else{
-                $('.modal-footer .btn.btn-primary').prop('disabled', true);
-                $('#Form-field-App-domains-group label').prop('class','oc-icon-times');
-            }
-        } // end validateDomain()
-    </script>
-
 <?= Form::close() ?>

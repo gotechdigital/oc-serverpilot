@@ -78,7 +78,7 @@ class CreateTables extends Migration
             $table->longText('ssl')->nullable();
             $table->text('autossl')->nullable();
             $table->longText('domains')->nullable();
-            $table->string('datecreated');
+            $table->string('datecreated')->nullable();
 
             # Custom cols.
             $table->text('annotations')->nullable();

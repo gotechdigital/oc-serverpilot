@@ -18,39 +18,34 @@ fields:
         comment: 'Obtain this from <a href="https://manage.serverpilot.io/#account/api" target="_blank">here</a>.'
 tabs:
     fields:
-#        sync_data:
-#            label: Sync with ServerPilot
-#            type: dropdown
-#            tab: Options
-#            span: left
-#            options:
-#                realtime: 'Only Manual Sync'
-#                everyMinute: 'Run the task every minute'
-#                everyFiveMinutes: 'Run the task every five minutes'
-#                everyTenMinutes: 'Run the task every ten minutes'
-#                everyThirtyMinutes: 'Run the task every thirty minutes'
-#                hourly: 'Run the task every hour'
-#                daily: 'Run the task every day at midnight'
         preview_domain:
             label: Preview Domain
             commentHtml: true
-            comment: 'Use <span style="color: blue;">{APP_NAME}</span> to indicate where are to use App Name. Example: <small>preview.{APP_NAME}.domain.tld</small>'
+            comment: 'Use <span style="color: blue;">{APP_NAME}</span> to indicate where are to use App Name.'
             type: text
-            tab: Options
-            placeholder: 'preview.{APP_NAME}.domain.tld'
+            tab: Settings
+            placeholder: '{APP_NAME}.previewdomain.tld'
             span: left
-
+        runtime:
+            label: Default Runtime
+            type: dropdown
+            tab: Settings
+            span: right
+            comment: It is recommended that your main installation run in a different runtime than your applications
         show_sysuser_password:
+            tab: Options
             label: Show user password
             type: switch
             span: left
             default: false
         show_dbs_password:
+            tab: Options
             label: Show database password
             type: switch
             span: left
             default: false
         log_errors:
+            tab: Options
             label: Log Errors
             type: switch
             span: left

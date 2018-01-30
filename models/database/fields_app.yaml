@@ -1,0 +1,35 @@
+fields:
+    name:
+        label: 'Database Name'
+        oc.commentPosition: ''
+        span: full
+        required: 1
+        type: text
+        cssClass: db-name
+
+    user[name]:
+        label: User
+        oc.commentPosition: ''
+        span: left
+        required: 1
+        type: text
+        cssClass: usr-db
+        trigger:
+            action: disable
+            field: name
+            condition: value[]
+    user[password]:
+        label: Password
+        oc.commentPosition: ''
+        span: right
+        required: 1
+        type: text
+        cssClass: usr-db-pass
+        trigger:
+            action: disable
+            field: name
+            condition: value[]
+    auto_pass:
+        cssClass: 'hide'
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/controllers/databases/forms/_script_auto_password.htm
