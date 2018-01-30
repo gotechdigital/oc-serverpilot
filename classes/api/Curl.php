@@ -97,7 +97,7 @@ class Curl
                     $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
                 break;
 			case 404:
-                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
+                    $error = trans('awebsome.serverpilot::lang.error.'.$status_code, ['data' => json_encode($data, JSON_PRETTY_PRINT)]);
                 break;
 			case 409:
                     $error = trans('awebsome.serverpilot::lang.error.'.$status_code);
@@ -121,8 +121,7 @@ class Curl
                 Log::error($error);
 
                 throw new ValidationException(['error_mesage' => $error]);
-            }
-            else return json_decode(json_encode(['error' => ['code' => $status_code, 'message' => $error]]));
+            }else return json_decode(json_encode(['error' => ['code' => $status_code, 'message' => $error]]));
         } else return json_decode($response);
 	}
 }

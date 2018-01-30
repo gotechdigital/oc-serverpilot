@@ -5,7 +5,6 @@ use BackendMenu;
 
 use Backend\Classes\Controller;
 use Awebsome\Serverpilot\Classes\ServerPilot;
-use Awebsome\Serverpilot\Models\Database;
 
 /**
  * Databases Back-end Controller
@@ -35,5 +34,13 @@ class Databases extends Controller
             ServerPilot::dbs()->import();
 
         $this->asExtension('ListController')->index();
+    }
+
+    public function api($id = null)
+    {
+        $result = ServerPilot::dbs($id)->get();
+
+        $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
+        return $print;
     }
 }

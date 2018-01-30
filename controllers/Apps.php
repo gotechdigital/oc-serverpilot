@@ -46,6 +46,14 @@ class Apps extends Controller
         $this->asExtension('ListController')->index();
     }
 
+    public function api($id = null)
+    {
+        $result = ServerPilot::apps($id)->get();
+
+        $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
+        return $print;
+    }
+
     public function update($recordId = null, $context = null)
     {
 
@@ -71,5 +79,7 @@ class Apps extends Controller
 
         return Redirect::to(Backend::url('awebsome/serverpilot/apps/update/'.$app->id));
     }
+
+
 
 }

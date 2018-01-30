@@ -27,7 +27,7 @@ class CreateTables extends Migration
             $table->string('account_id')->nullable();              # serverpilot owner account by multiaccount feature.
 
             # API Cols.
-            $table->string('api_id')->index();
+            $table->string('api_id')->index()->nullable();
             $table->string('name');                                 #hostname,
             $table->boolean('autoupdates')->default(0);             #is enabled,
             $table->boolean('firewall')->default(0);                #is enabled,
@@ -49,8 +49,8 @@ class CreateTables extends Migration
             $table->increments('id');
 
             # API Cols.
-            $table->string('api_id')->index();
-            $table->string('server_api_id');
+            $table->string('api_id')->index()->nullable();
+            $table->string('server_api_id')->index()->nullable();
             $table->string('name');
 
             //Custom Cols.
@@ -69,9 +69,9 @@ class CreateTables extends Migration
             $table->increments('id');
 
             # API Cols.
-            $table->string('api_id')->index();          # id.
-            $table->string('server_api_id');
-            $table->string('sysuser_api_id');
+            $table->string('api_id')->index()->nullable();          # id.
+            $table->string('server_api_id')->index()->nullable();
+            $table->string('sysuser_api_id')->index()->nullable();
 
             $table->string('name');
             $table->string('runtime');
@@ -95,9 +95,9 @@ class CreateTables extends Migration
             $table->increments('id');
 
             # API Cols.
-            $table->string('api_id')->index();
-            $table->string('app_api_id');
-            $table->string('server_api_id');
+            $table->string('api_id')->index()->nullable();
+            $table->string('app_api_id')->index()->nullable();
+            $table->string('server_api_id')->index()->nullable();
             $table->string('name');
             $table->text('user');
 
@@ -117,8 +117,8 @@ class CreateTables extends Migration
             $table->increments('id');
 
             # API Cols.
-            $table->string('api_id')->index();
-            $table->string('server_api_id');
+            $table->string('api_id')->index()->nullable();
+            $table->string('server_api_id')->index()->nullable();
             $table->string('status');
             $table->string('datecreated');
 

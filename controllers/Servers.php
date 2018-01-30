@@ -37,4 +37,12 @@ class Servers extends Controller
 
         $this->asExtension('ListController')->index();
     }
+
+    public function api($id = null)
+    {
+        $result = ServerPilot::servers($id)->get();
+
+        $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
+        return $print;
+    }
 }

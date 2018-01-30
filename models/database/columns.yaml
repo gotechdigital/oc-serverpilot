@@ -39,6 +39,7 @@ columns:
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/database/columns/password.htm
         sortable: false
+        invisible: true
 
     updated_at:
         label: 'Last Import'

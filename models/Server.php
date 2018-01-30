@@ -51,7 +51,7 @@ class Server extends Model
      */
     public $importing;
 
-    public function beforeSave()
+    public function beforeUpdate()
     {
         if(!$this->importing)
         {

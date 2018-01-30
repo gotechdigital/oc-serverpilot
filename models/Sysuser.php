@@ -55,7 +55,26 @@ class Sysuser extends Model
      */
     public $importing;
 
-    public function beforeSave()
+    public function beforeCreate()
+    {
+        if(!$this->importing)
+        {
+            $sysuser = ServerPilot::sysusers()->create([
+                'serverid' => post('Sysuser.server_api_id'),
+                'name' => $this->name,
+                'password' => post('Sysuser.password')
+            ]);
+
+            if($sysuser = @$sysuser->data)
+            {
+                $this->api_id = $sysuser->id;
+                $this->server_api_id = $sysuser->serverid;
+                Log::info('creado...'. json_encode($sysuser));
+            }
+        }
+    }
+
+    public function beforeUpdate()
     {
         if(!$this->importing && post('Sysuser.password'))
         {
@@ -99,13 +118,9 @@ class Sysuser extends Model
     /**
      * Set USER.
      */
-    public function setUserAttribute($user)
+    public function setNameAttribute($value)
     {
-        if(!$this->user)
-            $user = strtolower($user);
-        else $user = $this->user;
-
-        $this->attribute['user'] = $user;
+        $this->attributes['name'] = strtolower($value);
     }
 
 
@@ -119,5 +134,19 @@ class Sysuser extends Model
         catch (DecryptException $ex) {
             return null;
         }
+    }
+
+    public function getServersOption()
+    {
+        $servers = Server::all();
+        $options = [];
+        if(count($servers) > 0)
+        {
+            foreach ($servers as $server) {
+                $options[$server->api_id] = $server->name;
+            }
+        }
+
+        return $options;
     }
 }

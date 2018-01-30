@@ -69,7 +69,7 @@ class Database extends Model
      */
     public $importing;
 
-    public function beforeSave()
+    public function beforeUpdate()
     {
         if(!$this->importing && post('Database.password'))
         {

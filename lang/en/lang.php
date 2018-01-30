@@ -14,7 +14,7 @@
         '401' => 'Error 401: ServerPilot says, Either no authentication credentials were provided or they are invalid.',
         '402' => 'Error 402: ServerPilot says, Method is restricted to users on the Coach or Business plan.',
         '403' => 'Error 403: ServerPilot says, Typically when trying to alter or delete protected resources.',
-        '404' => 'Error 404: ServerPilot says, You requested a resource that does not exist.',
+        '404' => 'Error 404: ServerPilot says, You requested a resource that does not exist. :data',
         '409' => 'Error 409: ServerPilot says, Typically when trying creating a resource that already exists.',
         '500' => 'Error 500: ServerPilot says, Internal server error. Try again at a later time.',
     ]

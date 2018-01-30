@@ -23,7 +23,7 @@ create:
 # Update page
 update:
     title: Edit System User
-    redirect: awebsome/serverpilot/sysusers
+    redirect: awebsome/serverpilot/sysusers/update/:id
     redirectClose: awebsome/serverpilot/sysusers
 
 # Preview page

@@ -1,19 +1,31 @@
 fields:
-    server_api_id:
-        label: ServerId
+    api_id:
+        label: api_id
         cssClass: hide
         disabled: true
+
+    server_api_id:
+        label: Server
+        disabled: true
+        type: dropdown
+        options: getServersOption
+        span: left
+        trigger:
+            action: enable
+            field: api_id
+            condition: value[]
     name:
         label: User
         span: left
         trigger:
             action: enable
-            field: server_api_id
+            field: api_id
             condition: value[]
     visible_password:
         label: Password:
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/password.htm
+        context: update
     password:
         label: Change Password
         type: password

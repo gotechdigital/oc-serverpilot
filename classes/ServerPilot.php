@@ -1,7 +1,7 @@
 <?php namespace Awebsome\Serverpilot\Classes;
 
 use Awebsome\Serverpilot\Classes\Api\Curl;
-use Awebsome\Serverpilot\Classes\Synchronizer;
+use Awebsome\Serverpilot\Classes\ImportHandler as Import;
 
 class ServerPilot extends Curl
 {
@@ -18,29 +18,90 @@ class ServerPilot extends Curl
     /**  Location for overloaded data.  */
     public $data;               # data for create, update, or delete.
     public $endpoint;           # resource to /endpoint
-    public $resource;           # $resource name.
+    public $name;               # $resource name. ex: apps, servers, dbs
 
-    public $models;              # Models of resources.
-    public $model;              # Model of resource.
+    public $model;           # Models of resources.
+    public $table;           # Models of resources.
     public $id;              # Model of resource.
 
-    public function __construct()
-    {
-        $this->registerModels();
-    }
-
+    /**
+     * Register Models.
+     */
     public function registerModels()
     {
-        /**
-         * Register Models.
-         */
-        return $this->models = [
+        return [
             'servers'   => 'Awebsome\ServerPilot\Models\Server',
             'sysusers'  => 'Awebsome\ServerPilot\Models\Sysuser',
             'apps'      => 'Awebsome\ServerPilot\Models\App',
             'dbs'       => 'Awebsome\ServerPilot\Models\Database',
             'actions'   => 'Awebsome\ServerPilot\Models\Action',
         ];
+    }
+
+    /**
+     * Register tables.
+     * ==========================================
+     * mapped data between api and data tables.
+     */
+    public function registerTables()
+    {
+        return [
+            'servers' => [
+                'api_id'                => 'id',
+                'name'                  => 'name',
+                'autoupdates'           => 'autoupdates',
+                'firewall'              => 'firewall',
+                'lastaddress'           => 'lastaddress',
+                'datecreated'           => 'datecreated',
+                'lastconn'              => 'lastconn',
+                'created_at'            => 'datecreated',
+                'deny_unknown_domains'  => 'deny_unknown_domains'
+            ],
+            'sysusers' => [
+                'api_id'                => 'id',
+                'server_api_id'         => 'serverid',
+                'name'                  => 'name'
+            ],
+
+            'dbs' => [
+                'api_id'            => 'id',
+                'app_api_id'        => 'appid',
+                'server_api_id'     => 'serverid',
+                'name'              => 'name',
+                'user'              => 'user'
+            ],
+
+            'apps' => [
+                'api_id'            => 'id',
+                'sysuser_api_id'    => 'sysuserid',
+                'server_api_id'     => 'serverid',
+                'name'              => 'name',
+                'runtime'           => 'runtime',
+                'ssl'               => 'ssl',
+                'autossl'           => 'autossl',
+                'domains'           => 'domains',
+                'datecreated'       => 'datecreated'
+            ],
+
+            'actions' => [
+                'api_id'            => 'id',
+                'server_api_id'     => 'serverid',
+                'status'            => 'status',
+                'datecreated'       => 'datecreated'
+            ]
+        ];
+    }
+
+    public function getModel($resource)
+    {
+        $models = $this->registerModels();
+        return $models[$resource];
+    }
+
+    public function getTable($resource)
+    {
+        $tables = $this->registerTables();
+        return $tables[$resource];
     }
 
     /**
@@ -70,7 +131,9 @@ class ServerPilot extends Curl
     public static function servers($id = null)
     {
         $sp = new Self;
-        $sp->resource = __FUNCTION__;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
         $sp->id = $id;
 
         return $sp;
@@ -79,7 +142,9 @@ class ServerPilot extends Curl
     public static function apps($id = null)
     {
         $sp = new Self;
-        $sp->resource = __FUNCTION__;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
         $sp->id = $id;
 
         return $sp;
@@ -88,7 +153,9 @@ class ServerPilot extends Curl
     public static function sysusers($id = null)
     {
         $sp = new Self;
-        $sp->resource = __FUNCTION__;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
         $sp->id = $id;
 
         return $sp;
@@ -97,7 +164,9 @@ class ServerPilot extends Curl
     public static function dbs($id = null)
     {
         $sp = new Self;
-        $sp->resource = __FUNCTION__;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
         $sp->id = $id;
 
         return $sp;
@@ -106,7 +175,9 @@ class ServerPilot extends Curl
     public static function actions($id)
     {
         $sp = new Self;
-        $sp->resource = __FUNCTION__;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
         $sp->id = $id;
 
         return $sp;
@@ -119,11 +190,13 @@ class ServerPilot extends Curl
 
     public function import()
     {
-        $this->model = $this->models[$this->resource];
 
-        if($this->id)
-            $import = Synchronizer::import($this);
-        else $import = Synchronizer::importAll($this);
+        # ImportHandler::details($this);
+
+        if(!$this->id)
+            $import = Import::all($this);
+
+        # ImportHandler::batch($this);
 
         return $import;
     }
@@ -140,7 +213,7 @@ class ServerPilot extends Curl
     public function get()
     {
         if(!$this->endpoint)
-            $this->endpoint = ($this->id) ? $this->resource . '/'.$this->id : $this->resource;
+            $this->endpoint = ($this->id) ? $this->name . '/'.$this->id : $this->name;
 
         return $this->request($this->endpoint, $this->data);
     }
@@ -148,9 +221,14 @@ class ServerPilot extends Curl
     public function update($data)
     {
         if($this->id && !$this->endpoint)
-            $this->endpoint = $this->resource . '/'.$this->id;
+            $this->endpoint = $this->name . '/'.$this->id;
 
         return $this->request($this->endpoint, $data, self::SP_HTTP_METHOD_POST);
+    }
+
+    public function create($data)
+    {
+        return $this->request($this->name, $data, self::SP_HTTP_METHOD_POST);
     }
 
     # update
