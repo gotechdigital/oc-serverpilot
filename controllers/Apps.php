@@ -61,13 +61,16 @@ class Apps extends Controller
     }
 
 
-
+    /**
+     * New App from list Modal.
+     */
     public function onCreateForm()
     {
         $this->asExtension('FormController')->create();
 
-        return $this->makePartial('forms/new_app_form');
+        return $this->makePartial('create_modal');
     }
+
 
     public function onCreate()
     {

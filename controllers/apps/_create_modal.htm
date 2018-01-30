@@ -56,14 +56,14 @@
         )
 
         $('#Form-field-App-domains').change(function(){
-            
+
             var dom = $('#Form-field-App-domains').val();
 
             validateDomain(dom);
         });
 
         function validateDomain(the_domain)
-        {  
+        {
             // strip off "http://" and/or "www."
             the_domain = the_domain.replace("http://","");
             the_domain = the_domain.replace("www.","");

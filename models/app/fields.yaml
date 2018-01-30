@@ -1,12 +1,11 @@
 fields:
-    user_id:
+    sysuser_api_id:
         label: 'System User'
-        oc.commentPosition: ''
         span: left
         disabled: 0
         required: 1
         type: dropdown
-        options: getSystemUserList
+        options: getSysuserOptions
     name:
         label: Name
         oc.commentPosition: ''

@@ -8,7 +8,7 @@ fields:
         label: Server
         disabled: true
         type: dropdown
-        options: getServersOption
+        options: getServersOptions
         span: left
         trigger:
             action: enable

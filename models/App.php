@@ -1,16 +1,9 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
 use Model;
-use Flash;
-use ValidationException;
-use Awebsome\Serverpilot\Models\Settings;
-use Awebsome\Serverpilot\Models\SystemUser;
-use Awebsome\Serverpilot\Models\Database;
 
-use Awebsome\Serverpilot\Classes\Atom;
-use Awebsome\Serverpilot\Classes\Sublime;
+use Awebsome\Serverpilot\Models\Sysuser;
 use Awebsome\Serverpilot\Classes\ServerPilot;
-use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
 /**
  * App Model
@@ -37,12 +30,6 @@ class App extends Model
      */
     protected $jsonable = ['autossl','ssl', 'domains'];
 
-    use \October\Rain\Database\Traits\Purgeable;
-    /**
-     * @var array Purgeable fields
-     */
-    protected $purgeable = ['importing'];
-
     /**
      * @var array Relations
      */
@@ -60,4 +47,19 @@ class App extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+    /**
+     * get Sysuser Options
+     */
+     public function getSysuserOptions()
+     {
+        $users = Sysuser::all();
+        $options = [];
+
+        foreach ($users as $user) {
+            $options[$user->api_id] = $user->name;
+        }
+
+        return $options;
+     }
 }

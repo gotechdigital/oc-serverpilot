@@ -69,7 +69,7 @@ class Sysuser extends Model
             {
                 $this->api_id = $sysuser->id;
                 $this->server_api_id = $sysuser->serverid;
-                Log::info('creado...'. json_encode($sysuser));
+                # Log::info('creado...'. json_encode($sysuser));
             }
         }
     }
@@ -81,7 +81,7 @@ class Sysuser extends Model
             ServerPilot::sysusers($this->api_id)->update([
                 'password' => $this->passwordDecrypt()
             ]);
-            // Log::info('sysuser Updateado...');
+            # Log::info('sysuser Updateado...');
         }
     }
 
@@ -136,15 +136,13 @@ class Sysuser extends Model
         }
     }
 
-    public function getServersOption()
+    public function getServersOptions()
     {
         $servers = Server::all();
         $options = [];
-        if(count($servers) > 0)
-        {
-            foreach ($servers as $server) {
-                $options[$server->api_id] = $server->name;
-            }
+
+        foreach ($servers as $server) {
+            $options[$server->api_id] = $server->name;
         }
 
         return $options;
