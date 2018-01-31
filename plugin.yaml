@@ -38,12 +38,12 @@ navigation:
                 icon: icon-server
                 permissions:
                     - awebsome.serverpilot.servers
-            actions:
-                label: Actions
-                url: awebsome/serverpilot/actions
-                icon: icon-fire
-                permissions:
-                    - awebsome.serverpilot.actions
+#            actions:
+#                label: Actions
+#                url: awebsome/serverpilot/actions
+#                icon: icon-fire
+#                permissions:
+#                    - awebsome.serverpilot.actions
 permissions:
     awebsome.serverpilot.serverpilot:
         tab: 'awebsome.serverpilot::lang.plugin.name'

@@ -32,8 +32,8 @@ class Servers extends Controller
 
     public function index()
     {
-        if(ServerPilot::isAuth())
-            ServerPilot::servers()->import();
+        #if(ServerPilot::isAuth())
+        #    ServerPilot::servers()->import();
 
         $this->asExtension('ListController')->index();
     }

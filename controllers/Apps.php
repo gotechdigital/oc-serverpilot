@@ -41,8 +41,8 @@ class Apps extends Controller
 
     public function index()
     {
-        if(ServerPilot::isAuth())
-            ServerPilot::apps()->import();
+        # if(ServerPilot::isAuth())
+        #    ServerPilot::apps()->import();
 
         $this->asExtension('ListController')->index();
     }
@@ -76,4 +76,15 @@ class Apps extends Controller
         return Redirect::to(Backend::url('awebsome/serverpilot/apps/update/'.$app->id));
     }
 
+
+    public function test()
+    {
+
+        
+
+        //$result = App::all();
+        $print = '<pre>'.json_encode($caso1, JSON_PRETTY_PRINT).'</pre>';
+        $print.= '<pre>'.json_encode($caso2, JSON_PRETTY_PRINT).'</pre>';
+        return $print;
+    }
 }

@@ -1,13 +1,13 @@
 <?php namespace Awebsome\Serverpilot;
 
-use Flash;
+use Event;
 use Backend;
 use Redirect;
 
 use Awebsome\Serverpilot\Models\Sync;
 use Awebsome\Serverpilot\Models\Settings as CFG;
 
-use Awebsome\Serverpilot\Classes\ServerPilotSync;
+use Awebsome\Serverpilot\Classes\ServerPilot;
 
 use System\Classes\PluginBase;
 use Db;
@@ -22,12 +22,21 @@ class Plugin extends PluginBase
 
     public function boot()
     {
-
+        Event::listen('awebsome.serverpilot.afterSaveSettings', function() {
+            // Code to register $user->email to mailing list
+            if(ServerPilot::isAuth())
+            {
+                ServerPilot::servers()->import();
+                ServerPilot::sysusers()->import();
+                ServerPilot::apps()->import('oneToOne');
+                ServerPilot::dbs()->import();
+            }
+        });
     }
 
     public function registerSchedule($schedule)
     {
-    
+
     }
 
     public function registerSettings()

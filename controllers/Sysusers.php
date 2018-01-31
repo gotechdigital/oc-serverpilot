@@ -33,8 +33,8 @@ class Sysusers extends Controller
 
     public function index()
     {
-        if(ServerPilot::isAuth())
-            ServerPilot::sysusers()->import();
+        #if(ServerPilot::isAuth())
+        #    ServerPilot::sysusers()->import();
 
         $this->asExtension('ListController')->index();
     }

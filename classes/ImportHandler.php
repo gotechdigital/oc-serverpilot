@@ -59,8 +59,16 @@ class ImportHandler
      * ====================================================
      * get all records of resource
      */
-    public static function importBatch($resource)
+    public static function allOneToOne($resource)
     {
+        # list record data
+        $records = $resource->get();
+        $resource = $resource->name;
 
+        foreach ($records->data as $data) {
+            ServerPilot::$resource($data->id)->import();
+        }
+
+        return $records;
     }
 }

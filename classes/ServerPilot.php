@@ -1,5 +1,6 @@
 <?php namespace Awebsome\Serverpilot\Classes;
 
+use Awebsome\ServerPilot\Models\Settings as CFG;
 use Awebsome\Serverpilot\Classes\Api\Curl;
 use Awebsome\Serverpilot\Classes\ImportHandler as Import;
 
@@ -112,13 +113,18 @@ class ServerPilot extends Curl
      */
     public static function isAuth()
     {
-        $sp = new Self;
-        $response = $sp->actions('1')->get();
-        $code = @$response->error->code;
+        if(CFG::get('CLIENT_ID') && CFG::get('API_KEY'))
+        {
 
-        if($code != 401)
-            return true;
-        else return false;
+            $sp = new Self;
+            $response = $sp->actions('1')->get();
+            $code = @$response->error->code;
+
+            if($code != 401)
+                return true;
+            else return false;
+
+        }else return false;
     }
 
     /**
@@ -188,17 +194,30 @@ class ServerPilot extends Curl
      * Helper Methods
      */
 
-    public function import()
+    public function import($mode = null)
     {
 
-        # ImportHandler::details($this);
-
-        if(!$this->id)
-            $import = Import::all($this);
-
-        # ImportHandler::batch($this);
+        if(!$mode)
+        {
+            if(!$this->id)
+                $import = Import::all($this);
+            else
+                $import = Import::import($this, $this->get()->data);
+        }else if($mode == 'oneToOne')
+        {
+            $import = Import::allOneToOne($this);
+        }
 
         return $import;
+    }
+
+    public function importBatch()
+    {
+        if(!$this->id)
+        {
+            $import = Import::batch($this);
+            return $import;
+        }
     }
 
     /**

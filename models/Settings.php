@@ -1,5 +1,6 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
+use Event;
 use Model;
 use Awebsome\ServerPilot\Models\Runtime;
 /*
@@ -9,7 +10,7 @@ class Settings extends Model
 {
     public $implement = ['System.Behaviors.SettingsModel'];
 
-    public $settingsCode = 'settings';
+    public $settingsCode = 'awebsome_serverpilot_settings';
     public $settingsFields = 'fields.yaml';
 
     /**
@@ -35,6 +36,12 @@ class Settings extends Model
         'CLIENT_ID'    => 'required',
         'API_KEY'   => 'required'
     ];
+
+    public function afterSave()
+    {
+        # refresh data.
+        Event::fire('awebsome.serverpilot.afterSaveSettings');
+    }
 
     public function getRuntimeOptions()
     {

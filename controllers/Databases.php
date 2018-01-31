@@ -30,8 +30,8 @@ class Databases extends Controller
 
     public function index()
     {
-        if(ServerPilot::isAuth())
-            ServerPilot::dbs()->import();
+        #if(ServerPilot::isAuth())
+        #    ServerPilot::dbs()->import();
 
         $this->asExtension('ListController')->index();
     }
