@@ -69,6 +69,29 @@ class Database extends Model
      */
     public $importing;
 
+    public function beforeCreate()
+    {
+        if(!$this->importing)
+        {
+            $db = ServerPilot::dbs()->create([
+                'appid'=> $this->app_api_id,
+                'name'=> $this->name,
+                'user'=> [
+                        'name' => $this->user['name'],
+                        'password' => $this->user['password']
+                    ]
+            ]);
+
+            if($db = @$db->data)
+            {
+                $db = ServerPilot::dbs($db->id)->get()->data;
+                $this->api_id = $db->id;
+                $this->server_api_id = $db->serverid;
+                $this->password =  $this->user['password'];
+            }
+        }
+    }
+
     public function beforeUpdate()
     {
         if(!$this->importing && post('Database.password'))
@@ -79,8 +102,12 @@ class Database extends Model
                     'password' => $this->passwordDecrypt(),
                 ]
             ]);
-            Log::info('db updated...');
         }
+    }
+
+    public function beforeDelete()
+    {
+        ServerPilot::dbs($this->api_id)->delete();
     }
 
     /**

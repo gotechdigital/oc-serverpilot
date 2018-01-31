@@ -19,7 +19,7 @@
             data-placement="bottom"
             data-delay="500"
             data-original-title="<?=e(trans('backend::lang.form.save'))?> (Ctrl+S)"
-            
+
             >
             <?= e(trans('backend::lang.form.save')) ?>
         </button>
@@ -45,15 +45,13 @@
                 type="button"
                 class="btn btn-default empty oc-icon-trash-o"
                 data-request="onDelete"
-
                 data-toggle="tooltip"
                 data-placement="right"
                 data-delay="500"
                 data-original-title="<?=trans('backend::lang.form.delete')?>"
 
                 data-load-indicator="<?=trans('backend::lang.form.delete')?>..."
-                data-request-confirm="Once you delete an app, there is no going back. Please be certain. <?=trans('backend::lang.form.confirm')?> <?=trans('backend::lang.form.delete')?>?" 
-                
+                data-request-confirm="Once you delete an app, there is no going back. Please be certain. <?=trans('backend::lang.form.confirm')?> <?=trans('backend::lang.form.delete')?>?"
                 >
             </button>
         <?endif;?>

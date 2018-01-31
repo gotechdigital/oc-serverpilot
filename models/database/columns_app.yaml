@@ -6,17 +6,18 @@ columns:
     name:
         label: DB Name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/name.htm
+        path: ~/plugins/awebsome/serverpilot/models/database/columns/name.htm
         searchable: true
         clickable: false
     user:
         label: User Name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/databases/columns/user.htm
+        path: ~/plugins/awebsome/serverpilot/models/database/columns/user.htm
         clickable: false
-    updated_at:
-        label: 'Last Sync'
-        type: timesince
+    visible_password:
+        label: Password
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/models/database/columns/password.htm
         clickable: false
     created_at:
         label: 'Created At'

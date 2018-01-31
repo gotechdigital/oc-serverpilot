@@ -13,6 +13,8 @@ use Awebsome\Serverpilot\Classes\ServerPilot;
  */
 class App extends Model
 {
+    use \October\Rain\Database\Traits\Purgeable;
+
     /**
      * @var string The database table used by the model.
      */
@@ -53,6 +55,11 @@ class App extends Model
 
 
     /**
+     * @var array List of attributes to purge.
+     */
+    protected $purgeable = ['repeater_domains'];
+
+    /**
      * check if it's an import
      * @param boolean
      */
@@ -60,10 +67,38 @@ class App extends Model
 
     public function __construct(array $attributes = array())
     {
+        /**
+         * set default selected.
+         */
         $this->setRawAttributes(['runtime' => CFG::get('runtime')], true);
 
         parent::__construct($attributes);
     }
+
+    /**
+     * before delete
+     */
+    public function beforeDelete()
+    {
+        # Delete all databases of this app
+        $this->databases()->delete();
+
+        # delete app in serverpilot
+        ServerPilot::apps($this->api_id)->delete();
+    }
+
+
+    public function beforeUpdate()
+    {
+        if(!$this->importing)
+        {
+            ServerPilot::apps($this->api_id)->update([
+                'runtime' => $this->runtime,
+                'domains' => $this->api_domains
+            ]);
+        }
+    }
+
 
     public function beforeCreate()
     {
@@ -73,7 +108,7 @@ class App extends Model
                 'name'      => $this->name,
                 'sysuserid' => $this->sysuser_api_id,
                 'runtime'   => $this->runtime,
-                'domains'   => [post('App.domains')],
+                'domains'   => [$this->domains],
             ]);
 
             if($app = @$app->data)
@@ -84,13 +119,58 @@ class App extends Model
                 $this->ssl = $app->ssl;
                 $this->autossl = @$app->autossl;
                 $this->datecreated = $app->datecreated;
+                $this->domains = $app->domains;
                 Log::info('creado...'. json_encode($app));
             }
         }
     }
 
+
     /**
-     * get Sysuser Options
+     * formmated data
+     * ==========================================
+     */
+    public function getServerNameAttribute()
+    {
+        return $this->server->name;
+    }
+
+
+    public function getApiDomainsAttribute()
+    {
+        $domains= [];
+        if(is_array(post('App.repeater_domains')))
+        {
+            foreach (post('App.repeater_domains') as $domain) {
+                $domains[] = current($domain);
+            }
+        }
+        return $domains;
+    }
+
+    /**
+     * get Domains for Repeater
+     * ===========================================
+     * get domains formatted for repeater of form
+     */
+    public function getRepeaterDomainsAttribute()
+    {
+        $api_domains = $this->domains;
+        $domains = [];
+
+        foreach ($api_domains as $domain) {
+            $domains[]['domain'] = $domain;
+        }
+
+        return $domains;
+    }
+
+
+
+    /**
+     * get System Users availables
+     * =============================================
+     * @return array Sysuser for dropdown
      */
     public function getSysuserOptions()
     {
@@ -105,6 +185,12 @@ class App extends Model
         return $options;
     }
 
+
+    /**
+     * get Runtimes availables
+     * =============================================
+     * @return array Runtime for dropdown
+     */
     public function getRuntimeOptions()
     {
         $runtimes = Runtime::orderBy('id', 'desc')->get();

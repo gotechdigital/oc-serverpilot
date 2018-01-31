@@ -231,6 +231,13 @@ class ServerPilot extends Curl
         return $this->request($this->name, $data, self::SP_HTTP_METHOD_POST);
     }
 
+    public function delete()
+    {
+        $this->endpoint = $this->name . '/'.$this->id;
+
+        $this->request($this->endpoint, null, self::SP_HTTP_METHOD_DELETE);
+    }
+
     # update
     # delete
 }

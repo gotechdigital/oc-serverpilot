@@ -55,20 +55,12 @@ class Apps extends Controller
         return $print;
     }
 
-    public function update($recordId = null, $context = null)
-    {
-
-        $this->asExtension('FormController')->update($recordId, $context);
-    }
-
-
     /**
      * New App from list Modal.
      */
     public function onCreateForm()
     {
         $this->asExtension('FormController')->create();
-
         return $this->makePartial('create_modal');
     }
 
@@ -83,7 +75,5 @@ class Apps extends Controller
 
         return Redirect::to(Backend::url('awebsome/serverpilot/apps/update/'.$app->id));
     }
-
-
 
 }

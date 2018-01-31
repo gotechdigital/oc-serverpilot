@@ -32,4 +32,4 @@ fields:
     auto_pass:
         cssClass: 'hide'
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/databases/forms/_script_auto_password.htm
+        path: ~/plugins/awebsome/serverpilot/models/database/fields/auto_password.htm
