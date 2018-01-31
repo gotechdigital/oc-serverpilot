@@ -22,7 +22,7 @@ fields:
 secondaryTabs:
     stretch: true
     fields:
-        repeater_domains:
+        domains:
             label: Domains
             tab: App
             type: repeater

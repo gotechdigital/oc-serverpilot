@@ -13,7 +13,7 @@ use Awebsome\Serverpilot\Classes\ServerPilot;
  */
 class App extends Model
 {
-    use \October\Rain\Database\Traits\Purgeable;
+    # use \October\Rain\Database\Traits\Purgeable;
 
     /**
      * @var string The database table used by the model.
@@ -53,12 +53,6 @@ class App extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-
-    /**
-     * @var array List of attributes to purge.
-     */
-    protected $purgeable = ['repeater_domains'];
-
     /**
      * check if it's an import
      * @param boolean
@@ -94,7 +88,7 @@ class App extends Model
         {
             ServerPilot::apps($this->api_id)->update([
                 'runtime' => $this->runtime,
-                'domains' => $this->api_domains
+                'domains' => $this->getDomains()
             ]);
         }
     }
@@ -108,7 +102,7 @@ class App extends Model
                 'name'      => $this->name,
                 'sysuserid' => $this->sysuser_api_id,
                 'runtime'   => $this->runtime,
-                'domains'   => [$this->domains],
+                'domains'   => $this->getDomains(),
             ]);
 
             if($app = @$app->data)
@@ -119,8 +113,6 @@ class App extends Model
                 $this->ssl = $app->ssl;
                 $this->autossl = @$app->autossl;
                 $this->datecreated = $app->datecreated;
-                $this->domains = $app->domains;
-                Log::info('creado...'. json_encode($app));
             }
         }
     }
@@ -135,31 +127,35 @@ class App extends Model
         return $this->server->name;
     }
 
-
-    public function getApiDomainsAttribute()
+    /**
+     * get Domains for api
+     * ===========================================
+     * get domains formatted for the api
+     */
+    public function getDomains()
     {
-        $domains= [];
-        if(is_array(post('App.repeater_domains')))
+        $domains = $this->domains;
+
+        if(count($domains) > 0)
         {
-            foreach (post('App.repeater_domains') as $domain) {
-                $domains[] = current($domain);
-            }
-        }
+            $domains = array_column($domains, 'domain');
+        }else $domains = [];
+
         return $domains;
     }
 
     /**
-     * get Domains for Repeater
+     * set Domains for Repeater field
      * ===========================================
-     * get domains formatted for repeater of form
+     * set domains formatted for repeater of form
      */
-    public function getRepeaterDomainsAttribute()
+    public function setDomains($domains = array())
     {
-        $api_domains = $this->domains;
-        $domains = [];
-
-        foreach ($api_domains as $domain) {
-            $domains[]['domain'] = $domain;
+        if(is_array($domains))
+        {
+            foreach ($domains as $domain) {
+                $domains[]['domain'] = $domain;
+            }
         }
 
         return $domains;
