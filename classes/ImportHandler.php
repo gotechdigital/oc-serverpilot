@@ -20,8 +20,9 @@ class ImportHandler
             $model = new $model;
         else $model = $model::find($existing->id);
 
-        foreach ($resource->table as $col => $value) {
-            $model->$col = @$data->$value;
+        foreach ($resource->table as $col => $map)
+        {
+            $model->$col = Self::getValue($data, $map, $model);
         }
 
         $model->importing = true;
@@ -30,7 +31,26 @@ class ImportHandler
         return $model;
     }
 
+    /**
+     * getValue
+     * ================================================
+     * @return data from api to apply in model record
+     */
+    public static function getValue($data, $map, $model)
+    {
+        # get API DATA ATTR NAME
+        $key = current($map);
 
+        # get MODEL MUTATOR METHOD
+        $mutator = (count($map) >= 2) ? next($map) : null;
+
+        $value = @$data->$key;
+
+        if($mutator)
+            $value = $model::$mutator($value);
+
+        return $value;
+    }
 
     /**
      * Import All

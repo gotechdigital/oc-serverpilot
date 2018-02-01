@@ -88,7 +88,7 @@ class App extends Model
         {
             ServerPilot::apps($this->api_id)->update([
                 'runtime' => $this->runtime,
-                'domains' => $this->getDomains()
+                'domains' => $this->api_domains
             ]);
         }
     }
@@ -102,7 +102,7 @@ class App extends Model
                 'name'      => $this->name,
                 'sysuserid' => $this->sysuser_api_id,
                 'runtime'   => $this->runtime,
-                'domains'   => $this->getDomains(),
+                'domains'   => $this->api_domains
             ]);
 
             if($app = @$app->data)
@@ -127,41 +127,34 @@ class App extends Model
         return $this->server->name;
     }
 
-    /**
-     * get Domains for api
-     * ===========================================
-     * get domains formatted for the api
-     */
-    public function getDomains()
-    {
-        $domains = $this->domains;
-
-        if(count($domains) > 0)
-        {
-            $domains = array_column($domains, 'domain');
-        }else $domains = [];
-
-        return $domains;
-    }
 
     /**
-     * set Domains for Repeater field
-     * ===========================================
-     * set domains formatted for repeater of form
+     * setDomains
+     * ======================================
+     * reformat array to repeater field
+     * @param  array  $domains
+     * @return array
      */
-    public function setDomains($domains = array())
+    public static function setDomains($domains)
     {
-        if(is_array($domains))
+        $allDomains = [];
+        foreach ($domains as $key => $value)
         {
-            foreach ($domains as $domain) {
-                $domains[]['domain'] = $domain;
-            }
+           $allDomains[]['domain'] = $value;
         }
-
-        return $domains;
+        return $allDomains;
     }
 
-
+    /**
+     * getDomains
+     * ======================================
+     * reformat array to api format
+     * @return array
+     */
+    public function getApiDomainsAttribute()
+    {
+        return @array_column($this->domains, 'domain');
+    }
 
     /**
      * get System Users availables

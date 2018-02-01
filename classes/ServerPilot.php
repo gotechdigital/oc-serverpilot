@@ -48,47 +48,48 @@ class ServerPilot extends Curl
     {
         return [
             'servers' => [
-                'api_id'                => 'id',
-                'name'                  => 'name',
-                'autoupdates'           => 'autoupdates',
-                'firewall'              => 'firewall',
-                'lastaddress'           => 'lastaddress',
-                'datecreated'           => 'datecreated',
-                'lastconn'              => 'lastconn',
-                'created_at'            => 'datecreated',
-                'deny_unknown_domains'  => 'deny_unknown_domains'
+                # 'table_col'           => [api_key, mutatorMethod]
+                'api_id'                => ['id'],
+                'name'                  => ['name'],
+                'autoupdates'           => ['autoupdates'],
+                'firewall'              => ['firewall'],
+                'lastaddress'           => ['lastaddress'],
+                'datecreated'           => ['datecreated'],
+                'lastconn'              => ['lastconn'],
+                'created_at'            => ['datecreated'],
+                'deny_unknown_domains'  => ['deny_unknown_domains']
             ],
             'sysusers' => [
-                'api_id'                => 'id',
-                'server_api_id'         => 'serverid',
-                'name'                  => 'name'
+                'api_id'                => ['id'],
+                'server_api_id'         => ['serverid'],
+                'name'                  => ['name']
             ],
 
             'dbs' => [
-                'api_id'            => 'id',
-                'app_api_id'        => 'appid',
-                'server_api_id'     => 'serverid',
-                'name'              => 'name',
-                'user'              => 'user'
+                'api_id'            => ['id'],
+                'app_api_id'        => ['appid'],
+                'server_api_id'     => ['serverid'],
+                'name'              => ['name'],
+                'user'              => ['user']
             ],
 
             'apps' => [
-                'api_id'            => 'id',
-                'sysuser_api_id'    => 'sysuserid',
-                'server_api_id'     => 'serverid',
-                'name'              => 'name',
-                'runtime'           => 'runtime',
-                'ssl'               => 'ssl',
-                'autossl'           => 'autossl',
-                'domains'           => 'domains',
-                'datecreated'       => 'datecreated'
+                'api_id'            => ['id'],
+                'sysuser_api_id'    => ['sysuserid'],
+                'server_api_id'     => ['serverid'],
+                'name'              => ['name'],
+                'runtime'           => ['runtime'],
+                'ssl'               => ['ssl'],
+                'autossl'           => ['autossl'],
+                'domains'           => ['domains', 'setDomains'], //method to proccess data.
+                'datecreated'       => ['datecreated']
             ],
 
             'actions' => [
-                'api_id'            => 'id',
-                'server_api_id'     => 'serverid',
-                'status'            => 'status',
-                'datecreated'       => 'datecreated'
+                'api_id'            => ['id'],
+                'server_api_id'     => ['serverid'],
+                'status'            => ['status'],
+                'datecreated'       => ['datecreated']
             ]
         ];
     }

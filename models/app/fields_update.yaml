@@ -28,6 +28,7 @@ secondaryTabs:
             type: repeater
             span: storm
             cssClass: 'col-sm-8'
+            prompt: Add new domain
             form:
                 fields:
                     domain:

@@ -15,7 +15,7 @@ fields:
             action: disable
             field: sysuser_api_id
             condition: value[]
-    domains[][domain]:
+    domains[1][domain]:
         label: Domain
         commentAbove: 'Main maindomain.tld without (www)'
         context: create
