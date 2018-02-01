@@ -1,4 +1,12 @@
+<style>
+.synchronize {
+display: inline-block;
+vertical-align: middle;
+margin-left: 20px;
+}
+</style>
 <div data-control="toolbar">
+
     <button
         type="button"
         data-control="popup"
@@ -7,4 +15,20 @@
         class="btn btn-primary oc-icon-puzzle-piece">
         New App
     </button>
+
+    <button
+        type="button"
+        data-request="onPull"
+        data-request-data="sync_now: 1" class="btn sync btn-info oc-icon-cloud-download"
+        data-request-confirm="This pulls the new resources created in the serverpilot.io panel, once pulled here, this plugin takes care of updating for you."
+        data-request-loading=".synchronize">
+        Pull force
+    </button>
+
+    <div style="display:none;" class="synchronize loading-indicator-container">
+        <div class="loading-indicator size-small">
+            <span></span>
+            <div>pulling resources...</div>
+        </div>
+    </div>
 </div>

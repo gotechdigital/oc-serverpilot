@@ -42,8 +42,8 @@ class Apps extends Controller
 
     public function index()
     {
-        # if(ServerPilot::isAuth())
-        #    ServerPilot::apps()->import();
+        //if(ServerPilot::isAuth())
+        #    ServerPilot::apps()->drain();
 
         $this->asExtension('ListController')->index();
     }
@@ -64,11 +64,7 @@ class Apps extends Controller
     {
         $result = ServerPilot::apps($id)->get();
 
-        //$result2 = ServerPilot::apps($id)->forceSSL(false);
-
-
         $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
-        //$print.= '<pre>'.json_encode($result2, JSON_PRETTY_PRINT).'</pre>';
         return $print;
     }
 
@@ -79,6 +75,19 @@ class Apps extends Controller
     {
         $this->asExtension('FormController')->create();
         return $this->makePartial('create_modal');
+    }
+
+    public function onPull()
+    {
+        if(ServerPilot::isAuth())
+        {
+            ServerPilot::servers()->import();
+            ServerPilot::sysusers()->import();
+            ServerPilot::apps()->import('oneToOne');
+            ServerPilot::dbs()->import();
+        }
+
+        return $this->listRefresh('apps');
     }
 
 

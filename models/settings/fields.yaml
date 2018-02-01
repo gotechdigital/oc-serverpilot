@@ -18,35 +18,35 @@ fields:
         comment: 'Obtain this from <a href="https://manage.serverpilot.io/#account/api" target="_blank">here</a>.'
 tabs:
     fields:
-        preview_domain:
-            label: Preview Domain
-            commentHtml: true
-            comment: 'Use <span style="color: blue;">{APP_NAME}</span> to indicate where are to use App Name.'
-            type: text
-            tab: Settings
-            placeholder: '{APP_NAME}.previewdomain.tld'
-            span: left
+#        preview_domain:
+#            label: Preview Domain
+#            commentHtml: true
+#            comment: 'Use <span style="color: blue;">{APP_NAME}</span> to indicate where are to use App Name.'
+#            type: text
+#            tab: Settings
+#            placeholder: '{APP_NAME}.previewdomain.tld'
+#            span: left
         runtime:
             label: Default Runtime
             type: dropdown
             tab: Settings
-            span: right
+            span: left
             comment: It is recommended that your main installation run in a different runtime than your applications
         show_sysuser_password:
-            tab: Options
+            tab: Settings
             label: Show user password
             type: switch
-            span: left
+            span: right
             default: false
         show_dbs_password:
-            tab: Options
+            tab: Settings
             label: Show database password
             type: switch
-            span: left
+            span: right
             default: false
         log_errors:
-            tab: Options
+            tab: Settings
             label: Log Errors
             type: switch
-            span: left
+            span: right
             default: false
