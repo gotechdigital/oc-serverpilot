@@ -1,19 +1,11 @@
 <?php namespace Awebsome\Serverpilot\Controllers;
 
 use Backend;
-use Redirect;
 use BackendMenu;
-use ValidationException;
-
-use System\Helpers\DateTime;
 
 use Backend\Classes\Controller;
 use Awebsome\Serverpilot\Classes\ServerPilot;
-use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
-use Awebsome\Serverpilot\Models\Sync;
-use Awebsome\Serverpilot\Models\Server;
-use Awebsome\Serverpilot\Models\SystemUser;
 /**
  * Servers Back-end Controller
  */
@@ -38,11 +30,19 @@ class Servers extends Controller
         $this->addCss($this->assetsPath.'/modal-form.css');
     }
 
-    public function onSync()
+    public function index()
     {
-        $Sync = new ServerPilotSync;
-        $Sync->All()->log('sync_all_resources_from_servers');
+        #if(ServerPilot::isAuth())
+        #    ServerPilot::servers()->import();
 
-        return $this->listRefresh('servers');
+        $this->asExtension('ListController')->index();
+    }
+
+    public function api($id = null)
+    {
+        $result = ServerPilot::servers($id)->get();
+
+        $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
+        return $print;
     }
 }

@@ -1,9 +1,8 @@
 <?php namespace Awebsome\Serverpilot\Classes;
 
-use ValidationException;
-use  Awebsome\Serverpilot\Classes\Curl;
-use  Awebsome\Serverpilot\Classes\ServerPilotSync;
-use  Awebsome\Serverpilot\Models\Settings;
+use Awebsome\ServerPilot\Models\Settings as CFG;
+use Awebsome\Serverpilot\Classes\Api\Curl;
+use Awebsome\Serverpilot\Classes\ImportHandler as Import;
 
 class ServerPilot extends Curl
 {
@@ -18,205 +17,276 @@ class ServerPilot extends Curl
 
 
     /**  Location for overloaded data.  */
-    public $data;
-    public $path;
-    public $auth;
-    public $response;
-    public $resource;
+    public $data;               # data for create, update, or delete.
+    public $endpoint;           # resource to /endpoint
+    public $ssl;                # add ssl to endpoint
+    public $name;               # $resource name. ex: apps, servers, dbs
 
+    public $model;           # Models of resources.
+    public $table;           # Models of resources.
+    public $id;              # Model of resource.
 
-    public function __construct()
+    /**
+     * Register Models.
+     */
+    public function registerModels()
     {
-        $CLIENT_ID = Settings::get('CLIENT_ID');
-        $API_KEY = Settings::get('API_KEY');
+        return [
+            'servers'   => 'Awebsome\ServerPilot\Models\Server',
+            'sysusers'  => 'Awebsome\ServerPilot\Models\Sysuser',
+            'apps'      => 'Awebsome\ServerPilot\Models\App',
+            'dbs'       => 'Awebsome\ServerPilot\Models\Database',
+            'actions'   => 'Awebsome\ServerPilot\Models\Action',
+        ];
+    }
 
-        $this->auth = $CLIENT_ID.':'.$API_KEY;
-        $this->data = [];
+    /**
+     * Register tables.
+     * ==========================================
+     * mapped data between api and data tables.
+     */
+    public function registerTables()
+    {
+        return [
+            'servers' => [
+                # 'table_col'           => [api_key, mutatorMethod]
+                'api_id'                => ['id'],
+                'name'                  => ['name'],
+                'autoupdates'           => ['autoupdates'],
+                'firewall'              => ['firewall'],
+                'lastaddress'           => ['lastaddress'],
+                'datecreated'           => ['datecreated'],
+                'lastconn'              => ['lastconn'],
+                'created_at'            => ['datecreated'],
+                'deny_unknown_domains'  => ['deny_unknown_domains']
+            ],
+            'sysusers' => [
+                'api_id'                => ['id'],
+                'server_api_id'         => ['serverid'],
+                'name'                  => ['name']
+            ],
+
+            'dbs' => [
+                'api_id'            => ['id'],
+                'app_api_id'        => ['appid'],
+                'server_api_id'     => ['serverid'],
+                'name'              => ['name'],
+                'user'              => ['user']
+            ],
+
+            'apps' => [
+                'api_id'            => ['id'],
+                'sysuser_api_id'    => ['sysuserid'],
+                'server_api_id'     => ['serverid'],
+                'name'              => ['name'],
+                'runtime'           => ['runtime'],
+                'ssl'               => ['ssl'],
+                'autossl'           => ['autossl'],
+                'domains'           => ['domains', 'setDomains'], //method to proccess data.
+                'datecreated'       => ['datecreated'],
+                ############## customs ##############
+                'available_ssl'     => ['autossl', 'setAvailableSSL'],
+                'auto_ssl'          => ['ssl', 'setAutoSSL'],
+                'force_ssl'         => ['ssl', 'setForceSSL']
+            ],
+
+            'actions' => [
+                'api_id'            => ['id'],
+                'server_api_id'     => ['serverid'],
+                'status'            => ['status'],
+                'datecreated'       => ['datecreated']
+            ]
+        ];
+    }
+
+    public function getModel($resource)
+    {
+        $models = $this->registerModels();
+        return $models[$resource];
+    }
+
+    public function getTable($resource)
+    {
+        $tables = $this->registerTables();
+        return $tables[$resource];
+    }
+
+    /**
+     * isAuth
+     * ==============================
+     * check authentication
+     * @return boolean is auth
+     */
+    public static function isAuth()
+    {
+        if(CFG::get('CLIENT_ID') && CFG::get('API_KEY'))
+        {
+
+            $sp = new Self;
+            $response = $sp->actions('1')->get();
+            $code = @$response->error->code;
+
+            if($code != 401)
+                return true;
+            else return false;
+
+        }else return false;
     }
 
     /**
      * Servers
      * ==============================
      * Resources Methods ServerPilot
-     * @param object json response
-     */
-    public function Servers($id = null)
+     * @param $id to retrive one.
+     * @return array data endpoint resource id
+    */
+    public static function servers($id = null)
     {
-        $this->resource = 'Servers';
-        $this->path = ($id) ? 'servers/'.$id : 'servers';
+        $sp = new Self;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
+        $sp->id = $id;
 
-        $this->setRequest();
-        return $this;
+        return $sp;
+    }
+
+    public static function apps($id = null)
+    {
+        $sp = new Self;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
+        $sp->id = $id;
+
+        return $sp;
+    }
+
+    public static function sysusers($id = null)
+    {
+        $sp = new Self;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
+        $sp->id = $id;
+
+        return $sp;
+    }
+
+    public static function dbs($id = null)
+    {
+        $sp = new Self;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
+        $sp->id = $id;
+
+        return $sp;
+    }
+
+    public static function actions($id)
+    {
+        $sp = new Self;
+        $sp->name = __FUNCTION__;
+        $sp->model = $sp->getModel($sp->name);
+        $sp->table = $sp->getTable($sp->name);
+        $sp->id = $id;
+
+        return $sp;
+    }
+
+
+    /**
+     * Helper Methods
+     */
+
+    public function import($mode = null)
+    {
+
+        if(!$mode)
+        {
+            if(!$this->id)
+                $import = Import::all($this);
+            else
+                $import = Import::import($this, $this->get()->data);
+        }else if($mode == 'oneToOne')
+        {
+            $import = Import::allOneToOne($this);
+        }
+
+        return $import;
+    }
+
+    public function importBatch()
+    {
+        if(!$this->id)
+        {
+            $import = Import::batch($this);
+            return $import;
+        }
     }
 
     /**
-     * SystemUsers
-     * ==============================
-     * Resources Methods ServerPilot
-     * @param object json response
+     * CRUD METHODS
      */
-    public function SystemUsers($id = null)
-    {
-        $this->resource = 'SystemUsers';
-        $this->path = ($id) ? 'sysusers/'.$id : 'sysusers';
-
-        $this->setRequest();
-        return $this;
-    }
 
     /**
-     * Apps
-     * ==============================
-     * Resources Methods ServerPilot
-     * @param object json response
+     * get resource
+     * ========================================================
+     * get endpoint response.
      */
-    public function Apps($id = null)
-    {
-        $this->resource = 'Apps';
-        $this->path = ($id) ? 'apps/'.$id : 'apps';
-
-        $this->setRequest();
-        return $this;
-    }
-
-    /**
-     * App SSL
-     * ==============================
-     * Resources Methods ServerPilot
-     * @param object json response
-     */
-    public function AppSSL($id = null)
-    {
-        $this->resource = 'Apps';
-        $this->path = 'apps/'.$id.'/ssl';
-
-        $this->setRequest();
-        return $this;
-    }
-
-    /**
-     * Databases
-     * ==============================
-     * Resources Methods ServerPilot
-     * @param object json response
-     */
-    public function Databases($id = null)
-    {
-        $this->resource = 'Databases';
-        $this->path = ($id) ? 'dbs/'.$id : 'dbs';
-
-        $this->setRequest();
-        return $this;
-    }
-
-    /**
-     * Where field_table by id
-     */
-    public function where($by = null, $id = null)
-    {
-            $results = $this->response;
-
-            if(!is_null($by)) {
-                foreach($results->data as $key => $result) {
-                    if($result->$by != $id) unset($results->data[$key]);
-                }
-            }
-
-            $this->response = $results;
-
-        return $this;
-    }
-
-    /**
-     * Resource
-     * Call resource method by resource method...
-     *
-     * @param [type] $Resource [description]
-     * @param [type] $id       [description]
-     */
-    public function Resource($Resource, $id = null)
-    {
-        $this->$Resource($id);
-
-        return $this;
-    }
-
-    /**
-     * listAll
-     * all data of resource selected
-     * @return object json
-     */
-    public function listAll()
-    {
-        return $this->response;
-    }
-
-
     public function get()
     {
-        return $this->response->data;
+        if(!$this->endpoint)
+            $this->endpoint = ($this->id) ? $this->name . '/'.$this->id : $this->name;
+
+        return $this->request($this->endpoint, $this->data);
     }
 
-    /**
-     * setRequest
-     * curl request.
-     */
-    private function setRequest()
+    public function forceSSL($force)
     {
-        $this->response = $this->request($this->auth,$this->path,$this->data);
+        $this->endpoint = $this->name.'/'.$this->id.'/ssl';
+
+        if($force)
+            $val = ['force' => true];
+        else $val = ['force' => false];
+
+        return $this->request($this->endpoint, $val, self::SP_HTTP_METHOD_POST);
     }
 
-    /**
-     * update
-     * ===================================
-     * Update Resource method
-     * @param  array $data  all data to update
-     * @return object json response
-     */
+    public function autoSSL($auto)
+    {
+        $this->endpoint = $this->name.'/'.$this->id.'/ssl';
+
+        if($auto)
+            $val = ['auto' => true];
+
+        if($auto == true)
+            return $this->request($this->endpoint, $val, self::SP_HTTP_METHOD_POST);
+        else
+            return $this->request($this->endpoint, null, self::SP_HTTP_METHOD_DELETE);
+    }
+
     public function update($data)
     {
+        if($this->id && !$this->endpoint)
+            $this->endpoint = $this->name . '/'.$this->id;
 
-        $this->data = $data;
-        $this->response =  $this->request($this->auth, $this->path, $this->data, self::SP_HTTP_METHOD_POST);
-
-        $Sync = new ServerPilotSync;
-        $Sync->putUpdateResource($this->resource, $data, $this->response);
-
-        return $this->response;
+        return $this->request($this->endpoint, $data, self::SP_HTTP_METHOD_POST);
     }
 
-    /**
-     * create
-     * ===================================
-     * Create a Resource
-     * @param  array $data  all data to create
-     * @return object json response
-     */
     public function create($data)
     {
-
-        $this->data = $data;
-        $this->response =  $this->request($this->auth,$this->path,$this->data, self::SP_HTTP_METHOD_POST);
-
-        # $Sync = new ServerPilotSync;
-        # $Sync->putCreateResource($this->resource, $data, $this->response);
-
-        return $this->response;
+        return $this->request($this->name, $data, self::SP_HTTP_METHOD_POST);
     }
 
-    public function delete($data = null)
+    public function delete()
     {
-        $deleteables = Settings::get('deleteable_resources');
+        $this->endpoint = $this->name . '/'.$this->id;
 
-        if(!is_array($deleteables))
-            $deleteables = [];
-
-        if(in_array($this->resource, $deleteables)){
-
-
-            $this->response =  $this->request($this->auth,$this->path,$data, self::SP_HTTP_METHOD_DELETE);
-
-            return $this->response;
-        }else throw new ValidationException(['error_mesage' => $this->resource.' is not a resource available for delete.']);
+        $this->request($this->endpoint, null, self::SP_HTTP_METHOD_DELETE);
     }
+
+    # update
+    # delete
 }

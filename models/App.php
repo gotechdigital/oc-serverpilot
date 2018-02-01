@@ -1,23 +1,19 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
+use Log;
 use Model;
-use Flash;
-use ValidationException;
-use Awebsome\Serverpilot\Models\Settings;
-use Awebsome\Serverpilot\Models\SystemUser;
-use Awebsome\Serverpilot\Models\Database;
 
-use Awebsome\Serverpilot\Classes\Atom;
-use Awebsome\Serverpilot\Classes\Sublime;
+use Awebsome\Serverpilot\Models\Runtime;
+use Awebsome\Serverpilot\Models\Sysuser;
+use Awebsome\Serverpilot\Models\Settings as CFG;
 use Awebsome\Serverpilot\Classes\ServerPilot;
-use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
 /**
  * App Model
  */
 class App extends Model
 {
-    use \October\Rain\Database\Traits\Purgeable;
+    # use \October\Rain\Database\Traits\Purgeable;
 
     /**
      * @var string The database table used by the model.
@@ -32,29 +28,24 @@ class App extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['id','user_id','server_id','name','runtime','ssl','domains','all_domains','created_at'];
+    protected $fillable = ['*'];
 
     /**
      * @var array jSonables fields
      */
-    protected $jsonable = ['domains','ssl','all_domains'];
-
-    /**
-     * @var array Purgeable fields
-     */
-    protected $purgeable = ['server_name', 'auto_ssl', 'force_ssl'];
+    protected $jsonable = ['autossl','ssl', 'domains'];
 
     /**
      * @var array Relations
      */
     public $hasOne = [];
     public $hasMany = [
-                'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'app_id','otherKey' => 'id'],
-            ];
+        'databases' => ['Awebsome\Serverpilot\Models\Database','key' => 'app_api_id', 'otherKey' => 'api_id'],
+    ];
     public $belongsTo = [
-                'systemuser'   => ['Awebsome\Serverpilot\Models\SystemUser','key' => 'user_id'],
-                'server'     => ['Awebsome\Serverpilot\Models\Server','key' => 'server_id'],
-            ];
+        'server'   => ['Awebsome\Serverpilot\Models\Server','key' => 'server_api_id', 'otherKey' => 'api_id'],
+        'sysuser'    => ['Awebsome\Serverpilot\Models\Sysuser','key' => 'sysuser_api_id', 'otherKey' => 'api_id'],
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];
@@ -62,219 +53,192 @@ class App extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-     use \October\Rain\Database\Traits\Validation;
+    /**
+     * check if it's an import
+     * @param boolean
+     */
+    public $importing;
+
+    public function __construct(array $attributes = array())
+    {
+        /**
+         * set default selected.
+         */
+        $this->setRawAttributes(['runtime' => CFG::get('runtime')], true);
+
+        parent::__construct($attributes);
+    }
 
     /**
-     * @var array Validation rules
+     * before delete
      */
-    protected $rules = [
-        'user_id'   => ['required'],
-        'runtime'   => ['required'],
-        'name'      => ['required', 'between:3,16','alpha_dash'],
-        'domains'   => ['required']
-    ];
-
-    public function beforeCreate()
+    public function beforeDelete()
     {
+        # Delete all databases of this app
+        $this->databases()->delete();
 
-        if(post('create_app_form'))
-        {
-            $ServerPilot = new ServerPilot;
-
-            $domains = $this->getFirstDomains($this->domains);
-
-            $App = $ServerPilot->Apps()->create([
-                        'name'      => $this->name,
-                        'sysuserid' => $this->user_id,
-                        'runtime'   => $this->runtime,
-                        'domains'   => $domains,
-                    ]);
-
-            if($App->data->id && $App->data->serverid)
-            {
-                $this->id = $App->data->id;
-                $this->server_id = $App->data->serverid;
-                $this->ssl = $App->data->ssl;
-                $this->domains = $this->setDomains($App->data->domains);
-
-                //set AtomConfig
-                if(empty($this->atom_config)){
-                    $this->atom_config = $this->getAtomConfig();
-                }
-                //set SublimeConfig
-                if(empty($this->sublime_config)){
-                    $this->sublime_config = $this->getSublimeConfig();
-                }
-
-            }else throw new ValidationException(['error_mesage' => json_encode($App)]);
-        }
+        # delete app in serverpilot
+        ServerPilot::apps($this->api_id)->delete();
     }
+
 
     public function beforeUpdate()
     {
-        if(post('save_app_update'))
+
+        if(!$this->importing)
         {
-            $ServerPilot = new ServerPilot;
+            ServerPilot::apps($this->api_id)->update([
+                'runtime' => $this->runtime,
+                'domains' => $this->api_domains
+            ]);
 
-            $App = $ServerPilot->Apps($this->id)->update([
-                            #'name'      => $this->name,
-                            #'sysuserid' => $this->user_id,
-                            'runtime'   => $this->runtime,
-                            'domains'   => array_column($this->domains, 'domain')
-                        ]);
+            $app = App::find($this->id);
 
-            if($App->data->id && $App->data->serverid)
+            if($app->auto_ssl != $this->auto_ssl)
             {
-                $this->domains = $this->setDomains($App->data->domains);
+                ServerPilot::apps($this->api_id)->autoSSL($this->auto_ssl);
+            }
 
-            }else throw new ValidationException(['error_mesage' => json_encode($App)]);
-        }
+            if(!$this->auto_ssl)
+                $this->force_ssl = false;
 
-        //set AtomConfig
-        if(empty($this->atom_config)){
-            $this->atom_config = $this->getAtomConfig();
-        }
-
-        //set SublimeConfig
-        if(empty($this->sublime_config)){
-            $this->sublime_config = $this->getSublimeConfig();
+            if($this->auto_ssl && $app->force_ssl != $this->force_ssl)
+            {
+                ServerPilot::apps($this->api_id)->forceSSL($this->force_ssl);
+            }
         }
     }
 
-    public function beforeDelete()
+
+    public function beforeCreate()
     {
-        $ServerPilot = new ServerPilot;
-        $ServerPilot->Apps($this->id)->delete();
-    }
-
-    public function afterCreate()
-    {
-        $Sync = new ServerPilotSync;
-        $Sync->Apps()->now();
-    }
-
-    public function afterDelete()
-    {
-        $Sync = new ServerPilotSync;
-        $Sync->Databases()->now();
-    }
-
-    /**
-     * getFirstDomains
-     * =====================================
-     * Domains for create app
-     * @param  string $domains  Main-domain
-     * @return array            domains to server pilot
-     */
-    public function getFirstDomains($domain)
-    {
-        $domains[] = $domain;
-        $domains[] = 'www.'.$domain;
-
-        $prevDomain = $this->getPrevDomain();
-
-        if($prevDomain)
-            $domains[] = $prevDomain;
-
-        return $domains;
-    }
-
-    /**
-     * getDomains
-     * ======================================
-     * reformat array to repeater field
-     * @param  array  $domains
-     * @return array
-     */
-    public function setDomains($domains)
-    {
-        foreach ($domains as $key => $value)
+        if(!$this->importing)
         {
-            $allDomains[]['domain'] = $value;
-        }
-
-        return $allDomains;
-    }
-
-    /**
-     * getPrevDomain
-     * ==============================
-     *
-     */
-    public function getPrevDomain()
-    {
-        $domain = Settings::get('app_prev_domain');
-
-        if(!empty($domain) && strpos($domain, "{APP_NAME}"))
-            return str_replace('{APP_NAME}', $this->name, $domain);
-    }
-
-    /**
-     * getServerList
-     * SystemUsers Listing for "create form"
-     * @return array
-     */
-    public function getSystemUserList()
-    {
-        $SystemUsers = SystemUser::get();
-        $options = [];
-        foreach ($SystemUsers as $key => $value) {
-            $options[$value->id] = $value->name.' :: '.$value->server->name;
-        }
-
-        return $options;
-    }
-
-    /**
-     * asume the first domain with the main (default)
-     */
-    public function getMainDomain()
-    {
-        return current(current($this->domains));
-    }
-
-    /**
-     * get Atom Config data
-     */
-    public function getAtomConfig()
-    {
-        $config = Atom::config([
-                'host' => $this->getMainDomain(),
-                'user' => $this->systemuser->name,
-                'pass' => $this->systemuser->passwordDecrypt(),
-                'app'  => $this->name
+            $app = ServerPilot::apps()->create([
+                'name'      => $this->name,
+                'sysuserid' => $this->sysuser_api_id,
+                'runtime'   => $this->runtime,
+                'domains'   => $this->api_domains
             ]);
 
-        return json_encode($config, JSON_PRETTY_PRINT);
+            if($app = @$app->data)
+            {
+                $app = ServerPilot::apps($app->id)->get()->data;
+                $this->api_id = $app->id;
+                $this->server_api_id = $app->serverid;
+                $this->ssl = $app->ssl;
+                $this->autossl = @$app->autossl;
+                $this->datecreated = $app->datecreated;
+            }
+        }
+    }
+
+
+    /**
+     * setAvailableSSL
+     * ===============================================
+     * @param array data from app->autossl->available
+     * @return boolean is_enabled
+     */
+    public static function setAvailableSSL($autossl)
+    {
+        return (@$autossl->available == true) ? true : false;
     }
 
     /**
-     * get Sublime Config data
+     * setAutoSSL
+     * =========================================
+     * @param array data from app->ssl->auto
+     * @return boolean is_enabled
      */
-    public function getSublimeConfig()
+    public static function setAutoSSL($ssl)
     {
-        $config = Sublime::config([
-                'host' => $this->getMainDomain(),
-                'user' => $this->systemuser->name,
-                'password' => $this->systemuser->passwordDecrypt(),
-                'app'  => $this->name
-            ]);
-
-        return json_encode($config, JSON_PRETTY_PRINT);
+        return (@$ssl->auto == true) ? true : false;
     }
 
+    /**
+     * setForceSSL
+     * =========================================
+     * @param array data from app->ssl->force
+     * @return boolean is_enabled
+     */
+    public static function setForceSSL($ssl)
+    {
+        return (@$ssl->force == true) ? true : false;
+    }
+
+    /**
+     * formmated data
+     * ==========================================
+     */
     public function getServerNameAttribute()
     {
         return $this->server->name;
     }
 
-    public function getAutoSslAttribute()
+
+    /**
+     * setDomains
+     * ======================================
+     * reformat array to repeater field
+     * @param  array  $domains
+     * @return array
+     */
+    public static function setDomains($domains)
     {
-        return $this->ssl['auto'];
+        $allDomains = [];
+        foreach ($domains as $key => $value)
+        {
+           $allDomains[]['domain'] = $value;
+        }
+        return $allDomains;
     }
 
-    public function getForceSslAttribute()
+    /**
+     * getDomains
+     * ======================================
+     * reformat array to api format
+     * @return array
+     */
+    public function getApiDomainsAttribute()
     {
-        return $this->ssl['force'];
+        return @array_column($this->domains, 'domain');
+    }
+
+    /**
+     * get System Users availables
+     * =============================================
+     * @return array Sysuser for dropdown
+     */
+    public function getSysuserOptions()
+    {
+        $users = Sysuser::all();
+        $options = [];
+        $options[''] = 'Select a user';
+
+        foreach ($users as $user) {
+            $options[$user->api_id] = $user->server->name.' > '.$user->name;
+        }
+
+        return $options;
+    }
+
+
+    /**
+     * get Runtimes availables
+     * =============================================
+     * @return array Runtime for dropdown
+     */
+    public function getRuntimeOptions()
+    {
+        $runtimes = Runtime::orderBy('id', 'desc')->get();
+
+        $options = [];
+
+        foreach ($runtimes as $runtime) {
+            $options[$runtime->version] = $runtime->label;
+        }
+
+        return $options;
     }
 }

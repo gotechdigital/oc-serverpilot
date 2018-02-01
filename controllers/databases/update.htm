@@ -18,7 +18,7 @@
                 <button
                     type="submit"
                     data-request="onSave"
-                    data-request-data="redirect:0"
+                    data-request-data="redirect:1"
                     data-hotkey="ctrl+s, cmd+s"
                     data-load-indicator="Saving Database..."
                     class="btn btn-primary">
@@ -32,13 +32,6 @@
                     data-load-indicator="Saving Database..."
                     class="btn btn-default">
                     Save and Close
-                </button>
-                <button
-                    type="button"
-                    class="oc-icon-trash-o btn-icon danger pull-right"
-                    data-request="onDelete"
-                    data-load-indicator="Deleting Database..."
-                    data-request-confirm="Delete this database?">
                 </button>
                 <span class="btn-text">
                     or <a href="<?= Backend::url('awebsome/serverpilot/databases') ?>">Cancel</a>

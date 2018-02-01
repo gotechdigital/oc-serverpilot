@@ -1,17 +1,14 @@
 <?php namespace Awebsome\Serverpilot\Controllers;
 
+use Flash;
 use Backend;
 use Redirect;
-use Request;
-use Flash;
 use BackendMenu;
-
-use System\Helpers\DateTime;
+use ValidationException;
 
 use Backend\Classes\Controller;
-use Awebsome\Serverpilot\Classes\ServerPilotSync;
 
-use Awebsome\Serverpilot\Models\Sync;
+use Awebsome\Serverpilot\Classes\ServerPilot;
 use Awebsome\Serverpilot\Models\App;
 
 /**
@@ -43,29 +40,56 @@ class Apps extends Controller
         $this->addCss($this->assetsPath.'/modal-form.css');
     }
 
-
-    public function update($recordId = null, $context = null)
+    public function index()
     {
+        //if(ServerPilot::isAuth())
+        #    ServerPilot::apps()->drain();
 
-        $this->asExtension('FormController')->update($recordId, $context);
+        $this->asExtension('ListController')->index();
     }
 
-
-    public function onSync()
+    public function update($recordId, $context = null)
     {
-        $Sync = new ServerPilotSync;
-        $Sync->Apps()->now()->log('sync_apps');
+        $app = App::find($recordId);
+
+        if(ServerPilot::isAuth())
+        $app = ServerPilot::apps($app->api_id)->import();
+            if($app)
+                Flash::info('APP updated from ServerPilot.');
+
+        $this->asExtension('FormController')->update($recordId);
+    }
+
+    public function api($id = null)
+    {
+        $result = ServerPilot::apps($id)->get();
+
+        $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
+        return $print;
+    }
+
+    /**
+     * New App from list Modal.
+     */
+    public function onCreateForm()
+    {
+        $this->asExtension('FormController')->create();
+        return $this->makePartial('create_modal');
+    }
+
+    public function onPull()
+    {
+        if(ServerPilot::isAuth())
+        {
+            ServerPilot::servers()->import();
+            ServerPilot::sysusers()->import();
+            ServerPilot::apps()->import('oneToOne');
+            ServerPilot::dbs()->import();
+        }
 
         return $this->listRefresh('apps');
     }
 
-
-    public function onCreateForm()
-    {
-        $this->asExtension('FormController')->create();
-
-        return $this->makePartial('forms/new_app_form');
-    }
 
     public function onCreate()
     {
@@ -78,4 +102,11 @@ class Apps extends Controller
         return Redirect::to(Backend::url('awebsome/serverpilot/apps/update/'.$app->id));
     }
 
+
+    public function test()
+    {
+        $result = App::find(1);
+        $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
+        return $print;
+    }
 }

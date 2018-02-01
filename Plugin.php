@@ -1,9 +1,13 @@
 <?php namespace Awebsome\Serverpilot;
 
-use Awebsome\Serverpilot\Models\Sync;
-use Awebsome\Serverpilot\Models\Settings;
+use Event;
+use Backend;
+use Redirect;
 
-use Awebsome\Serverpilot\Classes\ServerPilotSync;
+use Awebsome\Serverpilot\Models\Sync;
+use Awebsome\Serverpilot\Models\Settings as CFG;
+
+use Awebsome\Serverpilot\Classes\ServerPilot;
 
 use System\Classes\PluginBase;
 use Db;
@@ -13,32 +17,31 @@ class Plugin extends PluginBase
     /**
      * @var array Plugin dependencies
      */
-    public $require = ['RainLab.Translate'];
+    //public $require = ['RainLab.Translate'];
 
-    public function registerComponents()
+
+    public function boot()
     {
+        Event::listen('awebsome.serverpilot.afterSaveSettings', function() {
+            // Code to register $user->email to mailing list
+            if(ServerPilot::isAuth())
+            {
+                ServerPilot::servers()->import();
+                ServerPilot::sysusers()->import();
+                ServerPilot::apps()->import('oneToOne');
+                ServerPilot::dbs()->import();
+            }
+        });
     }
 
     public function registerSchedule($schedule)
     {
-        $runTime = Settings::get('sync_data');
 
-        if(!is_null($runTime))
-        {
-          if($runTime != 'realtime')
-          {
-              $schedule->call(function () {
-
-                  $Sync = new ServerPilotSync;
-                  $Sync->All()->log('sync_auto_schedule');
-
-              })->$runTime();
-          }
-        }
     }
 
     public function registerSettings()
     {
+
         return [
 
             //Connection Settings

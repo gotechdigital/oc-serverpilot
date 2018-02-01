@@ -2,43 +2,43 @@ columns:
     name:
         label: name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/name.htm
+        path: ~/plugins/awebsome/serverpilot/models/app/columns/name.htm
         searchable: true
     runtime:
         label: Runtime
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/runtime.htm
+        path: ~/plugins/awebsome/serverpilot/models/app/columns/runtime.htm
     server:
         label: Server
         relation: server
         valueFrom: name
         type: partial
         searchable: true
-        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/server.htm
+        path: ~/plugins/awebsome/serverpilot/models/app/columns/server.htm
     ssl:
         label: SSL
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/ssl.htm
+        path: ~/plugins/awebsome/serverpilot/models/app/columns/ssl.htm
     force_ssl:
         label: Force Https
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/force_ssl.htm
+        path: ~/plugins/awebsome/serverpilot/models/app/columns/force_ssl.htm
     domains:
         label: Main Domain
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/domain.htm
-    user:
+        path: ~/plugins/awebsome/serverpilot/models/app/columns/domain.htm
+    sysuser:
         label: System User
-        relation: systemuser
+        relation: sysuser
         valueFrom: name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/user.htm
+        path: ~/plugins/awebsome/serverpilot/models/app/columns/user.htm
     databases:
         label: Databases
         relation: databases
         valueFrom: name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/apps/columns/databases.htm
+        path: ~/plugins/awebsome/serverpilot/models/app/columns/databases.htm
     updated_at:
         label: 'Last Update'
         type: timesince

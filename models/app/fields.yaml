@@ -1,41 +1,32 @@
 fields:
-    user_id:
+    sysuser_api_id:
         label: 'System User'
-        oc.commentPosition: ''
         span: left
         disabled: 0
         required: 1
         type: dropdown
-        options: getSystemUserList
+        options: getSysuserOptions
     name:
         label: Name
         oc.commentPosition: ''
         span: right
-        required: 1
-        context:
-            - create
-        type: text
+        context: create
+        trigger:
+            action: disable
+            field: sysuser_api_id
+            condition: value[]
+    domains[1][domain]:
+        label: Domain
+        commentAbove: 'Main maindomain.tld without (www)'
+        context: create
+        trigger:
+            action: disable
+            field: sysuser_api_id
+            condition: value[]
     runtime:
         label: Runtime
-        default: php7.0
-        options:
-            php7.1: php7.1
-            php7.0: php7.0
-            php5.6: php5.6
-            php5.5: php5.5
-            php5.4: php5.4
         span: full
-        required: 1
         context:
             - create
         type: radio
         cssClass: 'radio-runtime'
-    domains:
-        label: Domain
-        commentAbove: 'Main maindomain.tld without (www)'
-        type: text
-        context: create
-        trigger:
-            action: disable
-            field: name
-            condition: value[]

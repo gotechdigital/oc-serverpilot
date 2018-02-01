@@ -1,13 +1,2 @@
+<?= $this->makePartial('$/awebsome/serverpilot/controllers/servers/_authentication_messages.htm') ?>
 <?= $this->listRender() ?>
-
-<script>
-    function jUpdatePassword(data){
-
-        $('#pswd-' + data.resource_id +' .password').text( data.newPassword );
-        $('#pswd-' + data.resource_id +' .password').removeClass( 'text-warning' );
-        $('#pswd-' + data.resource_id +' .list-badge').removeClass( 'badge-warning' );
-        $('#pswd-' + data.resource_id +' .list-badge').addClass( 'badge-success' );
-        $('#pswd-' + data.resource_id +' .password').addClass( 'text-success' );
-        $('#pswd-' + data.resource_id +' button').hide();
-    }
-</script>

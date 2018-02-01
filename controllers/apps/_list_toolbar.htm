@@ -18,16 +18,17 @@ margin-left: 20px;
 
     <button
         type="button"
-        data-request="onSync"
+        data-request="onPull"
         data-request-data="sync_now: 1" class="btn sync btn-info oc-icon-cloud-download"
+        data-request-confirm="This pulls the new resources created in the serverpilot.io panel, once pulled here, this plugin takes care of updating for you."
         data-request-loading=".synchronize">
-        Sync
+        Pull force
     </button>
 
     <div style="display:none;" class="synchronize loading-indicator-container">
         <div class="loading-indicator size-small">
             <span></span>
-            <div>Synced...</div>
+            <div>pulling resources...</div>
         </div>
     </div>
 </div>

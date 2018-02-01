@@ -1,39 +1,32 @@
 fields:
-    app_id:
-        label: App
-        oc.commentPosition: ''
-        span: full
-        disabled: 0
-        required: 1
-        type: dropdown
-        options: getAppsList
+    api_id:
+        label: API Id
+        span: left
+        disabled: true
+        cssClass: hide
     name:
-        label: 'Database Name'
-        oc.commentPosition: ''
-        span: full
-        required: 1
-        type: text
-        cssClass: db-name
+        label: 'Name'
+        span: left
+        disabled: true
+        trigger:
+            field: api_id
+            action: enable
+            condition: value[]
 
     user[name]:
         label: User
-        oc.commentPosition: ''
         span: left
-        required: 1
         type: text
-        cssClass: usr-db
+        disabled: true
         trigger:
-            action: disable
-            field: name
+            field: api_id
+            action: enable
             condition: value[]
-    user[password]:
-        label: Password
-        oc.commentPosition: ''
-        span: right
-        required: 1
-        type: text
-        cssClass: usr-db-pass
-        trigger:
-            action: disable
-            field: name
-            condition: value[]
+    visible_password:
+        label: Password:
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/models/database/columns/password.htm
+    password:
+        label: Change Password
+        type: password
+        span: left

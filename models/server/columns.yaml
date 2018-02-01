@@ -1,41 +1,50 @@
 columns:
+    id:
+        label: id
+        invisible: true
+    api_id:
+        label: api_id
+        invisible: true
+    account_id:
+        label: account_id
+        invisible: true
     name:
         label: Name
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/name.htm
+        path: ~/plugins/awebsome/serverpilot/models/server/columns/name.htm
     lastaddress:
         label: IP/Host
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/lastaddress.htm
+        path: ~/plugins/awebsome/serverpilot/models/server/columns/lastaddress.htm
     autoupdates:
         label: Updates
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/autoupdates.htm
+        path: ~/plugins/awebsome/serverpilot/models/server/columns/autoupdates.htm
     firewall:
         label: Firewall
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/firewall.htm
+        path: ~/plugins/awebsome/serverpilot/models/server/columns/firewall.htm
     deny_unknown_domains:
         label: 'Deny uknown domains'
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/deny_uknown_domains.htm
-    systemusers:
+        path: ~/plugins/awebsome/serverpilot/models/server/columns/deny_uknown_domains.htm
+    sysusers:
         label: Users
-        relation: systemusers
+        relation: sysusers
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/users.htm
+        path: ~/plugins/awebsome/serverpilot/models/server/columns/users.htm
         sortable: false
     apps:
         label: Apps
         relation: apps
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/apps.htm
+        path: ~/plugins/awebsome/serverpilot/models/server/columns/apps.htm
         sortable: false
     databases:
         label: Databases
         relation: databases
         type: partial
-        path: ~/plugins/awebsome/serverpilot/controllers/servers/columns/databases.htm
+        path: ~/plugins/awebsome/serverpilot/models/server/columns/databases.htm
         sortable: false
     datecreated:
         label: 'Created At'
@@ -44,5 +53,5 @@ columns:
         label: 'Last Connection'
         type: timetense
     updated_at:
-        label: 'Last Sync'
+        label: 'Last Import'
         type: timesince

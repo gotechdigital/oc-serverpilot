@@ -1,8 +1,13 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
+use Log;
 use Model;
+use Crypt;
+use Flash;
 use ValidationException;
-use Awebsome\Serverpilot\Models\App;
+use Illuminate\Contracts\Encryption\DecryptException;
+
+use Awebsome\ServerPilot\Models\Settings as CFG;
 
 use Awebsome\Serverpilot\Classes\ServerPilot;
 
@@ -11,6 +16,8 @@ use Awebsome\Serverpilot\Classes\ServerPilot;
  */
 class Database extends Model
 {
+    //use \October\Rain\Database\Traits\Purgeable;
+    use \October\Rain\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.
@@ -26,12 +33,18 @@ class Database extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['id','app_id','server_id','user','name'];
+    protected $fillable = ['*'];
 
     /**
      * @var array jSonable fields
      */
     protected $jsonable = ['user'];
+
+
+    /**
+    * @var array Validation rules
+    */
+    protected $rules = [];
 
     /**
      * @var array Relations
@@ -39,8 +52,8 @@ class Database extends Model
     public $hasOne = [];
     public $hasMany = [];
     public $belongsTo = [
-        'app'       => ['Awebsome\Serverpilot\Models\App', 'key' => 'id'],
-        'server'    => ['Awebsome\Serverpilot\Models\Server']
+        'app'       => ['Awebsome\Serverpilot\Models\App', 'key' => 'app_api_id', 'otherKey' => 'api_id'],
+        'server'       => ['Awebsome\Serverpilot\Models\Server', 'key' => 'server_api_id', 'otherKey' => 'api_id'],
     ];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -49,64 +62,91 @@ class Database extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    use \October\Rain\Database\Traits\Validation;
 
     /**
-     * @var array Validation rules
+     * check if it's an import
+     * @param boolean
      */
-    protected $rules = [
-        'app_id' => ['required'],
-        'name' => ['required','alpha_dash','between:3,16'],
-        'user' => ['required']
-    ];
+    public $importing;
 
     public function beforeCreate()
     {
+        if(!$this->importing)
+        {
+            $db = ServerPilot::dbs()->create([
+                'appid'=> $this->app_api_id,
+                'name'=> $this->name,
+                'user'=> [
+                        'name' => $this->user['name'],
+                        'password' => $this->user['password']
+                    ]
+            ]);
 
-        /**
-         * Execute only from Create Database From
-         */
-        if(post('create_database_form') || post('_relation_mode')){
-
-            $ServerPilot = new ServerPilot;
-
-            $Database = $ServerPilot->Databases()
-                    ->create([
-                        'appid'=> $this->app_id,
-                        'name'=> $this->name,
-                        'user'=> [
-                                'name' => $this->user['name'],
-                                'password' => $this->user['password']
-                            ]
-                    ]);
-
-            if($Database->data->id && $Database->data->serverid)
+            if($db = @$db->data)
             {
-                $this->id = $Database->data->id;
-                $this->server_id = $Database->data->serverid;
-                $this->user = $Database->data->user;
-            }else throw new ValidationException(['error_mesage' => json_encode($Database)]);
+                $db = ServerPilot::dbs($db->id)->get()->data;
+                $this->api_id = $db->id;
+                $this->server_api_id = $db->serverid;
+                $this->password =  $this->user['password'];
+            }
         }
     }
 
-    public function afterDelete()
+    public function beforeUpdate()
     {
-        $ServerPilot = new ServerPilot;
-        $ServerPilot->Databases($this->id)->delete();
+        if(!$this->importing && post('Database.password'))
+        {
+            ServerPilot::dbs($this->api_id)->update([
+                'user' => [
+                    'id' => $this->user['id'],
+                    'password' => $this->passwordDecrypt(),
+                ]
+            ]);
+        }
+    }
+
+    public function beforeDelete()
+    {
+        ServerPilot::dbs($this->api_id)->delete();
     }
 
     /**
-     * [getAppsList description]
-     * @return [type] [description]
+     * Set Database.
      */
-    public function getAppsList()
+    public function setPasswordAttribute($pass)
     {
-        $Apps = App::get();
-        $options = [];
-        foreach ($Apps as $key => $value) {
-            $options[$value->id] = $value->name;
+        if($pass)
+            $pass = Crypt::encrypt($pass);
+        else if ($this->password)
+        {
+            $pass = $this->password;
         }
 
-        return $options;
+        $this->attributes['password'] = $pass;
+        # to decrypt use:
+        # Crypt::decrypt($encryptedValue);
+    }
+
+    public function getVisiblePasswordAttribute()
+    {
+        if($this->password)
+        {
+            if(CFG::get('show_dbs_password'))
+                $password = $this->passwordDecrypt();
+            else $password = '....Encrypted....';
+
+        } else $password = '... Unknown ...';
+
+        return $password;
+    }
+
+    public function passwordDecrypt()
+    {
+        try {
+            return Crypt::decrypt($this->password);
+        }
+        catch (DecryptException $ex) {
+            return null;
+        }
     }
 }

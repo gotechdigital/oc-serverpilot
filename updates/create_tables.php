@@ -8,23 +8,14 @@ class CreateTables extends Migration
 
     public function up()
     {
-
-    /*
-    * SERVERPILOT
-    * ======================
-    */
-
-        /**
-         * Scheluding
-         */
-        Schema::create('awebsome_serverpilot_scheduling', function($table)
-        {
-            $table->engine = 'InnoDB';
-            $table->increments('id');
-            $table->string('schedule');
-            $table->mediumText('log');
-            $table->timestamps();
-        });
+        // delete deprecated tables & recreate new structure.
+        Schema::dropIfExists('awebsome_serverpilot_servers');
+        Schema::dropIfExists('awebsome_serverpilot_system_users');
+        Schema::dropIfExists('awebsome_serverpilot_sysusers');
+        Schema::dropIfExists('awebsome_serverpilot_apps');
+        Schema::dropIfExists('awebsome_serverpilot_databases');
+        Schema::dropIfExists('awebsome_serverpilot_scheduling');
+        Schema::dropIfExists('awebsome_serverpilot_actions');
 
         /**
          * Servers
@@ -32,12 +23,15 @@ class CreateTables extends Migration
         Schema::create('awebsome_serverpilot_servers', function($table)
         {
             $table->engine = 'InnoDB';
-            # $table->increments('id');
-            $table->string('id');                            #id,
+            $table->increments('id');                              #id
+            $table->string('account_id')->nullable();              # serverpilot owner account by multiaccount feature.
 
+            # API Cols.
+            $table->string('api_id')->index()->nullable();
             $table->string('name');                                 #hostname,
-            $table->boolean('autoupdates')->default(0);              #is enabled,
+            $table->boolean('autoupdates')->default(0);             #is enabled,
             $table->boolean('firewall')->default(0);                #is enabled,
+            $table->boolean('deny_unknown_domains')->default(0);    #is enabled,
             $table->string('lastaddress');                          #ip,
             $table->string('datecreated');                          #created_at,
             $table->string('lastconn');                             #Last_conecction
@@ -49,14 +43,18 @@ class CreateTables extends Migration
         /**
          * SystemUsers
          */
-        Schema::create('awebsome_serverpilot_system_users', function($table)
+        Schema::create('awebsome_serverpilot_sysusers', function($table)
         {
             $table->engine = 'InnoDB';
-            # $table->increments('id');
-            $table->string('id');
-            $table->string('server_id');
+            $table->increments('id');
 
+            # API Cols.
+            $table->string('api_id')->index()->nullable();
+            $table->string('server_api_id')->index()->nullable();
             $table->string('name');
+
+            //Custom Cols.
+            $table->text('password')->nullable();
 
             $table->timestamps();
         });
@@ -68,15 +66,26 @@ class CreateTables extends Migration
         Schema::create('awebsome_serverpilot_apps', function($table)
         {
             $table->engine = 'InnoDB';
-            # $table->increments('id');
-            $table->string('id');
-            $table->string('user_id');
-            $table->string('server_id');
+            $table->increments('id');
+
+            # API Cols.
+            $table->string('api_id')->index()->nullable();          # id.
+            $table->string('server_api_id')->index()->nullable();
+            $table->string('sysuser_api_id')->index()->nullable();
 
             $table->string('name');
             $table->string('runtime');
             $table->longText('ssl')->nullable();
-            $table->longText('domains')->nullable();            #serverpilot sync
+            $table->text('autossl')->nullable();
+            $table->longText('domains')->nullable();
+            $table->string('datecreated')->nullable();
+
+            # Custom cols.
+            $table->boolean('available_ssl')->default(0);
+            $table->boolean('auto_ssl')->default(0);
+            $table->boolean('force_ssl')->default(0);
+
+            $table->text('annotations')->nullable();
 
             $table->timestamps();
         });
@@ -87,19 +96,39 @@ class CreateTables extends Migration
         Schema::create('awebsome_serverpilot_databases', function($table)
         {
             $table->engine = 'InnoDB';
-            # $table->increments('id');
-            $table->string('id');
-            $table->string('app_id');
-            $table->string('server_id');
+            $table->increments('id');
 
+            # API Cols.
+            $table->string('api_id')->index()->nullable();
+            $table->string('app_api_id')->index()->nullable();
+            $table->string('server_api_id')->index()->nullable();
             $table->string('name');
-            $table->string('user');
+            $table->text('user');
+
+            # Custom Cols.
+            $table->text('password')->nullable();
+
+            $table->timestamps();
+        });
+
+
+        /**
+         * Actions
+         */
+        Schema::create('awebsome_serverpilot_actions', function($table)
+        {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+
+            # API Cols.
+            $table->string('api_id')->index()->nullable();
+            $table->string('server_api_id')->index()->nullable();
+            $table->string('status');
+            $table->string('datecreated');
 
             $table->timestamps();
         });
     }
-
-
 
     /**
      * Drop Tables
@@ -108,8 +137,10 @@ class CreateTables extends Migration
     {
         Schema::dropIfExists('awebsome_serverpilot_servers');
         Schema::dropIfExists('awebsome_serverpilot_system_users');
+        Schema::dropIfExists('awebsome_serverpilot_sysusers');
         Schema::dropIfExists('awebsome_serverpilot_apps');
         Schema::dropIfExists('awebsome_serverpilot_databases');
         Schema::dropIfExists('awebsome_serverpilot_scheduling');
+        Schema::dropIfExists('awebsome_serverpilot_actions');
     }
 }

@@ -23,7 +23,7 @@ create:
 # Update page
 update:
     title: Edit Database
-    redirect: awebsome/serverpilot/databases
+    redirect: awebsome/serverpilot/databases/update/:id
     redirectClose: awebsome/serverpilot/databases
 
 # Preview page

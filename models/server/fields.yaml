@@ -7,8 +7,8 @@ fields:
         label: Name
         disabled: true
         span: left
-    id:
-        label: ID
+    api_id:
+        label: API ID
         disabled: true
         span: right
 tabs:

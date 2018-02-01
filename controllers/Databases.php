@@ -1,18 +1,10 @@
 <?php namespace Awebsome\Serverpilot\Controllers;
 
-use Flash;
-use Redirect;
 use Backend;
 use BackendMenu;
 
-use System\Helpers\DateTime;
-
 use Backend\Classes\Controller;
 use Awebsome\Serverpilot\Classes\ServerPilot;
-use Awebsome\Serverpilot\Classes\ServerPilotSync;
-
-use Awebsome\Serverpilot\Models\Sync;
-use Awebsome\Serverpilot\Models\Server;
 
 /**
  * Databases Back-end Controller
@@ -38,59 +30,17 @@ class Databases extends Controller
 
     public function index()
     {
-        $this->vars['Servers'] = new Server;
-
-        $this->vars['lastSync'] = DateTime::timeSince(Sync::max('created_at'));
+        #if(ServerPilot::isAuth())
+        #    ServerPilot::dbs()->import();
 
         $this->asExtension('ListController')->index();
     }
 
-    public function onSync()
+    public function api($id = null)
     {
-        $Sync = new ServerPilotSync;
-        $Sync->Databases()->now()->log('sync_databases');
+        $result = ServerPilot::dbs($id)->get();
 
-        return $this->listRefresh('databases');
-    }
-
-
-    public function onCreateForm()
-    {
-        $this->asExtension('FormController')->create();
-
-        return $this->makePartial('forms/new_database_form');
-    }
-
-    public function onCreate()
-    {
-        # Save before create in ServerPilot.
-        $this->asExtension('FormController')->create_onSave();
-
-        return $this->listRefresh('databases');
-    }
-
-    /**
-     * onResetPassword
-     * reset pass and Sync ServerPilot
-     *
-     * @return [type] [description]
-     */
-    public function onResetPsw()
-    {
-        $resource   = post('resource');
-        $id         = post('resource_id');
-        $usr        = post('user_name');
-        $npsw       = str_random(16);
-
-        $ServerPilot = new ServerPilot;
-
-        if($id)
-            $ServerPilot->Databases($id)->update([ 'user' => ['id' => $usr, 'password' => $npsw] ]);
-
-        return [
-            'newPassword' => $npsw,
-            'resource_id' => $id,
-            'user_name'   => $usr
-        ];
+        $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
+        return $print;
     }
 }

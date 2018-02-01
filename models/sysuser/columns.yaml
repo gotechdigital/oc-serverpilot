@@ -1,0 +1,37 @@
+columns:
+    id:
+        label: Id
+        invisible: true
+    api_id:
+        label: api_id
+        invisible: true
+    server_api_id:
+        label: server_api_id
+        invisible: true
+
+    name:
+        label: Name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/name.htm
+        searchable: true
+    visible_password:
+        label: Password
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/password.htm
+        sortable: false
+        invisible: true
+    apps:
+        label: Apps
+        relation: apps
+        valueFrom: name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/apps.htm
+    server:
+        label: Server
+        relation: server
+        valueFrom: name
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/models/sysuser/columns/server.htm
+    updated_at:
+        label: 'Last Import'
+        type: timesince

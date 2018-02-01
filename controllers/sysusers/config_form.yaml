@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: System User
+
+# Model Form Field configuration
+form: $/awebsome/serverpilot/models/sysuser/fields.yaml
+
+# Model Class name
+modelClass: Awebsome\Serverpilot\Models\Sysuser
+
+# Default redirect location
+defaultRedirect: awebsome/serverpilot/sysusers
+
+# Create page
+create:
+    title: Create System User
+    redirect: awebsome/serverpilot/sysusers/update/:id
+    redirectClose: awebsome/serverpilot/sysusers
+
+# Update page
+update:
+    title: Edit System User
+    redirect: awebsome/serverpilot/sysusers/update/:id
+    redirectClose: awebsome/serverpilot/sysusers
+
+# Preview page
+preview:
+    title: Preview System User

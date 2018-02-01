@@ -1,6 +1,9 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
+use Log;
+
 use Model;
+use Flash;
 use ValidationException;
 
 use Awebsome\Serverpilot\Classes\ServerPilot;
@@ -10,12 +13,10 @@ use Awebsome\Serverpilot\Classes\ServerPilot;
  */
 class Server extends Model
 {
-
     /**
      * @var string The database table used by the model.
      */
     public $table = 'awebsome_serverpilot_servers';
-    public $timestamps = true;
 
     /**
      * @var array Guarded fields
@@ -25,19 +26,17 @@ class Server extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['id','name','autoupdates','firewall','lastaddress','datecreated','lastconn','created_at','deny_unknown_domains'];
+    protected $fillable = ['*'];
 
     /**
      * @var array Relations
      */
     public $hasOne = [];
-
     public $hasMany = [
-                'systemusers'   => ['Awebsome\Serverpilot\Models\SystemUser','key' => 'server_id','otherKey' => 'id'],
-                'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'server_id','otherKey' => 'id'],
-                'apps'          => ['Awebsome\Serverpilot\Models\App','key' => 'server_id','otherKey' => 'id']
-            ];
-
+        'sysusers'      => ['Awebsome\Serverpilot\Models\Sysuser','key' => 'server_api_id','otherKey' => 'api_id'],
+        'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'server_api_id','otherKey' => 'api_id'],
+        'apps'          => ['Awebsome\Serverpilot\Models\App','key' => 'server_api_id','otherKey' => 'api_id']
+    ];
     public $belongsTo = [];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -46,14 +45,22 @@ class Server extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    /**
+     * check if it's an import
+     * @param boolean
+     */
+    public $importing;
+
     public function beforeUpdate()
     {
-        $ServerPilot = new ServerPilot;
-
-        $ServerPilot->Servers($this->id)->update([
-            'autoupdates'   => ($this->autoupdates) ? true : false,
-            'firewall'      => ($this->firewall) ? true : false,
-            'deny_unknown_domains'   => ($this->deny_unknown_domains) ? true : false,
-        ]);
+        if(!$this->importing)
+        {
+            ServerPilot::servers($this->api_id)->update([
+                'autoupdates'   => ($this->autoupdates) ? TRUE : FALSE,
+                'firewall'      => ($this->firewall) ? TRUE : FALSE,
+                'deny_unknown_domains'   => ($this->deny_unknown_domains) ? TRUE : FALSE,
+            ]);
+            //Log::info('server Updateado...');
+        }
     }
 }
