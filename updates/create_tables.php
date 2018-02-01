@@ -81,6 +81,10 @@ class CreateTables extends Migration
             $table->string('datecreated')->nullable();
 
             # Custom cols.
+            $table->boolean('available_ssl')->default(0);
+            $table->boolean('auto_ssl')->default(0);
+            $table->boolean('force_ssl')->default(0);
+
             $table->text('annotations')->nullable();
 
             $table->timestamps();

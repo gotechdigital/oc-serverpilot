@@ -22,43 +22,62 @@ fields:
 secondaryTabs:
     stretch: true
     fields:
-        domains:
-            label: Domains
-            tab: App
-            type: repeater
-            span: storm
-            cssClass: 'col-sm-8'
-            prompt: Add new domain
-            form:
-                fields:
-                    domain:
-                        label: Domain
-                        type: text
+
         runtime:
             label: Runtime
             tab: App
             default: php5.6
             type: radio
             span: storm
-            cssClass: 'col-sm-4'
+            cssClass: 'col-sm-3'
 
+        available_ssl:
+            tab: App
+            label: AutoSSL Available
+            type: checkbox
+            comment: AutoSSL Certificate Status
+            span: storm
+            cssClass: col-sm-3
+            disabled: true
+
+        auto_ssl:
+            label: Auto SSL
+            tab: App
+            type: switch
+            span: storm
+            cssClass: col-sm-3
+            comment: 'Enable SSL using AutoSSL.'
+            trigger:
+                field: available_ssl
+                condition: checked
+                action: show
+        force_ssl:
+            label: Force HTTP to HTTPS
+            tab: App
+            type: switch
+            span: storm
+            cssClass: col-sm-3
+            comment: 'Requests using HTTP are being redirected to HTTPS.'
+            trigger:
+                field: auto_ssl
+                condition: checked
+                action: show
+
+        domains:
+            label: Domains
+            tab: App
+            type: repeater
+            span: storm
+            cssClass: 'col-sm-9'
+            prompt: Add new domain
+            form:
+                fields:
+                    domain:
+                        label: Domain
+                        type: text
         databases:
             label: Databases
             tab: Databases
             type: partial
             path: relation_databases
             span: full
-
-#        auto_ssl:
-#            label: Auto SSL
-#            tab: App
-#            type: switch
-#            span: right
-#            comment: 'Enable SSL using AutoSSL.'
-
-#        force_ssl:
-#            label: Force HTTP to HTTPS
-#            tab: App
-#            type: switch
-#            span: right
-#            comment: 'Requests using HTTP are being redirected to HTTPS.'

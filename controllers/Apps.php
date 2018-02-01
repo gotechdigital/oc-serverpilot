@@ -1,5 +1,6 @@
 <?php namespace Awebsome\Serverpilot\Controllers;
 
+use Flash;
 use Backend;
 use Redirect;
 use BackendMenu;
@@ -47,11 +48,27 @@ class Apps extends Controller
         $this->asExtension('ListController')->index();
     }
 
+    public function update($recordId, $context = null)
+    {
+        $app = App::find($recordId);
+
+        if(ServerPilot::isAuth())
+        $app = ServerPilot::apps($app->api_id)->import();
+            if($app)
+                Flash::info('APP updated from ServerPilot.');
+
+        $this->asExtension('FormController')->update($recordId);
+    }
+
     public function api($id = null)
     {
         $result = ServerPilot::apps($id)->get();
 
+        //$result2 = ServerPilot::apps($id)->forceSSL(false);
+
+
         $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
+        //$print.= '<pre>'.json_encode($result2, JSON_PRETTY_PRINT).'</pre>';
         return $print;
     }
 
@@ -79,12 +96,8 @@ class Apps extends Controller
 
     public function test()
     {
-
-        
-
-        //$result = App::all();
-        $print = '<pre>'.json_encode($caso1, JSON_PRETTY_PRINT).'</pre>';
-        $print.= '<pre>'.json_encode($caso2, JSON_PRETTY_PRINT).'</pre>';
+        $result = App::find(1);
+        $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
         return $print;
     }
 }

@@ -84,12 +84,28 @@ class App extends Model
 
     public function beforeUpdate()
     {
+
         if(!$this->importing)
         {
             ServerPilot::apps($this->api_id)->update([
                 'runtime' => $this->runtime,
                 'domains' => $this->api_domains
             ]);
+
+            $app = App::find($this->id);
+
+            if($app->auto_ssl != $this->auto_ssl)
+            {
+                ServerPilot::apps($this->api_id)->autoSSL($this->auto_ssl);
+            }
+
+            if(!$this->auto_ssl)
+                $this->force_ssl = false;
+
+            if($this->auto_ssl && $app->force_ssl != $this->force_ssl)
+            {
+                ServerPilot::apps($this->api_id)->forceSSL($this->force_ssl);
+            }
         }
     }
 
@@ -117,6 +133,39 @@ class App extends Model
         }
     }
 
+
+    /**
+     * setAvailableSSL
+     * ===============================================
+     * @param array data from app->autossl->available
+     * @return boolean is_enabled
+     */
+    public static function setAvailableSSL($autossl)
+    {
+        return (@$autossl->available == true) ? true : false;
+    }
+
+    /**
+     * setAutoSSL
+     * =========================================
+     * @param array data from app->ssl->auto
+     * @return boolean is_enabled
+     */
+    public static function setAutoSSL($ssl)
+    {
+        return (@$ssl->auto == true) ? true : false;
+    }
+
+    /**
+     * setForceSSL
+     * =========================================
+     * @param array data from app->ssl->force
+     * @return boolean is_enabled
+     */
+    public static function setForceSSL($ssl)
+    {
+        return (@$ssl->force == true) ? true : false;
+    }
 
     /**
      * formmated data

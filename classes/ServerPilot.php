@@ -19,6 +19,7 @@ class ServerPilot extends Curl
     /**  Location for overloaded data.  */
     public $data;               # data for create, update, or delete.
     public $endpoint;           # resource to /endpoint
+    public $ssl;                # add ssl to endpoint
     public $name;               # $resource name. ex: apps, servers, dbs
 
     public $model;           # Models of resources.
@@ -82,7 +83,11 @@ class ServerPilot extends Curl
                 'ssl'               => ['ssl'],
                 'autossl'           => ['autossl'],
                 'domains'           => ['domains', 'setDomains'], //method to proccess data.
-                'datecreated'       => ['datecreated']
+                'datecreated'       => ['datecreated'],
+                ############## customs ##############
+                'available_ssl'     => ['autossl', 'setAvailableSSL'],
+                'auto_ssl'          => ['ssl', 'setAutoSSL'],
+                'force_ssl'         => ['ssl', 'setForceSSL']
             ],
 
             'actions' => [
@@ -236,6 +241,30 @@ class ServerPilot extends Curl
             $this->endpoint = ($this->id) ? $this->name . '/'.$this->id : $this->name;
 
         return $this->request($this->endpoint, $this->data);
+    }
+
+    public function forceSSL($force)
+    {
+        $this->endpoint = $this->name.'/'.$this->id.'/ssl';
+
+        if($force)
+            $val = ['force' => true];
+        else $val = ['force' => false];
+
+        return $this->request($this->endpoint, $val, self::SP_HTTP_METHOD_POST);
+    }
+
+    public function autoSSL($auto)
+    {
+        $this->endpoint = $this->name.'/'.$this->id.'/ssl';
+
+        if($auto)
+            $val = ['auto' => true];
+
+        if($auto == true)
+            return $this->request($this->endpoint, $val, self::SP_HTTP_METHOD_POST);
+        else
+            return $this->request($this->endpoint, null, self::SP_HTTP_METHOD_DELETE);
     }
 
     public function update($data)

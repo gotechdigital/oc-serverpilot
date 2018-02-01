@@ -1,12 +1,13 @@
 <?php Block::put('breadcrumb') ?>
 <style>
     .radio-runtime div.radio {display: inline-block;} .radio-runtime label{margin-right: 15px; font-weight: bold;}
-
     div.control-breadcrumb {margin-bottom: 0;}
+    li.tool-button {position: absolute !important; right: 15px !important;}
 </style>
     <ul>
         <li><a href="<?= Backend::url('awebsome/serverpilot/apps') ?>">Apps</a></li>
         <li>Manage App</li>
+        <li class="tool-button"><a class="btn-xs btn-default" href="<?= Backend::url('awebsome/serverpilot/apps/update/'.$formModel->id)?>"><i class="icon-refresh"></i> Refresh</a></li>
     </ul>
 <?php Block::endPut() ?>
 <?php if (!$this->fatalError): ?>
