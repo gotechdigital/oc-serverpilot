@@ -11,15 +11,16 @@ With Awebsome.ServerPilot you can make this:
 ##### Servers
 + Server Listing
 + Firewall / Updates Status
-+ Sync data from ServerPilot.io to October
 
 ##### System Users
 + Add SSH/FTP Users
 + Reset Password
++ Save Password **(NEW)**
 
 ##### Databases
 + Create Database
 + Reset Password
++ Save Password **(NEW)**
 + Delete Database
 
 ##### Apps
@@ -28,35 +29,11 @@ With Awebsome.ServerPilot you can make this:
 + Manage Runtime (PHP Version)
 + Manage Domains
 + SSL Status
++ Enable AutoSSL **(NEW)**
++ Enable Force HTTP to HTTPS **(NEW)**
 + Delete an App
 
 
-FTP Configs
-==================
-To generate a password for the first time, reset the password from "Users", then go to "App", delete you sftpconfig and save to generate again. 
-
-Example FTP Config of Atom
-    
-    # You can modify and save your custom settings
-    {
-        "protocol": "sftp",
-        "host": "ourdomain.com",
-        "port": 22,
-        "user": "apps",
-        "pass": "reset the password",
-        "promptForPass": false,
-        "remote": "/srv/users/{user}/apps\{app}/public",
-        "agent": "",
-        "privatekey": "",
-        "passphrase": "",
-        "hosthash": "",
-        "ignorehost": true,
-        "connTimeout": 30000,
-        "keepalive": 10000,
-        "keyboardInteractive": false,
-        "watch": [],
-        "watchTimeout": 500
-    }
     
     
 We recommend [ServerPilot.io](https://www.serverpilot.io/?refcode=5e177d453154) &  [DigitalOcean](https://m.do.co/c/08c1ea53e42e)
