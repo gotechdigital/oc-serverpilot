@@ -32,6 +32,10 @@ class Plugin extends PluginBase
                 ServerPilot::dbs()->import();
             }
         });
+
+
+        ServerPilot::plus();
+
     }
 
     public function registerSchedule($schedule)

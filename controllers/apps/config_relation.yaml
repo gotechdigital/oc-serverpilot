@@ -8,3 +8,15 @@ databases:
         form: $/awebsome/serverpilot/models/database/fields_app.yaml
         list: $/awebsome/serverpilot/models/database/columns.yaml
         clickable: false
+
+### Serverpilot Plus ###
+backups:
+    label: Backups
+    view:
+        list: $/awebsome/serverpilotplus/models/backup/columns.yaml
+        toolbarButtons: create|delete
+        clickable: false
+    manage:
+        form: $/awebsome/serverpilotplus/models/backup/fields.yaml
+        list: $/awebsome/serverpilotplus/models/backup/columns.yaml
+        clickable: false
