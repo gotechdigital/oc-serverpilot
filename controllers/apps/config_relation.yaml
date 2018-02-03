@@ -13,7 +13,7 @@ databases:
 backups:
     label: Backups
     view:
-        list: $/awebsome/serverpilotplus/models/backup/columns.yaml
+        list: $/awebsome/serverpilotplus/models/backup/columns_app.yaml
         toolbarButtons: create|delete
         clickable: false
     manage:
