@@ -110,6 +110,16 @@ class Database extends Model
         ServerPilot::dbs($this->api_id)->delete();
     }
 
+
+    public function getPasswordDecryptAttribute()
+    {
+        return $this->passwordDecrypt();
+    }
+
+    public function getUserNameAttribute()
+    {
+        return @$this->user['name'];
+    }
     /**
      * Set Database.
      */

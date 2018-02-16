@@ -1,5 +1,7 @@
 <?php namespace Awebsome\Serverpilot\Classes;
 
+use Event;
+
 use Awebsome\ServerPilot\Models\Settings as CFG;
 use Awebsome\Serverpilot\Classes\Api\Curl;
 use Awebsome\Serverpilot\Classes\ImportHandler as Import;
@@ -26,6 +28,12 @@ class ServerPilot extends Curl
     public $table;           # Models of resources.
     public $id;              # Model of resource.
 
+    public static function instance()
+    {
+        $self = new Self;
+        
+        return $self;
+    }
     /**
      * Register Models.
      */
@@ -287,6 +295,26 @@ class ServerPilot extends Curl
         $this->request($this->endpoint, null, self::SP_HTTP_METHOD_DELETE);
     }
 
-    # update
-    # delete
+    // Plus conditions & restrinctions.
+
+    public static function plus()
+    {
+
+        // Extend all backend form usage
+        Event::listen('backend.form.extendFields', function($widget) {
+
+            // Only for the User controller
+            if (!$widget->getController() instanceof \Awebsome\Serverpilot\Controllers\Apps) {
+                return;
+            }
+
+            // Only for the User model
+            if (!$widget->model instanceof \Awebsome\Serverpilot\Models\App) {
+                return;
+            }
+
+            if(!class_exists('Awebsome\Serverpilotplus\Classes\BackupHandler'))
+                $widget->removeField('backups');
+        });
+    }
 }

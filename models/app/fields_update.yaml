@@ -81,3 +81,10 @@ secondaryTabs:
             type: partial
             path: relation_databases
             span: full
+
+        backups:
+            label: Backups
+            tab: Backups
+            type: partial
+            path: relation_backups
+            span: full

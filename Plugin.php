@@ -14,12 +14,7 @@ use Db;
 
 class Plugin extends PluginBase
 {
-    /**
-     * @var array Plugin dependencies
-     */
-    //public $require = ['RainLab.Translate'];
-
-
+    
     public function boot()
     {
         Event::listen('awebsome.serverpilot.afterSaveSettings', function() {
@@ -32,6 +27,8 @@ class Plugin extends PluginBase
                 ServerPilot::dbs()->import();
             }
         });
+
+        ServerPilot::plus();
     }
 
     public function registerSchedule($schedule)

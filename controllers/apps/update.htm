@@ -13,7 +13,7 @@
 <?php if (!$this->fatalError): ?>
 
     <div class="layout fancy-layout">
-        <?= Form::open(['class' => 'layout layout-row']) ?>
+        <?= Form::open(['class' => 'layout layout-row', 'data-request-data'=>'app_id:'.$formModel->id]) ?>
 
             <?= $this->formRender() ?>
 

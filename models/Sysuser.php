@@ -123,7 +123,11 @@ class Sysuser extends Model
         $this->attributes['name'] = strtolower($value);
     }
 
-
+    public function getPasswordDecryptAttribute()
+    {
+        return $this->passwordDecrypt();
+    }
+    
     public function passwordDecrypt()
     {
         # to decrypt use:

@@ -9,6 +9,7 @@ use ValidationException;
 use Backend\Classes\Controller;
 
 use Awebsome\Serverpilot\Classes\ServerPilot;
+use Awebsome\Serverpilot\Classes\ImportHandler;
 use Awebsome\Serverpilot\Models\App;
 
 /**
@@ -85,6 +86,8 @@ class Apps extends Controller
             ServerPilot::sysusers()->import();
             ServerPilot::apps()->import('oneToOne');
             ServerPilot::dbs()->import();
+
+            ImportHandler::DeleteNonExistentResources();
         }
 
         return $this->listRefresh('apps');
@@ -100,13 +103,5 @@ class Apps extends Controller
         $app = App::where('name', post('App.name'))->orderBy('created_at', 'desc')->first();
 
         return Redirect::to(Backend::url('awebsome/serverpilot/apps/update/'.$app->id));
-    }
-
-
-    public function test()
-    {
-        $result = App::find(1);
-        $print = '<pre>'.json_encode($result, JSON_PRETTY_PRINT).'</pre>';
-        return $print;
     }
 }

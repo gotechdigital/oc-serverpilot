@@ -91,4 +91,34 @@ class ImportHandler
 
         return $records;
     }
+
+
+    public static function DeleteNonExistentResources()
+    {
+        // get all local resources.
+        $sp = ServerPilot::instance();
+
+        //get Resources
+        $models = $sp->registerModels();
+        $resources = ['servers', 'sysusers', 'apps', 'dbs' ];
+
+        $nonExistent = [];
+
+        foreach ($resources as $resource)
+        {
+            $model = $models[$resource];
+            $apiRecords = @ServerPilot::$resource()->get()->data;
+
+            if(count($apiRecords) >= 1)
+            {
+                $existingIds = array_column($apiRecords, 'id');
+                $deleted =  $model::select('id', 'api_id')->whereNotIn('api_id', $existingIds);
+                $nonExistent[$resource] = $deleted->get();
+
+                $deleted->delete();
+            }
+        }
+
+        return $nonExistent;
+    }
 }
