@@ -28,6 +28,12 @@ class ServerPilot extends Curl
     public $table;           # Models of resources.
     public $id;              # Model of resource.
 
+    public static function instance()
+    {
+        $self = new Self;
+        
+        return $self;
+    }
     /**
      * Register Models.
      */
