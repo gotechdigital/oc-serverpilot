@@ -15,8 +15,5 @@ backups:
     view:
         list: $/awebsome/serverpilotplus/models/backup/columns_app.yaml
         toolbarButtons: create|delete
-        clickable: false
     manage:
         form: $/awebsome/serverpilotplus/models/backup/fields.yaml
-        list: $/awebsome/serverpilotplus/models/backup/columns.yaml
-        clickable: false
