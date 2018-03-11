@@ -26,6 +26,7 @@ columns:
     domains:
         label: Main Domain
         type: partial
+        searchable: true
         path: ~/plugins/awebsome/serverpilot/models/app/columns/domain.htm
     sysuser:
         label: System User
