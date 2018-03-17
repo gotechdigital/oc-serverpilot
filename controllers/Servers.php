@@ -26,8 +26,6 @@ class Servers extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'servers');
-
-        $this->addCss($this->assetsPath.'/modal-form.css');
     }
 
     public function index()

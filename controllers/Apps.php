@@ -28,7 +28,6 @@ class Apps extends Controller
     public $relationConfig = 'config_relation.yaml';
 
     public $bodyClass = 'compact-container';
-    protected $assetsPath = '/plugins/awebsome/serverpilot/assets';
 
     public $requiredPermissions = ['awebsome.serverpilot.apps'];
 
@@ -38,7 +37,7 @@ class Apps extends Controller
 
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'apps');
 
-        $this->addCss($this->assetsPath.'/modal-form.css');
+        $this->addCss('/plugins/awebsome/serverpilot/assets/modal-form.css');
     }
 
     public function index()

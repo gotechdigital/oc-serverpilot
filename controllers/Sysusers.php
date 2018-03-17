@@ -27,8 +27,6 @@ class Sysusers extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'sysusers');
-
-        $this->addCss($this->assetsPath.'/modal-form.css');
     }
 
     public function index()
