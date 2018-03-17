@@ -14,7 +14,11 @@ use Db;
 
 class Plugin extends PluginBase
 {
-    
+    /**
+     * @var array Plugin dependencies
+     */
+    public $require = [];
+
     public function boot()
     {
         Event::listen('awebsome.serverpilot.afterSaveSettings', function() {
