@@ -21,6 +21,7 @@ fields:
 
 secondaryTabs:
     stretch: true
+    paneCssClass: padded-pane
     fields:
 
         runtime:
