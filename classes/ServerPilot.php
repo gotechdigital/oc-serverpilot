@@ -31,7 +31,7 @@ class ServerPilot extends Curl
     public static function instance()
     {
         $self = new Self;
-        
+
         return $self;
     }
     /**
@@ -127,18 +127,20 @@ class ServerPilot extends Curl
      */
     public static function isAuth()
     {
-        if(CFG::get('CLIENT_ID') && CFG::get('API_KEY'))
-        {
+        $authenticationSuccess = false;
 
+        // Make a test request to see if the authentication succeeds
+        if (CFG::get('CLIENT_ID') && CFG::get('API_KEY')) {
             $sp = new Self;
             $response = $sp->actions('1')->get();
             $code = @$response->error->code;
 
-            if($code != 401)
-                return true;
-            else return false;
+            if ($code !== 401) {
+                $authenticationSuccess = true;
+            }
+        }
 
-        }else return false;
+        return $authenticationSuccess;
     }
 
     /**
@@ -293,28 +295,5 @@ class ServerPilot extends Curl
         $this->endpoint = $this->name . '/'.$this->id;
 
         $this->request($this->endpoint, null, self::SP_HTTP_METHOD_DELETE);
-    }
-
-    // Plus conditions & restrinctions.
-
-    public static function plus()
-    {
-
-        // Extend all backend form usage
-        Event::listen('backend.form.extendFields', function($widget) {
-
-            // Only for the User controller
-            if (!$widget->getController() instanceof \Awebsome\Serverpilot\Controllers\Apps) {
-                return;
-            }
-
-            // Only for the User model
-            if (!$widget->model instanceof \Awebsome\Serverpilot\Models\App) {
-                return;
-            }
-
-            if(!class_exists('Awebsome\Serverpilotplus\Classes\BackupHandler'))
-                $widget->removeField('backups');
-        });
     }
 }

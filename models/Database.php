@@ -1,9 +1,7 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
-use Log;
 use Model;
 use Crypt;
-use Flash;
 use ValidationException;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -16,74 +14,47 @@ use Awebsome\Serverpilot\Classes\ServerPilot;
  */
 class Database extends Model
 {
-    //use \October\Rain\Database\Traits\Purgeable;
-    use \October\Rain\Database\Traits\Validation;
-
     /**
      * @var string The database table used by the model.
      */
     public $table = 'awebsome_serverpilot_databases';
 
     /**
-     * @var array Guarded fields
-     */
-    protected $guarded = ['*'];
-
-
-    /**
-     * @var array Fillable fields
-     */
-    protected $fillable = ['*'];
-
-    /**
-     * @var array jSonable fields
+     * @var array Attributes to be cast to JSON
      */
     protected $jsonable = ['user'];
-
-
-    /**
-    * @var array Validation rules
-    */
-    protected $rules = [];
 
     /**
      * @var array Relations
      */
-    public $hasOne = [];
-    public $hasMany = [];
     public $belongsTo = [
-        'app'       => ['Awebsome\Serverpilot\Models\App', 'key' => 'app_api_id', 'otherKey' => 'api_id'],
-        'server'       => ['Awebsome\Serverpilot\Models\Server', 'key' => 'server_api_id', 'otherKey' => 'api_id'],
+        'app'    => [App::class, 'key' => 'app_api_id', 'otherKey' => 'api_id'],
+        'server' => [Server::class, 'key' => 'server_api_id', 'otherKey' => 'api_id'],
     ];
-    public $belongsToMany = [];
-    public $morphTo = [];
-    public $morphOne = [];
-    public $morphMany = [];
-    public $attachOne = [];
-    public $attachMany = [];
-
 
     /**
-     * check if it's an import
-     * @param boolean
+     * @var boolean Flags that the model is currently being imported
      */
     public $importing;
 
+    /**
+     * Runs before the model is created in order to sync the settings with ServerPilot
+     *
+     * @return void
+     */
     public function beforeCreate()
     {
-        if(!$this->importing)
-        {
+        if (!$this->importing) {
             $db = ServerPilot::dbs()->create([
-                'appid'=> $this->app_api_id,
-                'name'=> $this->name,
-                'user'=> [
-                        'name' => $this->user['name'],
-                        'password' => $this->user['password']
-                    ]
+                'appid' => $this->app_api_id,
+                'name'  => $this->name,
+                'user'  => [
+                    'name' => $this->user['name'],
+                    'password' => $this->user['password']
+                ]
             ]);
 
-            if($db = @$db->data)
-            {
+            if ($db = @$db->data) {
                 $db = ServerPilot::dbs($db->id)->get()->data;
                 $this->api_id = $db->id;
                 $this->server_api_id = $db->serverid;
@@ -92,10 +63,14 @@ class Database extends Model
         }
     }
 
+    /**
+     * Runs before the model is updated in order to sync the settings with ServerPilot
+     *
+     * @return void
+     */
     public function beforeUpdate()
     {
-        if(!$this->importing && post('Database.password'))
-        {
+        if (!$this->importing && post('Database.password')) {
             ServerPilot::dbs($this->api_id)->update([
                 'user' => [
                     'id' => $this->user['id'],
@@ -105,11 +80,15 @@ class Database extends Model
         }
     }
 
+    /**
+     * Runs before the model is deleted in order to sync the settings with ServerPilot
+     *
+     * @return void
+     */
     public function beforeDelete()
     {
         ServerPilot::dbs($this->api_id)->delete();
     }
-
 
     public function getPasswordDecryptAttribute()
     {
@@ -120,6 +99,7 @@ class Database extends Model
     {
         return @$this->user['name'];
     }
+
     /**
      * Set Database.
      */

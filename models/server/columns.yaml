@@ -19,14 +19,17 @@ columns:
     autoupdates:
         label: Updates
         type: partial
+        invisible: true
         path: ~/plugins/awebsome/serverpilot/models/server/columns/autoupdates.htm
     firewall:
         label: Firewall
         type: partial
+        invisible: true
         path: ~/plugins/awebsome/serverpilot/models/server/columns/firewall.htm
     deny_unknown_domains:
         label: 'Deny uknown domains'
         type: partial
+        invisible: true
         path: ~/plugins/awebsome/serverpilot/models/server/columns/deny_uknown_domains.htm
     sysusers:
         label: Users

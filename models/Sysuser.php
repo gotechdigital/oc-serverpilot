@@ -1,6 +1,5 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
-use Log;
 use Crypt;
 use Model;
 
@@ -23,26 +22,6 @@ class Sysuser extends Model
     public $table = 'awebsome_serverpilot_sysusers';
 
     /**
-     * @var array Guarded fields
-     */
-    protected $guarded = ['*'];
-
-    /**
-     * @var array Fillable fields
-     */
-    protected $fillable = ['*'];
-
-    /**
-     * @var array Relations
-     */
-    public $hasMany = [
-        'apps' => ['Awebsome\Serverpilot\Models\App','key' => 'sysuser_api_id','otherKey' => 'api_id'],
-    ];
-    public $belongsTo = [
-        'server' => ['Awebsome\ServerPilot\Models\Server', 'key' => 'server_api_id', 'otherKey' => 'api_id']
-    ];
-
-    /**
      * @var array Validation rules
      */
     protected $rules = [
@@ -50,38 +29,52 @@ class Sysuser extends Model
     ];
 
     /**
-     * check if it's an import
-     * @param boolean
+     * @var array Relations
+     */
+    public $hasMany = [
+        'apps' => [App::class, 'key' => 'sysuser_api_id', 'otherKey' => 'api_id'],
+    ];
+    public $belongsTo = [
+        'server' => [Server::class, 'key' => 'server_api_id', 'otherKey' => 'api_id'],
+    ];
+
+    /**
+     * @var boolean Flags that the model is currently being imported
      */
     public $importing;
 
+    /**
+     * Runs before the model is created in order to sync the settings with ServerPilot
+     *
+     * @return void
+     */
     public function beforeCreate()
     {
-        if(!$this->importing)
-        {
+        if (!$this->importing) {
             $sysuser = ServerPilot::sysusers()->create([
                 'serverid' => post('Sysuser.server_api_id'),
-                'name' => $this->name,
+                'name'     => $this->name,
                 'password' => post('Sysuser.password')
             ]);
 
-            if($sysuser = @$sysuser->data)
-            {
+            if ($sysuser = @$sysuser->data) {
                 $this->api_id = $sysuser->id;
                 $this->server_api_id = $sysuser->serverid;
-                # Log::info('creado...'. json_encode($sysuser));
             }
         }
     }
 
+    /**
+     * Runs before the model is updated in order to sync the settings with ServerPilot
+     *
+     * @return void
+     */
     public function beforeUpdate()
     {
-        if(!$this->importing && post('Sysuser.password'))
-        {
+        if (!$this->importing && post('Sysuser.password')) {
             ServerPilot::sysusers($this->api_id)->update([
                 'password' => $this->passwordDecrypt()
             ]);
-            # Log::info('sysuser Updateado...');
         }
     }
 
@@ -127,7 +120,7 @@ class Sysuser extends Model
     {
         return $this->passwordDecrypt();
     }
-    
+
     public function passwordDecrypt()
     {
         # to decrypt use:

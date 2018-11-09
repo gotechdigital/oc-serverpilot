@@ -21,41 +21,23 @@ class App extends Model
     public $table = 'awebsome_serverpilot_apps';
 
     /**
-     * @var array Guarded fields
+     * @var array Attributes to be cast to JSON
      */
-    protected $guarded = ['*'];
-
-    /**
-     * @var array Fillable fields
-     */
-    protected $fillable = ['*'];
-
-    /**
-     * @var array jSonables fields
-     */
-    protected $jsonable = ['autossl','ssl', 'domains'];
+    protected $jsonable = ['autossl', 'ssl', 'domains'];
 
     /**
      * @var array Relations
      */
-    public $hasOne = [];
     public $hasMany = [
-        'databases' => ['Awebsome\Serverpilot\Models\Database','key' => 'app_api_id', 'otherKey' => 'api_id'],
+        'databases' => [Database::class, 'key' => 'app_api_id', 'otherKey' => 'api_id'],
     ];
     public $belongsTo = [
-        'server'   => ['Awebsome\Serverpilot\Models\Server','key' => 'server_api_id', 'otherKey' => 'api_id'],
-        'sysuser'    => ['Awebsome\Serverpilot\Models\Sysuser','key' => 'sysuser_api_id', 'otherKey' => 'api_id'],
+        'server'    => [Server::class, 'key' => 'server_api_id', 'otherKey' => 'api_id'],
+        'sysuser'   => [Sysuser::class, 'key' => 'sysuser_api_id', 'otherKey' => 'api_id'],
     ];
-    public $belongsToMany = [];
-    public $morphTo = [];
-    public $morphOne = [];
-    public $morphMany = [];
-    public $attachOne = [];
-    public $attachMany = [];
 
     /**
-     * check if it's an import
-     * @param boolean
+     * @var boolean Flags that the model is currently being imported
      */
     public $importing;
 
@@ -70,23 +52,27 @@ class App extends Model
     }
 
     /**
-     * before delete
+     * Runs before the model is deleted, cleans up by deleting all related databases and tells ServerPilot to delete the app
+     *
+     * @return void
      */
     public function beforeDelete()
     {
-        # Delete all databases of this app
+        // Delete all databases of this app
         $this->databases()->delete();
 
-        # delete app in serverpilot
+        // Delete the app in serverpilot
         ServerPilot::apps($this->api_id)->delete();
     }
 
-
+    /**
+     * Runs before the model is updated in order to sync the settings with ServerPilot
+     *
+     * @return void
+     */
     public function beforeUpdate()
     {
-
-        if(!$this->importing)
-        {
+        if (!$this->importing) {
             ServerPilot::apps($this->api_id)->update([
                 'runtime' => $this->runtime,
                 'domains' => $this->api_domains
@@ -94,25 +80,28 @@ class App extends Model
 
             $app = App::find($this->id);
 
-            if($app->auto_ssl != $this->auto_ssl)
-            {
+            if ($app->auto_ssl != $this->auto_ssl) {
                 ServerPilot::apps($this->api_id)->autoSSL($this->auto_ssl);
             }
 
-            if(!$this->auto_ssl)
+            if (!$this->auto_ssl) {
                 $this->force_ssl = false;
+            }
 
-            if($this->auto_ssl && $app->force_ssl != $this->force_ssl)
-            {
+            if ($this->auto_ssl && $app->force_ssl != $this->force_ssl) {
                 ServerPilot::apps($this->api_id)->forceSSL($this->force_ssl);
             }
         }
     }
 
-
+    /**
+     * Runs before the model is created in order to sync the settings with ServerPilot
+     *
+     * @return void
+     */
     public function beforeCreate()
     {
-        if(!$this->importing)
+        if (!$this->importing)
         {
             $app = ServerPilot::apps()->create([
                 'name'      => $this->name,
@@ -121,8 +110,7 @@ class App extends Model
                 'domains'   => $this->api_domains
             ]);
 
-            if($app = @$app->data)
-            {
+            if ($app = @$app->data) {
                 $app = ServerPilot::apps($app->id)->get()->data;
                 $this->api_id = $app->id;
                 $this->server_api_id = $app->serverid;
@@ -222,7 +210,6 @@ class App extends Model
 
         return $options;
     }
-
 
     /**
      * get Runtimes availables

@@ -21,12 +21,11 @@ fields:
 
 secondaryTabs:
     stretch: true
+    paneCssClass: padded-pane
     fields:
-
         runtime:
             label: Runtime
             tab: App
-            default: php5.6
             type: radio
             span: storm
             cssClass: 'col-sm-3'
@@ -39,7 +38,6 @@ secondaryTabs:
             span: storm
             cssClass: col-sm-3
             disabled: true
-
         auto_ssl:
             label: Auto SSL
             tab: App
@@ -52,12 +50,12 @@ secondaryTabs:
                 condition: checked
                 action: show
         force_ssl:
-            label: Force HTTP to HTTPS
+            label: Force HTTPS
             tab: App
             type: switch
             span: storm
             cssClass: col-sm-3
-            comment: 'Requests using HTTP are being redirected to HTTPS.'
+            comment: 'Redirect all requests using HTTP to HTTPS'
             trigger:
                 field: auto_ssl
                 condition: checked
@@ -73,18 +71,11 @@ secondaryTabs:
             form:
                 fields:
                     domain:
-                        label: Domain
+                        label: ' '
                         type: text
         databases:
             label: Databases
             tab: Databases
             type: partial
             path: relation_databases
-            span: full
-
-        backups:
-            label: Backups
-            tab: Backups
-            type: partial
-            path: relation_backups
             span: full
