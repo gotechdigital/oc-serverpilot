@@ -1,0 +1,17 @@
+{
+    "name": "awebsome/oc-serverpilot-plugin",
+    "type": "october-plugin",
+    "description": "OctoberCMS plugin to manage your ServerPilot resources through the October backend",
+    "homepage": "https://octobercms.com/plugin/awebsome-serverpilot",
+    "keywords": ["october", "octobercms", "serverpilot", "backend", "awebsome"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Awebsome",
+            "email": "lucaszdv@gmail.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
