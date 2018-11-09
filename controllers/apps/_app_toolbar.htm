@@ -1,7 +1,6 @@
 <?php
     $isCreate = $this->formGetContext() == 'create';
     $pageUrl = isset($pageUrl) ? $pageUrl : null;
-
 ?>
 <div class="form-buttons loading-indicator-container">
 
@@ -19,7 +18,6 @@
             data-placement="bottom"
             data-delay="500"
             data-original-title="<?=e(trans('backend::lang.form.save'))?> (Ctrl+S)"
-
             >
             <?= e(trans('backend::lang.form.save')) ?>
         </button>
@@ -37,10 +35,10 @@
             data-delay="500"
             data-original-title="<?=e(trans('backend::lang.form.save_and_close'))?> (Ctrl+Shift+S)"
             >
-            <?= e(trans('backend::lang.form.save_and_close'))?>
+            <?= e(trans('backend::lang.form.save_and_close')) ?>
         </button>
 
-          <?php if (!$isCreate): ?>
+        <?php if (!$isCreate): ?>
             <button
                 type="button"
                 class="btn btn-default empty oc-icon-trash-o"

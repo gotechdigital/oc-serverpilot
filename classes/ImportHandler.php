@@ -16,12 +16,13 @@ class ImportHandler
         # get existing
         $existing = $model::where('api_id', $data->id)->first();
 
-        if(!$existing)
+        if (!$existing) {
             $model = new $model;
-        else $model = $model::find($existing->id);
+        } else {
+            $model = $model::find($existing->id);
+        }
 
-        foreach ($resource->table as $col => $map)
-        {
+        foreach ($resource->table as $col => $map) {
             $model->$col = Self::getValue($data, $map, $model);
         }
 

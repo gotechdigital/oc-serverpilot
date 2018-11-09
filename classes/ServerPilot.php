@@ -31,7 +31,7 @@ class ServerPilot extends Curl
     public static function instance()
     {
         $self = new Self;
-        
+
         return $self;
     }
     /**
@@ -127,18 +127,20 @@ class ServerPilot extends Curl
      */
     public static function isAuth()
     {
-        if(CFG::get('CLIENT_ID') && CFG::get('API_KEY'))
-        {
+        $authenticationSuccess = false;
 
+        // Make a test request to see if the authentication succeeds
+        if (CFG::get('CLIENT_ID') && CFG::get('API_KEY')) {
             $sp = new Self;
             $response = $sp->actions('1')->get();
             $code = @$response->error->code;
 
-            if($code != 401)
-                return true;
-            else return false;
+            if ($code !== 401) {
+                $authenticationSuccess = true;
+            }
+        }
 
-        }else return false;
+        return $authenticationSuccess;
     }
 
     /**

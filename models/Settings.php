@@ -3,11 +3,14 @@
 use Event;
 use Model;
 use Awebsome\ServerPilot\Models\Runtime;
+
 /*
  * Settings Model
  */
 class Settings extends Model
 {
+    use \October\Rain\Database\Traits\Validation;
+
     public $implement = ['System.Behaviors.SettingsModel'];
 
     public $settingsCode = 'awebsome_serverpilot_settings';
@@ -19,30 +22,24 @@ class Settings extends Model
     public $table = 'awebsome_serverpilot_settings';
 
     /**
-     * @var array Guarded fields
+     * @var array The validation rules for the model
      */
-    protected $guarded = ['*'];
-
-    /**
-     * @var array Fillable fields
-     */
-    protected $fillable = [];
-
-
-    use \October\Rain\Database\Traits\Validation;
-
     public $rules = [
-        #API ServerPilot
-        'CLIENT_ID'    => 'required',
+        'CLIENT_ID' => 'required',
         'API_KEY'   => 'required'
     ];
 
     public function afterSave()
     {
-        # refresh data.
+        // Trigger a sync with ServerPilot
         Event::fire('awebsome.serverpilot.afterSaveSettings');
     }
 
+    /**
+     * Get the available runtime options
+     *
+     * @return array
+     */
     public function getRuntimeOptions()
     {
         $runtimes = Runtime::orderBy('id', 'desc')->get();
