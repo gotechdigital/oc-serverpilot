@@ -16,12 +16,14 @@ columns:
         searchable: true
         path: ~/plugins/awebsome/serverpilot/models/app/columns/server.htm
     ssl:
-        label: SSL
+        label: SSL Available
         type: partial
+        invisible: true
         path: ~/plugins/awebsome/serverpilot/models/app/columns/ssl.htm
     force_ssl:
         label: Force HTTPS
         type: partial
+        invisible: true
         path: ~/plugins/awebsome/serverpilot/models/app/columns/force_ssl.htm
     domains:
         label: Main Domain
@@ -38,6 +40,7 @@ columns:
         label: Databases
         relation: databases
         valueFrom: name
+        invisible: true
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/app/columns/databases.htm
     updated_at:

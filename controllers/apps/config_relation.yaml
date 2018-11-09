@@ -1,5 +1,5 @@
 databases:
-    label: Databases
+    label: Database
     view:
         list: $/awebsome/serverpilot/models/database/columns_app.yaml
         toolbarButtons: create|delete
