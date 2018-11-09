@@ -1,24 +1,18 @@
 <?php namespace Awebsome\Serverpilot;
 
+use Db;
 use Event;
 use Backend;
 use Redirect;
+use System\Classes\PluginBase;
 
 use Awebsome\Serverpilot\Models\Sync;
 use Awebsome\Serverpilot\Models\Settings as CFG;
 
 use Awebsome\Serverpilot\Classes\ServerPilot;
 
-use System\Classes\PluginBase;
-use Db;
-
 class Plugin extends PluginBase
 {
-    /**
-     * @var array Plugin dependencies
-     */
-    public $require = [];
-
     public function boot()
     {
         Event::listen('awebsome.serverpilot.afterSaveSettings', function() {
@@ -31,20 +25,11 @@ class Plugin extends PluginBase
                 ServerPilot::dbs()->import();
             }
         });
-
-        ServerPilot::plus();
-    }
-
-    public function registerSchedule($schedule)
-    {
-
     }
 
     public function registerSettings()
     {
-
         return [
-
             //Connection Settings
             'serverpilot'  => [
                 'label'       => 'ServerPilot',
@@ -53,7 +38,7 @@ class Plugin extends PluginBase
                 'icon'        => 'icon-cloud',
                 'class'       => 'Awebsome\Serverpilot\Models\Settings',
                 'order'       => 100,
-                'permissions' => [ 'awebsome.serverpilot.settings' ],
+                'permissions' => ['awebsome.serverpilot.settings'],
                 'keywords'    => 'Server ServerPilot'
             ],
         ];
