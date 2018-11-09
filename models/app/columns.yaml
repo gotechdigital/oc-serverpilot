@@ -1,11 +1,11 @@
 columns:
     name:
-        label: name
+        label: Name
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/app/columns/name.htm
         searchable: true
     runtime:
-        label: Runtime
+        label: PHP Runtime
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/app/columns/runtime.htm
     server:
@@ -16,12 +16,14 @@ columns:
         searchable: true
         path: ~/plugins/awebsome/serverpilot/models/app/columns/server.htm
     ssl:
-        label: SSL
+        label: SSL Available
         type: partial
+        invisible: true
         path: ~/plugins/awebsome/serverpilot/models/app/columns/ssl.htm
     force_ssl:
-        label: Force Https
+        label: Force HTTPS
         type: partial
+        invisible: true
         path: ~/plugins/awebsome/serverpilot/models/app/columns/force_ssl.htm
     domains:
         label: Main Domain
@@ -38,9 +40,10 @@ columns:
         label: Databases
         relation: databases
         valueFrom: name
+        invisible: true
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/app/columns/databases.htm
     updated_at:
-        label: 'Last Update'
+        label: Last Update
         type: timesince
         invisible: true

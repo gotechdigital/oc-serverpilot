@@ -3,7 +3,6 @@
 # ===================================
 
 columns:
-
     id:
         label: ID
         invisible: true
@@ -12,35 +11,28 @@ columns:
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/database/columns/name.htm
         searchable: true
-        width: 15%
-
     app:
         label: App
         relation: app
         valueFrom: name
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/database/columns/app.htm
-        width: 15%
     server:
         label: Server
         relation: server
         valueFrom: name
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/database/columns/server.htm
-        width: 15%
-
     user:
         label: User
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/database/columns/user.htm
-
     visible_password:
         label: Password
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/database/columns/password.htm
         sortable: false
         invisible: true
-
     updated_at:
         label: 'Last Import'
         type: timesince

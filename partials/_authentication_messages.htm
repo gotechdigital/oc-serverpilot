@@ -1,0 +1,11 @@
+<?php if (!\Awebsome\Serverpilot\Classes\ServerPilot::isAuth()) : ?>
+    <div class="padded-container" style="padding-top: 0;">
+        <div class="callout callout-danger">
+            <div class="header">
+                <i class="icon-exclamation-triangle"></i>
+                <h3><?= trans('awebsome.serverpilot::lang.message.authentication_fails') ?></h3>
+                <p><?= trans('awebsome.serverpilot::lang.message.authentication_fails_help') ?> </p>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

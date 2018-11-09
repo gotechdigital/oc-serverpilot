@@ -1,5 +1,5 @@
 databases:
-    label: Databases
+    label: Database
     view:
         list: $/awebsome/serverpilot/models/database/columns_app.yaml
         toolbarButtons: create|delete
@@ -8,12 +8,3 @@ databases:
         form: $/awebsome/serverpilot/models/database/fields_app.yaml
         list: $/awebsome/serverpilot/models/database/columns.yaml
         clickable: false
-
-### Serverpilot Plus ###
-backups:
-    label: Backups
-    view:
-        list: $/awebsome/serverpilotplus/models/backup/columns_app.yaml
-        toolbarButtons: create|delete
-    manage:
-        form: $/awebsome/serverpilotplus/models/backup/fields.yaml

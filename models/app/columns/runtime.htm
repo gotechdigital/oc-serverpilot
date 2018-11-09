@@ -1,1 +1,5 @@
-<span class="list-badge badge-<?=str_replace('php','',$value) < 7 ? 'warning': 'success'?>"><i class="icon-cogs"></i></span> <span class="text-<?=str_replace('php','',$value) < 7 ? 'warning': 'success'?>"><?=$value?></span>
+<?php $value = str_replace('php','',$value); ?>
+<span class="list-badge badge-<?= $value < 7 ? 'warning': 'success' ?>">
+    <i class="icon-cogs"></i>
+</span>
+<span class="text-<?= $value < 7 ? 'warning': 'success'?>"><?= $value ?></span>

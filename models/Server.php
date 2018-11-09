@@ -1,7 +1,5 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
-use Log;
-
 use Model;
 use Flash;
 use ValidationException;
@@ -19,48 +17,32 @@ class Server extends Model
     public $table = 'awebsome_serverpilot_servers';
 
     /**
-     * @var array Guarded fields
-     */
-    protected $guarded = ['*'];
-
-    /**
-     * @var array Fillable fields
-     */
-    protected $fillable = ['*'];
-
-    /**
      * @var array Relations
      */
-    public $hasOne = [];
     public $hasMany = [
-        'sysusers'      => ['Awebsome\Serverpilot\Models\Sysuser','key' => 'server_api_id','otherKey' => 'api_id'],
-        'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'server_api_id','otherKey' => 'api_id'],
-        'apps'          => ['Awebsome\Serverpilot\Models\App','key' => 'server_api_id','otherKey' => 'api_id']
+        'apps'      => [App::class, 'key' => 'server_api_id', 'otherKey' => 'api_id'],
+        'sysusers'  => [Sysuser::class, 'key' => 'server_api_id', 'otherKey' => 'api_id'],
+        'databases' => [Database::class, 'key' => 'server_api_id', 'otherKey' => 'api_id'],
     ];
-    public $belongsTo = [];
-    public $belongsToMany = [];
-    public $morphTo = [];
-    public $morphOne = [];
-    public $morphMany = [];
-    public $attachOne = [];
-    public $attachMany = [];
 
     /**
-     * check if it's an import
-     * @param boolean
+     * @var boolean Flags that the model is currently being imported
      */
     public $importing;
 
+    /**
+     * Runs before the model is updated in order to sync the settings with ServerPilot
+     *
+     * @return void
+     */
     public function beforeUpdate()
     {
-        if(!$this->importing)
-        {
+        if (!$this->importing) {
             ServerPilot::servers($this->api_id)->update([
-                'autoupdates'   => ($this->autoupdates) ? TRUE : FALSE,
-                'firewall'      => ($this->firewall) ? TRUE : FALSE,
-                'deny_unknown_domains'   => ($this->deny_unknown_domains) ? TRUE : FALSE,
+                'autoupdates'          => (bool) $this->autoupdates,
+                'firewall'             => (bool) $this->firewall,
+                'deny_unknown_domains' => (bool) $this->deny_unknown_domains,
             ]);
-            //Log::info('server Updateado...');
         }
     }
 }

@@ -1,9 +1,17 @@
 <style>
-.synchronize {
-display: inline-block;
-vertical-align: middle;
-margin-left: 20px;
-}
+    .synchronize {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 20px;
+    }
+
+    .btn.sync {
+        display: none !important;
+    }
+
+    .synchronize[style*="none"] + .btn.sync {
+        display: inline-block !important;
+    }
 </style>
 <div data-control="toolbar">
 
@@ -16,19 +24,21 @@ margin-left: 20px;
         New App
     </button>
 
-    <button
-        type="button"
-        data-request="onPull"
-        data-request-data="sync_now: 1" class="btn sync btn-info oc-icon-cloud-download"
-        data-request-confirm="Pull the new resources created or clean the deleted in the serverpilot.io panel, once pulled here, this plugin takes care of updating for you."
-        data-request-loading=".synchronize">
-        Pull force
-    </button>
+    <a href="https://manage.serverpilot.io/apps" class="btn btn-info oc-icon-link" target="_blank">View in ServerPilot</a>
 
     <div style="display:none;" class="synchronize loading-indicator-container">
         <div class="loading-indicator size-small">
             <span></span>
-            <div>pulling resources...</div>
+            <div>Synchronizing resources...</div>
         </div>
     </div>
+
+    <button
+        type="button"
+        data-request="onPull"
+        class="btn sync btn-info oc-icon-cloud-download"
+        data-request-loading=".synchronize">
+        Sync
+    </button>
+
 </div>

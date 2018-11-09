@@ -8,24 +8,16 @@ fields:
         required: true
         span: left
         commentHtml: true
-        comment: 'Obtain this from <a href="https://manage.serverpilot.io/#account/api" target="_blank">here</a>.'
+        comment: 'Obtain this from <a href="https://manage.serverpilot.io/account/api" target="_blank">here</a>.'
     API_KEY:
         label: Api Key
         type: text
         required: true
         span: right
         commentHtml: true
-        comment: 'Obtain this from <a href="https://manage.serverpilot.io/#account/api" target="_blank">here</a>.'
+        comment: 'Obtain this from <a href="https://manage.serverpilot.io/account/api" target="_blank">here</a>.'
 tabs:
     fields:
-#        preview_domain:
-#            label: Preview Domain
-#            commentHtml: true
-#            comment: 'Use <span style="color: blue;">{APP_NAME}</span> to indicate where are to use App Name.'
-#            type: text
-#            tab: Settings
-#            placeholder: '{APP_NAME}.previewdomain.tld'
-#            span: left
         runtime:
             label: Default Runtime
             type: dropdown
