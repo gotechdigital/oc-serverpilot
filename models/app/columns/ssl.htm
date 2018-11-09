@@ -1,5 +1,11 @@
-<? if($value):?>
-    <span class="list-badge badge-success"><i class="icon-lock"></i></span> <span class="text-success">Secure</span>
-<? else: ?>
-    <span class="list-badge badge-warning"><i class="icon-exclamation"></i></span> <span class="text-warning">No Secure</span>
-<? endif ?>
+<?php if($value): ?>
+    <span class="list-badge badge-success">
+        <i class="icon-lock"></i>
+    </span>
+    <span class="text-success">Secure</span>
+<?php else: ?>
+    <span class="list-badge badge-warning">
+        <i class="icon-exclamation"></i>
+    </span>
+    <span class="text-warning">Insecure</span>
+<?php endif ?>
